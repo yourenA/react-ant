@@ -5,10 +5,6 @@ import React, {Component} from 'react';
 import { Select} from 'antd';
 const Option = Select.Option;
 class TopicTable extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     onChangeTestType= (value)=> {
         console.log(value);
         const {q,test_part,test_version}=this.props;

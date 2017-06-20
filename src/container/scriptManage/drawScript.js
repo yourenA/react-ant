@@ -2,15 +2,14 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout} from 'antd';
+import {Breadcrumb, Layout, Button} from 'antd';
 import DrawScriptCof from './drawScriptCof'
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {Button, Select} from 'antd';
 import uuidv4 from 'uuid/v4';
-const Option = Select.Option;
+// const Option = Select.Option;
 const {Content,} = Layout;
 
 
@@ -575,20 +574,81 @@ class DrawScript extends Component {
         const originHadJson = {
             name: "已存在分组1",
             nodeDataArray: [
-            {"title":"分组", "isGroup":true, "category":"OfGroups", "key":-6, "loc":"-260.26142374915395 -195.38205515784537"},
-            {"category":"set", "params":[ {"key":"11", "value":"11"},{"key":"22", "value":"22"} ], "text":"设置参数", "key":-7, "loc":"218 -143", "group":-6},
-            {"category":"item", "title":"语句", "params":[ {"key":"2", "value":"2"} ], "key":-8, "loc":"-48 -4", "group":-6},
-            {"category":"item", "title":"语句", "params":[ {"key":"4", "value":"4"} ], "key":-4, "loc":"60 231", "group":-6},
-            {"category":"item", "title":"语句", "params":[ {"key":"1", "value":"1"} ], "key":-5, "loc":"-49 -102", "group":-6},
-            {"category":"item", "title":"语句", "params":[ {"key":"3", "value":"3"} ], "key":-9, "loc":"-182 239", "group":-6},
-            {"text":"条件语句", "category":"if", "figure":"Diamond", "key":-2, "loc":"-54 102", "group":-6}
-        ],
+                {
+                    "title": "分组",
+                    "isGroup": true,
+                    "category": "OfGroups",
+                    "key": -6,
+                    "loc": "-260.26142374915395 -195.38205515784537"
+                },
+                {
+                    "category": "set",
+                    "params": [{"key": "11", "value": "11"}, {"key": "22", "value": "22"}],
+                    "text": "设置参数",
+                    "key": -7,
+                    "loc": "218 -143",
+                    "group": -6
+                },
+                {
+                    "category": "item",
+                    "title": "语句",
+                    "params": [{"key": "2", "value": "2"}],
+                    "key": -8,
+                    "loc": "-48 -4",
+                    "group": -6
+                },
+                {
+                    "category": "item",
+                    "title": "语句",
+                    "params": [{"key": "4", "value": "4"}],
+                    "key": -4,
+                    "loc": "60 231",
+                    "group": -6
+                },
+                {
+                    "category": "item",
+                    "title": "语句",
+                    "params": [{"key": "1", "value": "1"}],
+                    "key": -5,
+                    "loc": "-49 -102",
+                    "group": -6
+                },
+                {
+                    "category": "item",
+                    "title": "语句",
+                    "params": [{"key": "3", "value": "3"}],
+                    "key": -9,
+                    "loc": "-182 239",
+                    "group": -6
+                },
+                {"text": "条件语句", "category": "if", "figure": "Diamond", "key": -2, "loc": "-54 102", "group": -6}
+            ],
             linkDataArray: [
-            {"from":-5, "to":-8, "points":[-48.999999999999986,-65.27292531090464,-48.999999999999986,-55.27292531090464,-48.999999999999986,-53.00000000000001,-48.000000000000014,-53.00000000000001,-48.000000000000014,-50.727074689095375,-48.000000000000014,-40.727074689095375]},
-            {"from":-8, "to":-2, "points":[-47.999999999999986,32.727074689095375,-47.999999999999986,42.727074689095375,-47.999999999999986,51.31353734454769,-54,51.31353734454769,-54,59.900000000000006,-54,69.9]},
-            {"from":-2, "to":-9, "visible":true, "points":[-54,134.10000000000002,-54,144.10000000000002,-54,168.18646265545232,-182,168.18646265545232,-182,192.2729253109046,-182,202.2729253109046]},
-            {"from":-2, "to":-4, "visible":true, "points":[-54,134.10000000000002,-54,144.10000000000002,-54,164.18646265545232,59.999999999999986,164.18646265545232,59.999999999999986,184.2729253109046,59.999999999999986,194.2729253109046], "condition":"N"}
-        ]};
+                {
+                    "from": -5,
+                    "to": -8,
+                    "points": [-48.999999999999986, -65.27292531090464, -48.999999999999986, -55.27292531090464, -48.999999999999986, -53.00000000000001, -48.000000000000014, -53.00000000000001, -48.000000000000014, -50.727074689095375, -48.000000000000014, -40.727074689095375]
+                },
+                {
+                    "from": -8,
+                    "to": -2,
+                    "points": [-47.999999999999986, 32.727074689095375, -47.999999999999986, 42.727074689095375, -47.999999999999986, 51.31353734454769, -54, 51.31353734454769, -54, 59.900000000000006, -54, 69.9]
+                },
+                {
+                    "from": -2,
+                    "to": -9,
+                    "visible": true,
+                    "points": [-54, 134.10000000000002, -54, 144.10000000000002, -54, 168.18646265545232, -182, 168.18646265545232, -182, 192.2729253109046, -182, 202.2729253109046]
+                },
+                {
+                    "from": -2,
+                    "to": -4,
+                    "visible": true,
+                    "points": [-54, 134.10000000000002, -54, 144.10000000000002, -54, 164.18646265545232, 59.999999999999986, 164.18646265545232, 59.999999999999986, 184.2729253109046, 59.999999999999986, 194.2729253109046],
+                    "condition": "N"
+                }
+            ]
+        };
         let keyUuidArr = [];
         for (let k = 0, len3 = originHadJson.nodeDataArray.length; k < len3; k++) {
             let uuid2 = uuidv4();
@@ -600,13 +660,13 @@ class DrawScript extends Component {
             // }
             if (originHadJson.nodeDataArray[i].group) {
                 for (let n = 0, len4 = keyUuidArr.length; n < len4; n++) {
-                    if (originHadJson.nodeDataArray[i].group ===  keyUuidArr[n].key) {
-                        originHadJson.nodeDataArray[i].group= keyUuidArr[n].uuid
+                    if (originHadJson.nodeDataArray[i].group === keyUuidArr[n].key) {
+                        originHadJson.nodeDataArray[i].group = keyUuidArr[n].uuid
                     }
                 }
             }
 
-            if(originHadJson.nodeDataArray[i].isGroup) {
+            if (originHadJson.nodeDataArray[i].isGroup) {
                 originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
             }
 
@@ -634,28 +694,26 @@ class DrawScript extends Component {
         myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     }
     searchDiagram = ()=> {
-        {  // called by button
-            var input = document.getElementById("mySearch");
-            if (!input) return;
-            input.focus();
+        var input = document.getElementById("mySearch");
+        if (!input) return;
+        input.focus();
 
-            myPalette.startTransaction("highlight search");
+        myPalette.startTransaction("highlight search");
 
-            if (input.value) {
-                // search four different data properties for the string, any of which may match for success
-                // create a case insensitive RegExp from what the user typed
-                var regex = new RegExp(input.value, "i");
-                console.log("regex", regex)
-                var results = myPalette.findNodesByExample({name: regex},
-                    {text: regex},
-                    {title: regex});
-                // try to center the diagram at the first node that was found
-                if (results.count > 0) myPalette.centerRect(results.first().actualBounds);
-            } else {  // empty string only clears highlighteds collection
-                myPalette.clearHighlighteds();
-            }
-
+        if (input.value) {
+            // search four different data properties for the string, any of which may match for success
+            // create a case insensitive RegExp from what the user typed
+            var regex = new RegExp(input.value, "i");
+            console.log("regex", regex)
+            var results = myPalette.findNodesByExample({name: regex},
+                {text: regex},
+                {title: regex});
+            // try to center the diagram at the first node that was found
+            if (results.count > 0) myPalette.centerRect(results.first().actualBounds);
+        } else {  // empty string only clears highlighteds collection
+            myPalette.clearHighlighteds();
         }
+
 
     }
     keypressInput = (e)=> {

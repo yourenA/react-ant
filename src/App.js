@@ -13,8 +13,8 @@ import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
 import CatagoryManage from './container/catagoryManage/index';
-import About from './container/about';
-import Topics from './container/topics';
+// import About from './container/about';
+// import Topics from './container/topics';
 import Login from './container/login';
 import Register from './container/register';
 import './App.less';
@@ -90,9 +90,9 @@ class App extends Component {
                                     <Menu.Item key="/test_stands"><NavLink activeClassName="nav-selected"
                                                                      to="/test_stands">测试架</NavLink></Menu.Item>
                                 </SubMenu>
-                                <Menu.Item key="/about"><NavLink activeClassName="nav-selected"
+                                {/*<Menu.Item key="/about"><NavLink activeClassName="nav-selected"
                                                                  to="/about">About</NavLink></Menu.Item>
-                                <Menu.Item key="/topics"><NavLink activeClassName="nav-selected" to="/topics/option1">Topics</NavLink></Menu.Item>
+                                <Menu.Item key="/topics"><NavLink activeClassName="nav-selected" to="/topics/option1">Topics</NavLink></Menu.Item>*/}
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
@@ -120,7 +120,7 @@ class App extends Component {
                         return (login.login && testPermission('script_test') ) ?
                             <HardwareTesting {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
-                    <Route path="/about" component={About}/>
+                    {/*<Route path="/about" component={About}/>*/}
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route exact
@@ -133,11 +133,11 @@ class App extends Component {
                         return (login.login && testPermission('script_management') ) ?
                             <DrawScript {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
-                    <Route
+                   {/* <Route
                         path="/topics/option1" render={(props) => {
                         return login.login ?
                             <Topics {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
-                    }}/>
+                    }}/>*/}
                     <Route
                         path="/products" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?
