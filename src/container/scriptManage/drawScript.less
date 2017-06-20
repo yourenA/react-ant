@@ -1,0 +1,33 @@
+.drawScript {
+  display: flex;
+  position: relative;
+  .drawScript-sidebar {
+    flex: 0 0 250px;
+    border: 1px solid #bbb;
+    border-right: none;
+    overflow: hidden;
+  }
+  .drawScript-content {
+    position: relative;
+    flex: 1;
+    height: 700px;
+    border: 1px solid #bbb;
+    #myDiagramDiv{
+      height: 700px;
+    }
+    .drawScript-overview {
+      position: absolute;
+      left: 0px;
+      top: 0;
+      width: 200px;
+      height: 100px
+    }
+  }
+
+}
+
+#mySavedModel {
+  display: block;
+  height: 300px;
+  width: 100%;
+}

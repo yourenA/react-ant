@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+$max-width: 1400px;
+$theme-blue: #108ee9;
+$nav-height: 60px;
+$nav-fontColor: rgba(0, 0, 0, .65);
+//利用map处理断点
+$breakpoints: (
+        small: 320px,
+        medium: 890px,
+        large: 1200px
+);
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @media screen and (max-width: $value) {
+      @content;
+    }
+  }
+}
+
+%message {
+  border: 1px solid;
+}
+@mixin message($color) {
+  @if type-of($color) == color {
+    @extend %message;
+    color: #ffffff;
+    border-color: $color;
+    background: $color;
+    &:hover{
+      border-color: lighten($color, 10%);
+      background: lighten($color, 10%);
+      color: #ffffff;
+    }
+    &:focus{
+      border-color: lighten($color, 10%);
+      background: lighten($color, 10%);
+      color: #ffffff;
+    }
+  } @else {
+    @warn "#{$color} is not a color for `message`.";
+  }
+}
+$message-types: (
+        error : #b94a40,
+        valid : #468847,
+        warning : #c09853,
+        info : #2CADBE
+) !default;
+
+@each $type, $color in $message-types {
+  .btn-#{$type} {
+    @include message($color);
+  }
+}
