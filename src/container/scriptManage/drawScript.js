@@ -8,6 +8,9 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
+import {Button, Select} from 'antd';
+import uuidv4 from 'uuid/v4';
+const Option = Select.Option;
 const {Content,} = Layout;
 
 
@@ -18,27 +21,25 @@ var formulaArr = [
     {text: "条件语句", category: "if", figure: "Diamond"},
     {text: "循环语句", category: "for", figure: "Diamond"},
     {category: "end", text: "结束"},
-    { category: "Comment", text: "备注" },
+    {category: "Comment", text: "备注"},
     {title: "分组", isGroup: true, category: "OfGroups"},
-    { category: "set", params: [{}],text:'设置参数' },
+    {category: "set", params: [{}], text: '设置参数'},
     {
         category: "item",
         title: "语句",
         params: [
-            {key: "param1", value: "100"},
-            {key: "param2", value: "120"},
-            {key: "param3", value: "130"}
+            {}
         ]
     }];
 
 var myDiagram = null;
 var myPalette = null;
-var myOverview =null;
+var myOverview = null;
 class DrawScript extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isChange:false
+            isChange: false,
         };
     }
 
@@ -47,14 +48,15 @@ class DrawScript extends Component {
         this.props.fetchAllTestType();
         this.props.fetchAllParts();
         this.props.fetchAllHardwareVersions();
+
     }
 
     showLinkLabel = (e)=> {
         var label = e.subject.findObject("LABEL");// name: "LABEL"
         if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond");//如果figure=Diamond则线的文字可以编辑
     }
-    nodeStyle=()=> {
-        const that=this;
+    nodeStyle = ()=> {
+        const that = this;
         return [
             // The Node.location comes from the "loc" property of the node data,
             // converted by the Point.parse static method.
@@ -76,7 +78,7 @@ class DrawScript extends Component {
             }
         ]
     }
-    makePort=(name, spot, output, input)=> {
+    makePort = (name, spot, output, input)=> {
         // the port is basically just a small circle that has a white stroke when it is made visible
         return $(go.Shape, "Circle",
             {
@@ -90,14 +92,14 @@ class DrawScript extends Component {
                 cursor: "pointer"  // show a different cursor to indicate potential link point
             });
     }
-    showPorts=(node, show)=> {
+    showPorts = (node, show)=> {
         var diagram = node.diagram;
         if (!diagram || diagram.isReadOnly || !diagram.allowLink) return;
         node.ports.each(function (port) {
             port.stroke = (show ? "#333" : null);
         });
     }
-    highlightGroup=(e, grp, show)=> {
+    highlightGroup = (e, grp, show)=> {
         if (!grp) return;
         e.handled = true;
         if (show) {
@@ -113,26 +115,26 @@ class DrawScript extends Component {
         }
         grp.isHighlighted = false;
     }
-    finishDrop=(e, grp) =>{
+    finishDrop = (e, grp) => {
         (grp !== null
             ? grp.addMembers(grp.diagram.selection, true)
             : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
     }
-    addReason=(e, obj)=>{
+    addReason = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
         myDiagram.model.addArrayItem(arr, {});
     }
-    addFormulaParam=(e, obj)=>{
+    addFormulaParam = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
         myDiagram.model.addArrayItem(arr, {});
     }
-    textStyle=()=>{
+    textStyle = ()=> {
         var bigfont = "bold 12pt Helvetica, Arial, sans-serif";
         return {
             margin: 6,
@@ -143,8 +145,8 @@ class DrawScript extends Component {
         }
     }
     init = ()=> {
-        const that=this;
-        const titleFont="11pt Verdana, sans-serif"
+        const that = this;
+        const titleFont = "11pt Verdana, sans-serif"
         var lightText = 'whitesmoke';
         myDiagram =
             $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
@@ -270,13 +272,13 @@ class DrawScript extends Component {
         myDiagram.nodeTemplateMap.add("Comment",
             $(go.Node, "Auto", this.nodeStyle(),
                 $(go.Shape, "File",
-                    { fill: "#EFFAB4", stroke: null }),
+                    {fill: "#EFFAB4", stroke: null}),
                 $(go.TextBlock,
                     {
                         margin: 5,
                         textAlign: "center",
                         editable: true,
-                        font:titleFont,
+                        font: titleFont,
                         stroke: '#454545'
                     },
                     new go.Binding("text").makeTwoWay())
@@ -286,14 +288,18 @@ class DrawScript extends Component {
         var UndesiredEventAdornmentFormula =
             $(go.Adornment, "Spot",
                 $(go.Panel, "Auto",
-                    $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 4 }),
+                    $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
                     $(go.Placeholder)),
                 // the button to create a "next" node, at the top-right corner
                 $("Button",
-                    { alignment: go.Spot.BottomRight,
-                        click: this.addFormulaParam },  // this function is defined below
-                    new go.Binding("visible", "", function(a) { return !a.diagram.isReadOnly; }).ofObject(),
-                    $(go.Shape, "TriangleDown", { desiredSize: new go.Size(10, 10) })
+                    {
+                        alignment: go.Spot.BottomRight,
+                        click: this.addFormulaParam
+                    },  // this function is defined below
+                    new go.Binding("visible", "", function (a) {
+                        return !a.diagram.isReadOnly;
+                    }).ofObject(),
+                    $(go.Shape, "TriangleDown", {desiredSize: new go.Size(10, 10)})
                 )
             );
         var actionTemplate =
@@ -311,7 +317,7 @@ class DrawScript extends Component {
             $(go.Node, "Auto",
                 // define the node's outer shape
                 that.nodeStyle(),//加了nodeStyle左边左边操作框才会对齐
-                { selectionAdornmentTemplate: UndesiredEventAdornmentFormula },
+                {selectionAdornmentTemplate: UndesiredEventAdornmentFormula},
                 $(go.Shape, "RoundedRectangle",
                     {
                         fill: '#FFDD33',
@@ -321,9 +327,9 @@ class DrawScript extends Component {
                     {stretch: go.GraphObject.Horizontal, background: "#FFDD33"},
                     // headered by a label and a PanelExpanderButton inside a Table
                     $(go.Panel, "Horizontal",  // button next to TextBlock
-                        {stretch: go.GraphObject.Horizontal,minSize: new go.Size(150, 40)},
+                        {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
                         $("PanelExpanderButton", "COLLAPSIBLE",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
-                            { alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
+                            {alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
                         ),
                         $(go.TextBlock,
                             {
@@ -360,14 +366,18 @@ class DrawScript extends Component {
         var UndesiredEventAdornment =
             $(go.Adornment, "Spot",
                 $(go.Panel, "Auto",
-                    $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 4 }),
+                    $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
                     $(go.Placeholder)),
                 // the button to create a "next" node, at the top-right corner
                 $("Button",
-                    { alignment: go.Spot.BottomRight,
-                        click: this.addReason },  // this function is defined below
-                    new go.Binding("visible", "", function(a) { return !a.diagram.isReadOnly; }).ofObject(),
-                    $(go.Shape, "TriangleDown", { desiredSize: new go.Size(10, 10) })
+                    {
+                        alignment: go.Spot.BottomRight,
+                        click: this.addReason
+                    },  // this function is defined below
+                    new go.Binding("visible", "", function (a) {
+                        return !a.diagram.isReadOnly;
+                    }).ofObject(),
+                    $(go.Shape, "TriangleDown", {desiredSize: new go.Size(10, 10)})
                 )
             );
         var reasonTemplate =
@@ -376,7 +386,7 @@ class DrawScript extends Component {
                     {column: 0, margin: 5, font: " 11pt sans-serif", editable: true,},
                     new go.Binding("text", "key").makeTwoWay()
                 ),
-                $(go.TextBlock,"value",
+                $(go.TextBlock, "value",
                     {column: 1, margin: 5, font: " 11pt sans-serif", editable: true,},
                     new go.Binding("text", "value").makeTwoWay()
                 )
@@ -385,12 +395,12 @@ class DrawScript extends Component {
             $(go.Node, "Auto",
                 that.nodeStyle(),
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-                { selectionAdornmentTemplate: UndesiredEventAdornment },
+                {selectionAdornmentTemplate: UndesiredEventAdornment},
                 $(go.Shape, "RoundedRectangle",
-                    { fill: "#CC5245", portId: "", stroke: "black", toEndSegmentLength: 150 }),
+                    {fill: "#CC5245", portId: "", stroke: "black", toEndSegmentLength: 150}),
                 $(go.Panel, "Vertical",
                     $(go.Panel, "Horizontal",  // button next to TextBlock
-                        {stretch: go.GraphObject.Horizontal,minSize: new go.Size(150, 40)},
+                        {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
                         $("PanelExpanderButton", "COLLAPSIBLECONF",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
                             {column: 0, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
                         ),
@@ -413,7 +423,8 @@ class DrawScript extends Component {
                             visible: false,
                             stretch: go.GraphObject.Horizontal,  // take up whole available width
                             background: "#00A9C9",  // to distinguish from the node's body
-                            itemTemplate: reasonTemplate },
+                            itemTemplate: reasonTemplate
+                        },
                         new go.Binding("itemArray", "params").makeTwoWay()
                     )
                 )
@@ -451,14 +462,14 @@ class DrawScript extends Component {
                     // Groups containing Groups lay out their members horizontally
                 },
                 new go.Binding("background", "isHighlighted", function (h) {
-                    return h ? "#FFCCCC" :  "#FFFFFF";
+                    return h ? "#FFCCCC" : "#FFFFFF";
                 }).ofObject(),
 //                            { resizable: true },
                 $(go.Shape, "RoundedRectangle",
                     {fill: null, stroke: "black", strokeWidth: 1}),
                 $(go.Panel, "Vertical",  // title above Placeholder
                     $(go.Panel, "Horizontal",  // button next to TextBlock
-                        {stretch: go.GraphObject.Horizontal, background: "#98FB98",minSize: new go.Size(150, 40)},
+                        {stretch: go.GraphObject.Horizontal, background: "#98FB98", minSize: new go.Size(150, 40)},
                         $("SubGraphExpanderButton",
                             {alignment: go.Spot.Center, margin: 5}),
                         $(go.TextBlock,
@@ -546,9 +557,9 @@ class DrawScript extends Component {
 
         myOverview =
             $(go.Overview, "myOverviewDiv",  // the HTML DIV element for the Overview
-                { observed: myDiagram, contentAlignment: go.Spot.Center });   // tell it which Diagram to show and pan
+                {observed: myDiagram, contentAlignment: go.Spot.Center});   // tell it which Diagram to show and pan
 
-        if(!this.props.location.state.newScript){
+        if (!this.props.location.state.newScript) {
             console.log(this.props.location.state.scriptJson)
             this.load(this.props.location.state.scriptJson)
         }
@@ -560,7 +571,69 @@ class DrawScript extends Component {
     load = (json)=> {
         myDiagram.model = go.Model.fromJson(json);
     }
-    searchDiagram=()=>{
+    addGraphical = ()=> {
+        const originHadJson = {
+            name: "已存在分组1",
+            nodeDataArray: [
+            {"title":"分组", "isGroup":true, "category":"OfGroups", "key":-6, "loc":"-260.26142374915395 -195.38205515784537"},
+            {"category":"set", "params":[ {"key":"11", "value":"11"},{"key":"22", "value":"22"} ], "text":"设置参数", "key":-7, "loc":"218 -143", "group":-6},
+            {"category":"item", "title":"语句", "params":[ {"key":"2", "value":"2"} ], "key":-8, "loc":"-48 -4", "group":-6},
+            {"category":"item", "title":"语句", "params":[ {"key":"4", "value":"4"} ], "key":-4, "loc":"60 231", "group":-6},
+            {"category":"item", "title":"语句", "params":[ {"key":"1", "value":"1"} ], "key":-5, "loc":"-49 -102", "group":-6},
+            {"category":"item", "title":"语句", "params":[ {"key":"3", "value":"3"} ], "key":-9, "loc":"-182 239", "group":-6},
+            {"text":"条件语句", "category":"if", "figure":"Diamond", "key":-2, "loc":"-54 102", "group":-6}
+        ],
+            linkDataArray: [
+            {"from":-5, "to":-8, "points":[-48.999999999999986,-65.27292531090464,-48.999999999999986,-55.27292531090464,-48.999999999999986,-53.00000000000001,-48.000000000000014,-53.00000000000001,-48.000000000000014,-50.727074689095375,-48.000000000000014,-40.727074689095375]},
+            {"from":-8, "to":-2, "points":[-47.999999999999986,32.727074689095375,-47.999999999999986,42.727074689095375,-47.999999999999986,51.31353734454769,-54,51.31353734454769,-54,59.900000000000006,-54,69.9]},
+            {"from":-2, "to":-9, "visible":true, "points":[-54,134.10000000000002,-54,144.10000000000002,-54,168.18646265545232,-182,168.18646265545232,-182,192.2729253109046,-182,202.2729253109046]},
+            {"from":-2, "to":-4, "visible":true, "points":[-54,134.10000000000002,-54,144.10000000000002,-54,164.18646265545232,59.999999999999986,164.18646265545232,59.999999999999986,184.2729253109046,59.999999999999986,194.2729253109046], "condition":"N"}
+        ]};
+        let keyUuidArr = [];
+        for (let k = 0, len3 = originHadJson.nodeDataArray.length; k < len3; k++) {
+            let uuid2 = uuidv4();
+            keyUuidArr.push({key: originHadJson.nodeDataArray[k].key, uuid: uuid2})
+        }
+        for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
+            // if( originHadJson.nodeDataArray[i].group){
+            //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
+            // }
+            if (originHadJson.nodeDataArray[i].group) {
+                for (let n = 0, len4 = keyUuidArr.length; n < len4; n++) {
+                    if (originHadJson.nodeDataArray[i].group ===  keyUuidArr[n].key) {
+                        originHadJson.nodeDataArray[i].group= keyUuidArr[n].uuid
+                    }
+                }
+            }
+
+            if(originHadJson.nodeDataArray[i].isGroup) {
+                originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
+            }
+
+
+            for (let j = 0, len2 = originHadJson.linkDataArray.length; j < len2; j++) {
+                if (originHadJson.linkDataArray[j].from === keyUuidArr[i].key) {
+                    originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
+                    originHadJson.linkDataArray[j].from = keyUuidArr[i].uuid;
+                }
+                if (originHadJson.linkDataArray[j].to === keyUuidArr[i].key) {
+                    originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
+                    originHadJson.linkDataArray[j].to = keyUuidArr[i].uuid;
+                }
+            }
+        }
+        const originGrapJson = JSON.parse(myDiagram.model.toJson());//获取图里面的数据
+        const addGrapJson = originHadJson;//需要添加的数据
+        originGrapJson.nodeDataArray = originGrapJson.nodeDataArray.concat(addGrapJson.nodeDataArray);
+        originGrapJson.linkDataArray = originGrapJson.linkDataArray.concat(addGrapJson.linkDataArray);
+        console.log("originGrapJson", originGrapJson);
+        myDiagram.model = go.Model.fromJson(originGrapJson);
+
+    }
+    loadTextArea = ()=> {
+        myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+    }
+    searchDiagram = ()=> {
         {  // called by button
             var input = document.getElementById("mySearch");
             if (!input) return;
@@ -572,10 +645,10 @@ class DrawScript extends Component {
                 // search four different data properties for the string, any of which may match for success
                 // create a case insensitive RegExp from what the user typed
                 var regex = new RegExp(input.value, "i");
-                console.log("regex",regex)
-                var results = myPalette.findNodesByExample({ name: regex },
-                    { text: regex },
-                    { title: regex });
+                console.log("regex", regex)
+                var results = myPalette.findNodesByExample({name: regex},
+                    {text: regex},
+                    {title: regex});
                 // try to center the diagram at the first node that was found
                 if (results.count > 0) myPalette.centerRect(results.first().actualBounds);
             } else {  // empty string only clears highlighteds collection
@@ -585,35 +658,36 @@ class DrawScript extends Component {
         }
 
     }
-    keypressInput=(e)=>{
+    keypressInput = (e)=> {
         console.log(e.which);//react使用which代替keycode
-        if(e.which===13){
+        if (e.which === 13) {
             this.searchDiagram()
         }
     }
-    saveScript=()=>{
-        const DrawScriptCof=this.refs.DrawScriptCofForm.getFieldsValue()
-        console.log('保存',DrawScriptCof)
+    saveScript = ()=> {
+        const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue()
+        console.log('保存', DrawScriptCof)
     }
-    turnBack=()=>{
-        if(this.state.isChange){
+    turnBack = ()=> {
+        if (this.state.isChange) {
             console.log('已经修改，请确认')
-        }else{
+        } else {
             this.props.history.goBack()
         }
     }
-    contentHadChanged=()=>{
+    contentHadChanged = ()=> {
         this.setState({
-            isChange:true
+            isChange: true
         })
     }
+
     render() {
         console.log(this.props)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newScript?'新建脚本':'编辑脚本'}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : '编辑脚本'}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <div className="testing-header">
@@ -636,13 +710,17 @@ class DrawScript extends Component {
                         </div>
                     </div>
                     <div>
-                        <button id="SaveButton" onClick={this.save}>将图表转为JSON</button>
-                        <button onClick={this.load}>将JSON转为图表</button>
+                        <Button onClick={this.addGraphical}>向图上添加图形</Button>
+                    </div>
+                    <div>
+                        <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
+                        <Button onClick={this.loadTextArea}>将JSON转为图表</Button>
                     </div>
                     <div>
                         <input id="mySearch" type="text" onKeyPress={this.keypressInput}/>
-                        <button onClick={this.searchDiagram}>search</button>
+                        <Button onClick={this.searchDiagram}>search</Button>
                     </div>
+
                     <textarea id="mySavedModel"></textarea>
                 </div>
             </Content>
@@ -657,4 +735,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispath) {
     return bindActionCreators(fetchTestConfAction, dispath);
 }
-export default connect(mapStateToProps,mapDispatchToProps)(DrawScript);
+export default connect(mapStateToProps, mapDispatchToProps)(DrawScript);
