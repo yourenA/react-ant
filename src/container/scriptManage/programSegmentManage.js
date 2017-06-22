@@ -4,19 +4,15 @@
 import React, {Component} from 'react';
 import {Breadcrumb, Table, Pagination,Button,Modal,Popconfirm,message} from 'antd';
 import axios from 'axios'
-import SearchWrap from  './search';
 import {
     Link
 } from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import configJson from './../../common/config.json';
+import SearchSegment from './searchSegment'
 import {getHeader,converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
-
-class ScriptManage extends Component {
+class SegmentManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,49 +20,25 @@ class ScriptManage extends Component {
             loading: false,
             page: 1,
             q:'',
-            test_type: '',
-            test_part: '',
-            test_version: '',
             meta: {pagination: {total: 0, per_page: 0}},
             editModal:false,
             editRecord:{}
         };
     }
-    /**
-     * 如果需要保存数据使用redux
-     import {fetchAbout, changeStart, changeAbout} from '../actions/about';
-
-     static fetch(state, dispatch) {
-		return dispatch(fetchAbout(state));
-	};
-
-     componentDidMount() {
-		const {loaded} = this.props;
-		if (!loaded) {
-			this.constructor.fetch(this.props, this.props.dispatch);
-		}
-	}
-     * */
     componentDidMount() {
 
         this.fetchHwData();
-        this.props.fetchAllTestType();
-        this.props.fetchAllParts();
-        this.props.fetchAllHardwareVersions();
     }
 
-    fetchHwData = (page = 1,q='', test_type='', test_part='', test_version='')=> {
-        const that = this;
+    fetchHwData = (page = 1,q='')=> {
         this.setState({loading: true});
+        const that = this;
         axios({
-            url: `${configJson.prefix}/test_scripts`,
+            url: `${configJson.prefix}/flow_diagrams`,
             method: 'get',
             params: {
                 page: page,
-                query:q,
-                test_type_id:test_type,
-                part_id:test_part,
-                hardware_version_id:test_version
+                query:q
             },
             headers: getHeader()
         })
@@ -86,39 +58,38 @@ class ScriptManage extends Component {
     delData=(id)=>{
         console.log('id',id)
         const that=this;
-        const {page, q, test_type, test_part, test_version}=this.state;
+        const {page, q}=this.state;
         axios({
-            url: `${configJson.prefix}/test_scripts/${id}`,
+            url: `${configJson.prefix}/flow_diagrams/${id}`,
             method: 'delete',
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response);
-                that.fetchHwData(page, q, test_type, test_part, test_version);
-                message.success(messageJson[`del script success`]);
+                that.fetchHwData(page, q);
+                message.success(messageJson[`del segment success`]);
             }).catch(function (error) {
             console.log('获取出错',error);
             converErrorCodeToMsg(error)
         })
     }
     editData=()=>{
+        const editSegmentName = this.refs.editSegmentName.getFieldsValue();
+        console.log("editScriptName",editSegmentName);
+        console.log('id',this.state.editRecord.id)
         const that=this;
         const {page, q, test_type, test_part, test_version}=this.state;
-        const editScriptName = this.refs.editScriptName.getFieldsValue();
         axios({
-            url: `${configJson.prefix}/test_scripts/${this.state.editRecord.id}`,
+            url: `${configJson.prefix}/flow_diagrams/${this.state.editRecord.id}`,
             method: 'put',
             params: {
-                name:editScriptName.name,
-                test_type_id:editScriptName.test_type_id.key,
-                part_id:editScriptName.part_id.key,
-                hardware_version_id:editScriptName.hardware_version_id.key,
+                name:editSegmentName.name,
             },
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response);
-                message.success(messageJson[`edit script success`]);//这三条语句的顺序不能乱
+                message.success(messageJson[`edit segment success`]);
                 that.setState({
                     editModal:false
                 })
@@ -128,15 +99,15 @@ class ScriptManage extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q, test_type, test_part, test_version)=> {
+    onChangeSearch = (page,q)=> {
         this.setState({
-            page, q, test_type, test_part, test_version
+            page,q
         })
-        this.fetchHwData(page, q, test_type, test_part, test_version);
+        this.fetchHwData(page, q);
     }
     onPageChange = (page) => {
-        const {q, test_type, test_part, test_version}=this.state
-        this.onChangeSearch(page, q, test_type, test_part, test_version);
+        const {q}=this.state;
+        this.onChangeSearch(page, q);
     };
     render() {
         const {data, page, meta} = this.state;
@@ -154,21 +125,13 @@ class ScriptManage extends Component {
                 )
             }
         },{
-            title: '脚本名称',
+            title: '名称',
             dataIndex: 'name',
             key: 'name',
         }, {
-            title: '部件名称',
-            dataIndex: 'part_name',
-            key: 'part_name'
-        }, {
-            title: '测试类型',
-            dataIndex: 'type_type_name',
-            key: 'type_type_name',
-        }, {
-            title: '硬件版本',
-            dataIndex: 'hardware_version',
-            key: 'hardware_version',
+            title: '脚本',
+            dataIndex: 'content',
+            key: 'content'
         }, {
             title: '操作',
             key: 'action',
@@ -181,7 +144,7 @@ class ScriptManage extends Component {
                             <Link
                                 to={{
                                     pathname:`${this.props.match.url}/${record.id}`,
-                                    state: { newScript: false , scriptJson:JSON.parse(record.content),editRecord:record}
+                                    state: { newSegment: false , SegmentJson:record.content,name:record.name,editRecord:record}
                                 }}
                             >查看/编辑</Link>
                         </Button>
@@ -204,19 +167,18 @@ class ScriptManage extends Component {
             <div>
                 <div className="content">
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>硬件测试</Breadcrumb.Item>
+                        <Breadcrumb.Item>脚本段管理</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
-                            <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                            <span className="ant-divider"/>
+                            <SearchSegment onChangeSearch={this.onChangeSearch} />
                             <Button type='primary'>
                                 <Link
                                     to={{
-                                        pathname:`${this.props.match.url}/newScript`,
-                                        state: { newScript: true}
+                                        pathname:`${this.props.match.url}/newSegment`,
+                                        state: { newSegment: true , SegmentJson:'{}',name:''}
                                     }}
-                                >新建脚本</Link>
+                                >新建脚本段</Link>
                             </Button>
                         </div>
                         <Table bordered className="main-table"
@@ -231,7 +193,7 @@ class ScriptManage extends Component {
                     <Modal
                         key={ Date.parse(new Date())}
                         visible={this.state.editModal}
-                        title="修改名称"
+                        title="查看脚本"
                         onCancel={()=> {
                             this.setState({editModal: false})
                         }}
@@ -245,20 +207,13 @@ class ScriptManage extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName ref="editScriptName" testConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
+                        <AddOrEditName ref="editSegmentName" isSegment={true} editRecord={this.state.editRecord}/>
                     </Modal>
                 </div>
             </div>
         )
     }
+
 }
 
-function mapStateToProps(state) {
-    return {
-        fetchTestConf: state.fetchTestConf,
-    };
-}
-function mapDispatchToProps(dispath) {
-    return bindActionCreators(fetchTestConfAction, dispath);
-}
-export default connect(mapStateToProps,mapDispatchToProps)(ScriptManage);
+export default SegmentManage;

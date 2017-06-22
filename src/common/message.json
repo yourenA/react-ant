@@ -33,5 +33,11 @@
   "del /parts success":"删除部件成功",
   "add /test_stands success":"添加测试架成功",
   "edit /test_stands success":"修改测试架成功",
-  "del /test_stands success":"删除测试架成功"
+  "del /test_stands success":"删除测试架成功",
+  "add script success":"添加脚本成功",
+  "edit script success":"修改脚本成功",
+  "del script success":"删除脚本成功",
+  "add segment success":"添加脚本段成功",
+  "edit segment success":"修改脚本段成功",
+  "del segment success":"删除脚本段成功"
 }

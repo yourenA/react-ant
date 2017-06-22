@@ -25,12 +25,13 @@ class DrawScriptConf extends React.Component {
 
                 <div className="testing-config">
                     <div className="testing-config-row">
+
                         <div className="testing-config-item no-hide">
                             <FormItem
                                 label={'脚本名称'}
                                 {...DrawScriptConfLayout}>
-                                {getFieldDecorator('scriptName', {
-                                    initialValue: '',
+                                {getFieldDecorator('name', {
+                                    initialValue: this.props.location.state.editRecord ? this.props.location.state.editRecord.name : '',
                                     rules: [{required: true, message: `请输入脚本名称`}],
                                 })(
                                     <Input  style={{width:'150px'}}/>
@@ -41,9 +42,14 @@ class DrawScriptConf extends React.Component {
                             <FormItem
                                 label="测试类型"
                                 {...DrawScriptConfLayout}>
-                                {getFieldDecorator('test_type', {
+                                {getFieldDecorator('test_type_id', {
+                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.test_type_id.toString(),label:this.props.location.state.editRecord.test_type_name} : {key:'',label:''},
+                                    rules: [{required: true, message: `请选择测试类型`}],
                                 })(
-                                    <Select style={{width:'150px'}} labelInValue={true} allowClear={true}>
+                                    <Select
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        style={{width:'150px'}} labelInValue={true} allowClear={true}>
                                         { this.props.fetchTestConf.test_type.map((item, key) => {
                                             return (
                                                 <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
@@ -58,8 +64,13 @@ class DrawScriptConf extends React.Component {
                                 label="测试部件"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('part_id', {
+                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.part_id.toString(),label:this.props.location.state.editRecord.part_name} : {key:'',label:''},
+                                    rules: [{required: true, message: `请选择测试部件`}],
                                 })(
-                                    <Select style={{width:'150px'}} labelInValue={true} allowClear={true}>
+                                    <Select
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        style={{width:'150px'}} labelInValue={true} allowClear={true}>
                                         { this.props.fetchTestConf.parts.map((item, key) => {
                                             return (
                                                 <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
@@ -74,8 +85,13 @@ class DrawScriptConf extends React.Component {
                                 label="硬件版本"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('hardware_version_id', {
+                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.hardware_version_id.toString(),label:this.props.location.state.editRecord.hardware_version} : {key:'',label:''},
+                                    rules: [{required: true, message: `请选择硬件版本`}],
                                 })(
-                                    <Select  style={{width:'150px'}} labelInValue={true} allowClear={true}>
+                                    <Select
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        style={{width:'150px'}} labelInValue={true} allowClear={true}>
                                         { this.props.fetchTestConf.hardware_versions.map((item, key) => {
                                             return (
                                                 <Option key={item.id} value={item.id.toString()}>{item.version}</Option>

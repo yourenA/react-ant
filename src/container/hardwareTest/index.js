@@ -172,6 +172,9 @@ class HardwareTest extends Component {
         })
     }
     onChangeSearch = (page, q, test_type, test_part, test_version)=> {
+        this.setState({
+            page, q, test_type, test_part, test_version
+        })
         this.fetchHwData(page, q, test_type, test_part, test_version);
     }
     onPageChange = (page) => {

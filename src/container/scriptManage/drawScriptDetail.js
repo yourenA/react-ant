@@ -17,7 +17,6 @@ import ScriptIndex from './scriptIndex.js'
 const Option = Select.Option;
 const {Content,} = Layout;
 
-
 class DrawScript extends Component {
     constructor(props) {
         super(props);
@@ -122,8 +121,14 @@ class DrawScript extends Component {
             for (let k = 0, len3 = originHadJson.nodeDataArray.length; k < len3; k++) {
                 let uuid2 = uuidv4();
                 keyUuidArr.push({key: originHadJson.nodeDataArray[k].key, uuid: uuid2});
+
             }
             for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
+                // if( originHadJson.nodeDataArray[i].group){
+                //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
+                // }
+                // let parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
+                // originHadJson.nodeDataArray[i].loc = `${parseInt(parseLoc[0]) + this.state.scrollLeft} ${parseInt(parseLoc[1]) + this.state.scrollTop}`
 
 
                 if (originHadJson.nodeDataArray[i].group) {
@@ -151,6 +156,8 @@ class DrawScript extends Component {
                 }
             }
 
+            // const originGrapJson = JSON.parse(myDiagram.model.toJson());//获取图里面的数据
+            // const addGrapJson = originHadJson;//需要添加的数据
             for (let h = 0, len = originHadJson.nodeDataArray.length; h < len; h++) {
                 myDiagram.model.addNodeData(originHadJson.nodeDataArray[h]);
             }
@@ -159,6 +166,9 @@ class DrawScript extends Component {
             }
         }
 
+        // originGrapJson.nodeDataArray = originGrapJson.nodeDataArray.concat(addGrapJson.nodeDataArray);
+        // originGrapJson.linkDataArray = originGrapJson.linkDataArray.concat(addGrapJson.linkDataArray);
+        // myDiagram.model = go.Model.fromJson(originGrapJson);
 
     }
     render() {

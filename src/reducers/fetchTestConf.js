@@ -1,9 +1,10 @@
-import {FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PARTS_SUCCESS,FETCH_TEST_TYPE_SUCCESS} from '../actions/fetchTestConf';
+import {FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PARTS_SUCCESS,FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS} from '../actions/fetchTestConf';
 
 const initState = {
     test_type: [],
     parts:[],
-    hardware_versions:[]
+    hardware_versions:[],
+    segments:[]
 }
 
 export default function (state = initState, action) {
@@ -22,6 +23,11 @@ export default function (state = initState, action) {
             return {
                 ...state,
                 hardware_versions: action.hardware_versions
+            };
+        case FETCH_SEGMENTS_SUCCESS:
+            return {
+                ...state,
+                segments: action.segments
             };
         default:
             return state

@@ -489,7 +489,7 @@
             D.k("No property to set for this enum value: " + b + " on " + a.toString())
         },
         trace: function(a) {
-            window.console && window.console.log(a)
+            // window.console && window.console.log(a)
         },
         Bx: {},
         Nn: function(a, b) { ! 0 !== D.Bx[a] && (D.Bx[a] = !0, window.console && window.console.log(a + " is deprecated in " + b + ", see the GoJS change log for more information."))

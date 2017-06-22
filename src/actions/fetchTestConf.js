@@ -7,6 +7,7 @@ import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
 export const FETCH_PARTS_SUCCESS = 'FETCH_PARTS_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
+export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export function fetchAllTestType() {
     return dispatch => {
         axios({
@@ -64,6 +65,28 @@ export function fetchAllHardwareVersions() {
                 dispatch({
                     type: FETCH_HARDWARE_VERSIONS_SUCCESS,
                     hardware_versions:response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错',error)
+            });
+    }
+}
+
+export function fetchAllSegments() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/flow_diagrams`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers:getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_SEGMENTS_SUCCESS,
+                    segments:response.data.data
                 });
             })
             .catch(function (error) {

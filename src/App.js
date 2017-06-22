@@ -12,9 +12,9 @@ import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
+import ProgramSegmentManage from './container/scriptManage/programSegmentManage';
+import AddProgramSegment from './container/scriptManage/addProgramSegment';
 import CatagoryManage from './container/catagoryManage/index';
-// import About from './container/about';
-// import Topics from './container/topics';
 import Login from './container/login';
 import Register from './container/register';
 import './App.less';
@@ -76,8 +76,12 @@ class App extends Component {
                                                             to="/">主页</NavLink></Menu.Item>
                                 <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
                                                                         to="/hardwareTest">硬件测试</NavLink></Menu.Item>
-                                <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
-                                                                        to="/scriptManage">脚本管理</NavLink></Menu.Item>
+                                <SubMenu title={<span>脚本管理</span>}>
+                                    <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
+                                                                            to="/scriptManage">脚本管理</NavLink></Menu.Item>
+                                    <Menu.Item key="/programSegmentManage"><NavLink activeClassName="nav-selected"
+                                                                            to="/programSegmentManage">脚本段管理</NavLink></Menu.Item>
+                                </SubMenu>
                                 <SubMenu title={<span>分类管理</span>}>
                                     <Menu.Item key="/products"><NavLink activeClassName="nav-selected"
                                                                           to="/products">产品管理</NavLink></Menu.Item>
@@ -132,6 +136,17 @@ class App extends Component {
                         path="/scriptManage/:id" render={(props) => {
                         return (login.login && testPermission('script_management') ) ?
                             <DrawScript {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+
+                    <Route exact
+                           path="/programSegmentManage" render={(props) => {
+                        return (login.login && testPermission('script_management') ) ?
+                            <ProgramSegmentManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+                    <Route
+                        path="/programSegmentManage/:id" render={(props) => {
+                        return (login.login && testPermission('script_management') ) ?
+                            <AddProgramSegment {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                    {/* <Route
                         path="/topics/option1" render={(props) => {

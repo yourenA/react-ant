@@ -29,11 +29,11 @@ class HardwareTest extends Component {
     }
 
     componentDidMount() {
-        this.setState({loading: true});
         this.fetchHwData();
     }
 
     fetchHwData = (page = 1, q = '',selectType='')=> {
+        this.setState({loading: true});
         const that = this;
         this.setState({loading: true});
         let params =  {
@@ -144,8 +144,14 @@ class HardwareTest extends Component {
     }
     onChangeSearch = (page, q,selectType)=> {
         if(this.props.match.url==='/hardware_versions'){
+            this.setState({
+                page, q,selectType
+            })
             this.fetchHwData(page, q,selectType);
         }else{
+            this.setState({
+                page, q
+            })
             this.fetchHwData(page, q);
         }
     }
