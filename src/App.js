@@ -13,6 +13,7 @@ import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
 import ProgramSegmentManage from './container/scriptManage/programSegmentManage';
+import ScriptDetail from './container/scriptManage/drawScriptDetail';
 import AddProgramSegment from './container/scriptManage/addProgramSegment';
 import CatagoryManage from './container/catagoryManage/index';
 import Login from './container/login';
@@ -136,6 +137,12 @@ class App extends Component {
                         path="/scriptManage/:id" render={(props) => {
                         return (login.login && testPermission('script_management') ) ?
                             <DrawScript {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+
+                    <Route
+                        path="/scriptDetail/:id" render={(props) => {
+                        return (login.login && testPermission('script_management') ) ?
+                            <ScriptDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
 
                     <Route exact

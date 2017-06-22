@@ -22,7 +22,8 @@ class DrawScript extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scriptJson:'{}'
+            scriptJson:'{}',
+            editRecord:null
         };
     }
 
@@ -48,7 +49,8 @@ class DrawScript extends Component {
             .then(function (response) {
                 console.log(response);
                 that.setState({
-                    scriptJson:response.data.content
+                    scriptJson:response.data.content,
+                    editRecord:response.data
                 });
                 if(cb) cb();
             }).catch(function (error) {
@@ -57,7 +59,9 @@ class DrawScript extends Component {
     }
 
     saveScript = ()=> {
-        let myDiagram=this.refs.ScriptIndex.callbackDiagram()
+
+        let myDiagram=this.refs.ScriptIndex.callbackDiagram();
+        const that=this
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
         const content=JSON.parse( myDiagram.model.toJson());
         for(let i=0,len=content.linkDataArray.length;i<len;i++){
@@ -81,6 +85,9 @@ class DrawScript extends Component {
             .then(function (response) {
                 console.log(response);
                 message.success(msg);
+                that.setState({
+                    editRecord:response.data
+                })
             }).catch(function (error) {
             console.log('获取出错',error);
             converErrorCodeToMsg(error)
@@ -94,7 +101,6 @@ class DrawScript extends Component {
         }
     }
     onChangeSegment=(id)=>{
-        console.log(id)
         const that = this;
         axios({
             url: `${configJson.prefix}/flow_diagrams/${id}`,
@@ -122,8 +128,14 @@ class DrawScript extends Component {
             for (let k = 0, len3 = originHadJson.nodeDataArray.length; k < len3; k++) {
                 let uuid2 = uuidv4();
                 keyUuidArr.push({key: originHadJson.nodeDataArray[k].key, uuid: uuid2});
+
             }
             for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
+                // if( originHadJson.nodeDataArray[i].group){
+                //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
+                // }
+                // let parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
+                // originHadJson.nodeDataArray[i].loc = `${parseInt(parseLoc[0]) + this.state.scrollLeft} ${parseInt(parseLoc[1]) + this.state.scrollTop}`
 
 
                 if (originHadJson.nodeDataArray[i].group) {
@@ -151,6 +163,8 @@ class DrawScript extends Component {
                 }
             }
 
+            // const originGrapJson = JSON.parse(myDiagram.model.toJson());//获取图里面的数据
+            // const addGrapJson = originHadJson;//需要添加的数据
             for (let h = 0, len = originHadJson.nodeDataArray.length; h < len; h++) {
                 myDiagram.model.addNodeData(originHadJson.nodeDataArray[h]);
             }
@@ -159,6 +173,9 @@ class DrawScript extends Component {
             }
         }
 
+        // originGrapJson.nodeDataArray = originGrapJson.nodeDataArray.concat(addGrapJson.nodeDataArray);
+        // originGrapJson.linkDataArray = originGrapJson.linkDataArray.concat(addGrapJson.linkDataArray);
+        // myDiagram.model = go.Model.fromJson(originGrapJson);
 
     }
     render() {
@@ -166,11 +183,11 @@ class DrawScript extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.location.state.editRecord.name}'`}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.state.editRecord? this.state.editRecord.name: ''}'`}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <div className="testing-header">
-                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props}/>
+                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props} {...this.state}/>
                         <div className="testing-start">
                             <div className="testing-start-btn testing-save-btn" onClick={this.saveScript}>
                                 保存脚本
@@ -192,7 +209,7 @@ class DrawScript extends Component {
                         </Select>
                         <Button type='primary' onClick={this.addGraphical}>添加</Button>
                     </div>
-                    <ScriptIndex ref="ScriptIndex" isNew={this.props.location.state.newScript} json={this.state.scriptJson}/>
+                    <ScriptIndex ref="ScriptIndex" {...this.props} isNew={this.props.location.state.newScript} json={this.state.scriptJson}/>
                 </div>
             </Content>
         )

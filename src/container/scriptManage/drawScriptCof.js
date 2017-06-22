@@ -20,6 +20,7 @@ class DrawScriptConf extends React.Component {
     }
 
     render() {
+        console.log(this.props)
         const {getFieldDecorator} = this.props.form;
         return (
 
@@ -31,7 +32,7 @@ class DrawScriptConf extends React.Component {
                                 label={'脚本名称'}
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('name', {
-                                    initialValue: this.props.location.state.editRecord ? this.props.location.state.editRecord.name : '',
+                                    initialValue: this.props.editRecord ? this.props.editRecord.name : '',
                                     rules: [{required: true, message: `请输入脚本名称`}],
                                 })(
                                     <Input  style={{width:'150px'}}/>
@@ -43,7 +44,7 @@ class DrawScriptConf extends React.Component {
                                 label="测试类型"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('test_type_id', {
-                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.test_type_id.toString(),label:this.props.location.state.editRecord.test_type_name} : {key:'',label:''},
+                                    initialValue: this.props.editRecord ? {key:this.props.editRecord.test_type_id.toString(),label:this.props.editRecord.test_type_name} : {key:'',label:''},
                                     rules: [{required: true, message: `请选择测试类型`}],
                                 })(
                                     <Select
@@ -64,7 +65,7 @@ class DrawScriptConf extends React.Component {
                                 label="测试部件"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('part_id', {
-                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.part_id.toString(),label:this.props.location.state.editRecord.part_name} : {key:'',label:''},
+                                    initialValue: this.props.editRecord ? {key:this.props.editRecord.part_id.toString(),label:this.props.editRecord.part_name} : {key:'',label:''},
                                     rules: [{required: true, message: `请选择测试部件`}],
                                 })(
                                     <Select
@@ -85,7 +86,7 @@ class DrawScriptConf extends React.Component {
                                 label="硬件版本"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('hardware_version_id', {
-                                    initialValue: this.props.location.state.editRecord ? {key:this.props.location.state.editRecord.hardware_version_id.toString(),label:this.props.location.state.editRecord.hardware_version} : {key:'',label:''},
+                                    initialValue: this.props.editRecord ? {key:this.props.editRecord.hardware_version_id.toString(),label:this.props.editRecord.hardware_version} : {key:'',label:''},
                                     rules: [{required: true, message: `请选择硬件版本`}],
                                 })(
                                     <Select

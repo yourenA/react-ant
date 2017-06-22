@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import {Breadcrumb, Layout, Button,Select,message} from 'antd';
-import DrawScriptCof from './drawScriptCof'
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -17,80 +16,40 @@ import ScriptIndex from './scriptIndex.js'
 const Option = Select.Option;
 const {Content,} = Layout;
 
-class DrawScript extends Component {
+class DrawScriptDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scriptJson:'{}'
+            segmentsJson:'{}',
+            detailJson:localStorage.getItem('detailJon'),
+            detailIndex:0,
         };
     }
 
      componentDidMount () {
-        if (!this.props.location.state.newScript) {
-            this.fetchScript(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
-        }else{
-            this.refs.ScriptIndex.init()
+         this.refs.ScriptIndex.init();
+         this.setState({
+             [this.props.match.params.id]:localStorage.getItem('detailJon')
+         },function () {
+         })
+    }
+    componentWillReceiveProps(nextProps){
+        if(this.props.match.params.id !== nextProps.match.params.id){
+            if(this.state[nextProps.match.params.id]){
+                this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
+            }else{
+                this.setState({
+                    [ nextProps.match.params.id]:localStorage.getItem('detailJon')
+                },function () {
+                    this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
+                })
+            }
+
         }
-
-        this.props.fetchAllTestType();
-        this.props.fetchAllParts();
-        this.props.fetchAllHardwareVersions();
-        this.props.fetchAllSegments();
     }
-    fetchScript=(id,cb)=>{
-        const that=this
-        axios({
-            url: `${configJson.prefix}/test_scripts/${id}`,
-            method: 'get',
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response);
-                that.setState({
-                    scriptJson:response.data.content
-                });
-                if(cb) cb();
-            }).catch(function (error) {
-            console.log('获取出错',error);
-        })
-    }
-
     saveScript = ()=> {
-        let myDiagram=this.refs.ScriptIndex.callbackDiagram()
-        const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
-        const content=JSON.parse( myDiagram.model.toJson());
-        for(let i=0,len=content.linkDataArray.length;i<len;i++){
-            delete  content.linkDataArray[i].points
-        }
-        const url=this.props.location.state.newScript ?`/test_scripts`:`/test_scripts/${this.props.match.params.id}`
-        const method=this.props.location.state.newScript ?`post`:`put`;
-        const msg=this.props.location.state.newScript ?messageJson[`add script success`]:messageJson[`edit script success`];
-        axios({
-            url: `${configJson.prefix}${url}`,
-            method: method,
-            params: {
-                name:DrawScriptCof.name,
-                test_type_id:DrawScriptCof.test_type_id?DrawScriptCof.test_type_id.key:'',
-                part_id:DrawScriptCof.part_id?DrawScriptCof.part_id.key:'',
-                hardware_version_id:DrawScriptCof.hardware_version_id?DrawScriptCof.hardware_version_id.key:'',
-                content: JSON.stringify(content),
-            },
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response);
-                message.success(msg);
-            }).catch(function (error) {
-            console.log('获取出错',error);
-            converErrorCodeToMsg(error)
-        })
     }
     turnBack = ()=> {
-        if (this.state.isChange) {
-            console.log('已经修改，请确认')
-        } else {
-            this.props.history.goBack()
-        }
     }
     onChangeSegment=(id)=>{
         console.log(id)
@@ -124,12 +83,6 @@ class DrawScript extends Component {
 
             }
             for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
-                // if( originHadJson.nodeDataArray[i].group){
-                //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
-                // }
-                // let parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
-                // originHadJson.nodeDataArray[i].loc = `${parseInt(parseLoc[0]) + this.state.scrollLeft} ${parseInt(parseLoc[1]) + this.state.scrollTop}`
-
 
                 if (originHadJson.nodeDataArray[i].group) {
                     for (let n = 0, len4 = keyUuidArr.length; n < len4; n++) {
@@ -176,17 +129,9 @@ class DrawScript extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.location.state.editRecord.name}'`}</Breadcrumb.Item>
+                    <Breadcrumb.Item>修改详细项</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
-                    <div className="testing-header">
-                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props}/>
-                        <div className="testing-start">
-                            <div className="testing-start-btn testing-save-btn" onClick={this.saveScript}>
-                                保存脚本
-                            </div>
-                        </div>
-                    </div>
                     <div>
                         <span>选择代码段: </span>
                         <Select   className="search-select"
@@ -200,9 +145,8 @@ class DrawScript extends Component {
                                 )
                             }) }
                         </Select>
-                        <Button type='primary' onClick={this.addGraphical}>添加</Button>
                     </div>
-                    <ScriptIndex ref="ScriptIndex" isNew={this.props.location.state.newScript} json={this.state.scriptJson}/>
+                    <ScriptIndex ref="ScriptIndex"  {...this.props} isNew={false} json={this.state.detailJson}/>
                 </div>
             </Content>
         )
@@ -216,4 +160,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispath) {
     return bindActionCreators(fetchTestConfAction, dispath);
 }
-export default connect(mapStateToProps, mapDispatchToProps)(DrawScript);
+export default connect(mapStateToProps, mapDispatchToProps)(DrawScriptDetail);

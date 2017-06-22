@@ -43,9 +43,9 @@ class ScriptIndex extends Component {
     }
 
     showLinkLabel = (e)=> {
-        console.log('e.subject.fromNode.data',e.subject.fromNode.data)
+        console.log('e.subject.fromNode.data', e.subject.fromNode.data)
         var label = e.subject.findObject("LABEL");// name: "LABEL"
-        if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond" || e.subject.fromNode.data.category==='item' );
+        if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond" || e.subject.fromNode.data.category === 'item' );
         //如果figure=Diamond则线的文字可以编辑
     }
     nodeStyle = ()=> {
@@ -130,7 +130,7 @@ class ScriptIndex extends Component {
     init = ()=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif"
-        var lightText = 'whitesmoke';
+        const lightText = 'whitesmoke';
         myDiagram =
             $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
                 {
@@ -453,7 +453,7 @@ class ScriptIndex extends Component {
                 ],
                 {
                     background: "#FFFFFF",
-                    isSubGraphExpanded:false,
+                    isSubGraphExpanded: false,
                     // highlight when dragging into the Group
                     mouseDragEnter: function (e, grp, prev) {
                         that.highlightGroup(e, grp, true);
@@ -480,8 +480,8 @@ class ScriptIndex extends Component {
                             contextMenu:     // define a context menu for each node
                                 $(go.Adornment, "Vertical",  // that has one button
                                     $("ContextMenuButton",
-                                        $(go.TextBlock, "Change Color"),
-                                        {click: this.changeColor})
+                                        $(go.TextBlock, "查看详细"),
+                                        {click: this.showDetail})
                                     // more ContextMenuButtons would go here
                                 )  // end Adornment
                         },
@@ -496,9 +496,11 @@ class ScriptIndex extends Component {
                             new go.Binding("text", "title").makeTwoWay())
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
-                        {  padding: 10},
+                        {padding: 10},
                         new go.Binding("padding", "isSubGraphExpanded",
-                            function(exp) { return exp ? 10 : 0; } ).ofObject())
+                            function (exp) {
+                                return exp ? 10 : 0;
+                            }).ofObject())
                 ),  // end Vertical Panel
 
                 // three named ports, one on each side except the bottom, all input only:
@@ -562,7 +564,7 @@ class ScriptIndex extends Component {
                         {fill: "#F8F8F8", stroke: null}),
                     $(go.TextBlock, "条件",  // the label
                         {
-                            margin:3,
+                            margin: 3,
                             font: "10pt helvetica, arial, sans-serif",
                             stroke: "#333333",
                             editable: true,
@@ -576,29 +578,60 @@ class ScriptIndex extends Component {
         myOverview =
             $(go.Overview, "myOverviewDiv",  // the HTML DIV element for the Overview
                 {observed: myDiagram, contentAlignment: go.Spot.Center});   // tell it which Diagram to show and pan
-        if(!this.props.isNew){
+        if (!this.props.isNew) {
             this.load(this.props.json)
         }
 
     }
-    changeColor = (e, obj) => {
+    showDetail = (e, obj) => {
         // get the context menu that holds the button that was clicked
         var contextmenu = obj.part;
         // get the node data to which the Node is data bound
         var nodedata = contextmenu.data;
         // compute the next color for the node
-        console.log(nodedata)
-        console.log(nodedata.key)
+        console.log(nodedata);
+        let originJson = JSON.parse(this.callbackJson());
+        let detailJon = {nodeDataArray: [], linkDataArray: []};
+        let keyInGroup = []
+        console.log("originJson", originJson);
+        for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
+            if (originJson.nodeDataArray[i].group === nodedata.key) {
+                detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
+                keyInGroup.push(originJson.nodeDataArray[i].key)
+            }
+            if (originJson.nodeDataArray[i].isGroup === true && originJson.nodeDataArray[i].key !== nodedata.key) {
+                for (let m = 0, len = originJson.nodeDataArray.length; m < len; m++) {
+                    if (originJson.nodeDataArray[m].group === originJson.nodeDataArray[i].key) {
+                        if(keyInGroup.indexOf( originJson.nodeDataArray[i].group) >= 0 || keyInGroup.indexOf( originJson.nodeDataArray[m].group) >= 0){
+                            detailJon.nodeDataArray.push(originJson.nodeDataArray[m]);
+                            keyInGroup.push(originJson.nodeDataArray[m].key)
+                        }
+                    }
+                }
+            }
+        }
+        for (let j = 0, len = originJson.linkDataArray.length; j < len; j++) {
+            delete  originJson.linkDataArray[j].points;
+            if (keyInGroup.indexOf(originJson.linkDataArray[j].from) >= 0 || keyInGroup.indexOf(originJson.linkDataArray[j].to) >= 0) {
+                detailJon.linkDataArray.push(originJson.linkDataArray[j]);
+            }
+        }
+        console.log('detailJon', detailJon)
+
+        localStorage.setItem('detailJon', JSON.stringify(detailJon));
+        localStorage.setItem('originJson', JSON.stringify(originJson));
+        this.props.history.push(`/scriptDetail/${nodedata.key}`)
+
     }
 
     save = ()=> {
         document.getElementById("mySavedModel").value = myDiagram.model.toJson();
         myDiagram.isModified = false;
     }
-    callbackJson=()=>{
+    callbackJson = ()=> {
         return myDiagram.model.toJson();
     }
-    callbackDiagram=()=>{
+    callbackDiagram = ()=> {
         return myDiagram
     }
     load = (json)=> {
@@ -809,9 +842,10 @@ class ScriptIndex extends Component {
             isChange: true
         })
     }
-    addProgramSegment=()=>{
+    addProgramSegment = ()=> {
         this.props.history.push('/addProgramSegment')
     }
+
     render() {
         return (
             <div>
