@@ -82,7 +82,7 @@ class SegmentManage extends Component {
         axios({
             url: `${configJson.prefix}/flow_diagrams/${this.state.editRecord.id}`,
             method: 'put',
-            params: {
+            data: {
                 name:editSegmentName.name,
             },
             headers: getHeader()

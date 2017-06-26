@@ -9,6 +9,11 @@ import axios from 'axios'
 import configJson from './../../common/config.json';
 import {getHeader,converErrorCodeToMsg} from './../../common/common';
 import messageJson from './../../common/message.json';
+import FetchSegments from './fetchSegments'
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as fetchTestConfAction from './../../actions/fetchTestConf';
+
 const {Content,} = Layout;
 
 
@@ -22,6 +27,7 @@ class AddProgramSegment extends Component {
     }
 
     componentDidMount() {
+        this.props.fetchAllSegments();
         if (!this.props.location.state.newSegment) {
             this.fetchScript(this.props.location.state.editRecord.id,this.refs.ScriptIndex.init)
         }else{
@@ -59,7 +65,7 @@ class AddProgramSegment extends Component {
         axios({
             url: `${configJson.prefix}${url}`,
             method: method,
-            params: {
+            data: {
                 name:this.refs.scriptCodeNmae.refs.input.value,
                 content: JSON.stringify(content),
             },
@@ -91,8 +97,9 @@ class AddProgramSegment extends Component {
                     <Breadcrumb.Item>{this.props.location.state.newSegment ? '新建脚本段' : '编辑脚本段'}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
+                    <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
                     <Button type='primary' onClick={()=>{this.setState({saveModal:true})}}>{this.props.location.state.newSegment ?'保存' :'保存修改'}</Button>
-                    <ScriptIndex ref="ScriptIndex" isNew={this.props.location.state.newSegment} json={this.state.segmentJson}/>
+                    <ScriptIndex ref="ScriptIndex" isNew={this.props.location.state.newSegment} {...this.props} json={this.state.segmentJson}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}
@@ -117,4 +124,12 @@ class AddProgramSegment extends Component {
         )
     }
 }
-export default AddProgramSegment
+function mapStateToProps(state) {
+    return {
+        fetchTestConf: state.fetchTestConf,
+    };
+}
+function mapDispatchToProps(dispath) {
+    return bindActionCreators(fetchTestConfAction, dispath);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddProgramSegment);

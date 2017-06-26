@@ -12,10 +12,12 @@ import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
-import ProgramSegmentManage from './container/scriptManage/programSegmentManage';
+import SegmentManage from './container/scriptManage/segmentManage';
 import ScriptDetail from './container/scriptManage/drawScriptDetail';
-import AddProgramSegment from './container/scriptManage/addProgramSegment';
+import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
+import DrawSegment from './container/scriptManage/drawSegment';
 import CatagoryManage from './container/catagoryManage/index';
+import SystemManage from './container/systemManage/index';
 import Login from './container/login';
 import Register from './container/register';
 import './App.less';
@@ -36,9 +38,9 @@ class App extends Component {
 
     componentWillMount() {
         console.log(window.location.pathname);
-        if (window.location.pathname.indexOf('topics') >= 0) {
+        if (window.location.pathname.indexOf('systemManage') >= 0) {
             this.setState({
-                pathname: '/topics'
+                pathname: '/systemManage'
             })
         } else {
             this.setState({
@@ -58,7 +60,7 @@ class App extends Component {
     }
 
     render() {
-        const login=this.props.loginState
+        const login=this.props.loginState;
         return (
             <Router>
                 <div>
@@ -75,29 +77,53 @@ class App extends Component {
                                 {/*'/'的navlink 需要添加exact才不会选其他的时候默认将‘/’也变高亮*/}
                                 <Menu.Item key="/"><NavLink exact activeClassName="nav-selected"
                                                             to="/">主页</NavLink></Menu.Item>
-                                <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
-                                                                        to="/hardwareTest">硬件测试</NavLink></Menu.Item>
-                                <SubMenu title={<span>脚本管理</span>}>
-                                    <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
-                                                                            to="/scriptManage">脚本管理</NavLink></Menu.Item>
-                                    <Menu.Item key="/programSegmentManage"><NavLink activeClassName="nav-selected"
-                                                                            to="/programSegmentManage">脚本段管理</NavLink></Menu.Item>
-                                </SubMenu>
-                                <SubMenu title={<span>分类管理</span>}>
-                                    <Menu.Item key="/products"><NavLink activeClassName="nav-selected"
-                                                                          to="/products">产品管理</NavLink></Menu.Item>
-                                    <Menu.Item key="/test_types"><NavLink activeClassName="nav-selected"
-                                                                                to="/test_types">测试类型</NavLink></Menu.Item>
-                                    <Menu.Item key="/hardware_versions"><NavLink activeClassName="nav-selected"
-                                                                              to="/hardware_versions">硬件版本</NavLink></Menu.Item>
-                                    <Menu.Item key="/parts"><NavLink activeClassName="nav-selected"
-                                                                     to="/parts">测试部件</NavLink></Menu.Item>
-                                    <Menu.Item key="/test_stands"><NavLink activeClassName="nav-selected"
-                                                                     to="/test_stands">测试架</NavLink></Menu.Item>
-                                </SubMenu>
-                                {/*<Menu.Item key="/about"><NavLink activeClassName="nav-selected"
-                                                                 to="/about">About</NavLink></Menu.Item>
-                                <Menu.Item key="/topics"><NavLink activeClassName="nav-selected" to="/topics/option1">Topics</NavLink></Menu.Item>*/}
+                                {
+                                    (login.login && testPermission('script_test') )?
+                                        <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
+                                                                                to="/hardwareTest">硬件测试</NavLink></Menu.Item>
+                                        :null
+                                }
+                                {
+                                    (login.login && testPermission('script_management') ) ?
+                                        <SubMenu title={<span>脚本管理</span>}>
+                                            <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
+                                                                                    to="/scriptManage">脚本管理</NavLink></Menu.Item>
+                                            <Menu.Item key="/segmentManage"><NavLink activeClassName="nav-selected"
+                                                                                     to="/segmentManage">脚本段管理</NavLink></Menu.Item>
+                                        </SubMenu>
+                                        :null
+                                }
+                                {
+                                    (login.login && testPermission('product_management') ) ?
+                                        <SubMenu title={<span>分类管理</span>}>
+                                            {testPermission('product_management')?
+                                                <Menu.Item key="/products"><NavLink activeClassName="nav-selected" to="/products">产品管理</NavLink></Menu.Item>
+                                                :null
+                                            }
+                                            {testPermission('test_type_management')?
+                                                <Menu.Item key="/test_types"><NavLink activeClassName="nav-selected"
+                                                                                      to="/test_types">测试类型</NavLink></Menu.Item>
+                                                :null
+                                            }
+                                            {testPermission('hardware_version_management')?
+                                                <Menu.Item key="/hardware_versions"><NavLink activeClassName="nav-selected"
+                                                                                             to="/hardware_versions">硬件版本</NavLink></Menu.Item>
+                                                :null
+                                            }
+                                            {testPermission('part_management')?
+                                                <Menu.Item key="/parts"><NavLink activeClassName="nav-selected"
+                                                                                 to="/parts">测试部件</NavLink></Menu.Item>
+                                                :null
+                                            }
+                                            {testPermission('test_stand_management')?
+                                                <Menu.Item key="/test_stands"><NavLink activeClassName="nav-selected"
+                                                                                       to="/test_stands">测试架</NavLink></Menu.Item>
+                                                :null
+                                            }
+                                        </SubMenu>
+                                        :null
+                                }
+                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/manufacturerInfo">系统管理</NavLink></Menu.Item>
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
@@ -125,7 +151,6 @@ class App extends Component {
                         return (login.login && testPermission('script_test') ) ?
                             <HardwareTesting {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
-                    {/*<Route path="/about" component={About}/>*/}
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route exact
@@ -146,20 +171,25 @@ class App extends Component {
                     }}/>
 
                     <Route exact
-                           path="/programSegmentManage" render={(props) => {
+                           path="/segmentManage" render={(props) => {
                         return (login.login && testPermission('script_management') ) ?
-                            <ProgramSegmentManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <SegmentManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
-                        path="/programSegmentManage/:id" render={(props) => {
+                        path="/segmentManage/:id" render={(props) => {
                         return (login.login && testPermission('script_management') ) ?
-                            <AddProgramSegment {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <DrawSegment {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
-                   {/* <Route
-                        path="/topics/option1" render={(props) => {
+                    <Route
+                        path="/segmentDetail/:id" render={(props) => {
+                        return (login.login && testPermission('script_management') ) ?
+                            <DrawSegmentDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+                    <Route
+                        path="/systemManage" render={(props) => {
                         return login.login ?
-                            <Topics {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
-                    }}/>*/}
+                            <SystemManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
                     <Route
                         path="/products" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?

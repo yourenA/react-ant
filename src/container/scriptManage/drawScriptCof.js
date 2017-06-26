@@ -20,7 +20,6 @@ class DrawScriptConf extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         const {getFieldDecorator} = this.props.form;
         return (
 

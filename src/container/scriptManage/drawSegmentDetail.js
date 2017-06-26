@@ -13,7 +13,6 @@ import axios from 'axios';
 import DrawScriptCof from './drawScriptCof'
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
-var _ = require('lodash');
 const {Content,} = Layout;
 
 class DrawScriptDetail extends Component {
@@ -75,39 +74,20 @@ class DrawScriptDetail extends Component {
     }
 
     saveScript = ()=> {
-        const originJson=JSON.parse(localStorage.getItem('originJson'));
-        const detailJon=JSON.parse(localStorage.getItem('detailJon'));
-        let changeJson=JSON.parse(this.refs.ScriptIndex.callbackJson());
-        console.log("changeJson.nodeDataArra",changeJson.nodeDataArray.length)
-        for(let i=0,len=changeJson.nodeDataArray.length;i<len;i++){
-            if(!changeJson.nodeDataArray[i].group){
-                changeJson.nodeDataArray[i].group=this.props.match.params.id
-            }
-        }
-        console.log("originJson",originJson)
-        console.log("detailJon",detailJon)
-        console.log("changeJson",changeJson)
-        console.log('resultJson',_.extend(_.difference(originJson.nodeDataArray, detailJon.nodeDataArray), changeJson.nodeDataArray))
     }
     turnBack = ()=> {
     }
     render() {
+        console.log(this.props)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>修改脚本"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
+                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
+                    <Breadcrumb.Item>修改脚本段"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
-                    <div className="testing-header">
-                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props} {...this.state}/>
-                        <div className="testing-start">
-                            <div className="testing-start-btn testing-save-btn" onClick={this.saveScript}>
-                                保存脚本
-                            </div>
-                        </div>
-                    </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
+                    <Button type='primary' onClick={()=>{this.setState({saveModal:true})}}>'保存</Button>
                     <ScriptIndex ref="ScriptIndex"  {...this.props} isNew={false} json={this.state.detailJson}/>
                 </div>
             </Content>

@@ -9,23 +9,6 @@ import uuidv4 from 'uuid/v4';
 
 var $ = window.$;
 var go = window.go;
-var formulaArr = [
-    {category: "start", text: "开始"},
-    {text: "条件语句", category: "if", figure: "Diamond"},
-    {text: "循环语句", category: "for", figure: "Diamond"},
-    {text: "错误输出", category: "errOut"},
-    {category: "end", text: "结束"},
-    {category: "Comment", text: "备注"},
-    {title: "分组", isGroup: true, category: "OfGroups"},
-    {category: "set", params: [{}], text: '设置参数'},
-    {
-        category: "item",
-        title: "语句",
-        params: [
-            {}
-        ]
-    }];
-
 var myDiagram = null;
 var myPalette = null;
 var myOverview = null;
@@ -129,8 +112,30 @@ class ScriptIndex extends Component {
     }
     init = ()=> {
         const that = this;
-        const titleFont = "11pt Verdana, sans-serif"
+        const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
+        let formulaArr = [
+            {category: "start", text: "开始"},
+            {text: "条件语句", category: "if", figure: "Diamond"},
+            {text: "循环语句", category: "for", figure: "Diamond"},
+            {text: "错误输出", category: "errOut"},
+            {category: "end", text: "结束"},
+            {category: "Comment", text: "备注"},
+            {title: "分组", isGroup: true, category: "OfGroups"},
+            {category: "set", params: [{}], text: '设置参数'},
+            {
+                category: "item",
+                title: "语句",
+                params: [
+                    {}
+                ]
+            }];
+
+
+        for (let i = 0, len = formulaArr.length; i < len; i++) {
+            let uuidIn = uuidv4();
+            formulaArr[i].key = uuidIn
+        }
         myDiagram =
             $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
                 {
@@ -589,12 +594,14 @@ class ScriptIndex extends Component {
         // get the node data to which the Node is data bound
         var nodedata = contextmenu.data;
         // compute the next color for the node
-        console.log(nodedata);
         let originJson = JSON.parse(this.callbackJson());
-        let detailJon = {nodeDataArray: [], linkDataArray: []};
+        let detailJon = {class: "go.GraphLinksModel", nodeDataArray: [], linkDataArray: []};
         let keyInGroup = []
         console.log("originJson", originJson);
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
+            if (originJson.nodeDataArray[i].key === nodedata.key) {
+                detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
+            }
             if (originJson.nodeDataArray[i].group === nodedata.key) {
                 detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
                 keyInGroup.push(originJson.nodeDataArray[i].key)
@@ -602,7 +609,7 @@ class ScriptIndex extends Component {
             if (originJson.nodeDataArray[i].isGroup === true && originJson.nodeDataArray[i].key !== nodedata.key) {
                 for (let m = 0, len = originJson.nodeDataArray.length; m < len; m++) {
                     if (originJson.nodeDataArray[m].group === originJson.nodeDataArray[i].key) {
-                        if(keyInGroup.indexOf( originJson.nodeDataArray[i].group) >= 0 || keyInGroup.indexOf( originJson.nodeDataArray[m].group) >= 0){
+                        if (keyInGroup.indexOf(originJson.nodeDataArray[i].group) >= 0 || keyInGroup.indexOf(originJson.nodeDataArray[m].group) >= 0) {
                             detailJon.nodeDataArray.push(originJson.nodeDataArray[m]);
                             keyInGroup.push(originJson.nodeDataArray[m].key)
                         }
@@ -616,12 +623,23 @@ class ScriptIndex extends Component {
                 detailJon.linkDataArray.push(originJson.linkDataArray[j]);
             }
         }
-        console.log('detailJon', detailJon)
 
         localStorage.setItem('detailJon', JSON.stringify(detailJon));
-        localStorage.setItem('originJson', JSON.stringify(originJson));
-        this.props.history.push(`/scriptDetail/${nodedata.key}`)
+        if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/segmentManage/:id') {
+            console.log("是在顶层")
+            localStorage.setItem('originJson', JSON.stringify(originJson));
+        }
+        if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
+            this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+        } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
+            this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+        }
 
+    }
+    delDiagram = ()=> {
+        myDiagram = null;
+        myPalette = null;
+        myOverview = null;
     }
 
     save = ()=> {

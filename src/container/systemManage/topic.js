@@ -3,23 +3,15 @@
  */
 import React from 'react'
 import {Layout, Breadcrumb,Button} from 'antd';
-import './topics.less'
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as globalActions from './../actions/global';
+import './index.less'
 const {Content,} = Layout;
-@connect(
-    state => state,
-    dispatch => bindActionCreators(globalActions, dispatch)
-)
 
 class Topic extends React.Component {
     changeCls=()=>{
-        this.props.currentAnimate(this.refs.input.value);
+        // this.props.currentAnimate(this.refs.input.value);
     }
     render() {
         const {match}=this.props;
-        console.log(this.props.global.animateCls)
         return (
             <Layout style={{padding: '0 24px 24px'}}>
                 <Breadcrumb style={{margin: '12px 0'}}>
