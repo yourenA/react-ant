@@ -206,9 +206,12 @@ exports.getUserPermission  = (name) => {
     return false
 };
 
-//封装好的get和post接口，调用方法情况action文件
-exports.fetchData = axios.create({
-    baseURL: configJson.prefix, //设置默认api路径
-    timeout: 5000, //设置超时时间
-    headers: {Authorization:`Bearer ${sessionStorage.getItem('usertoken') ||localStorage.getItem('usertoken')}`}
-});
+/**
+ *  删除图形的线节点
+ * */
+
+exports.delPointsInLink  = (arr) => {
+    for(let i=0,len=arr.length;i<len;i++){
+        delete  arr[i].points
+    }
+}

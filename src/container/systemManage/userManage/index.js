@@ -91,6 +91,10 @@ class HardwareTest extends Component {
             render: (text, record, index) => {
                 return (
                     <div key={index}>
+                        <Button type='primary' onClick={this.delData.bind(this, record.id)}>
+                            重置密码
+                        </Button>
+                        <span className="ant-divider"/>
                         <Button onClick={()=> {
                             this.setState({editId:record.id,editModal: true, editRecord: record})
                         }}>
@@ -103,10 +107,7 @@ class HardwareTest extends Component {
                                 删除
                             </button>
                         </Popconfirm>
-                        <span className="ant-divider"/>
-                        <Button type='primary' onClick={this.delData.bind(this, record.id)}>
-                            重置密码
-                        </Button>
+
                     </div>
                 )
             }

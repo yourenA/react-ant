@@ -2,15 +2,14 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout, Button, Select, message} from 'antd';
+import {Breadcrumb, Layout, Button} from 'antd';
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, converErrorCodeToMsg} from './../../common/common.js';
+import {getHeader,} from './../../common/common.js';
 import configJson from './../../common/config.json';
 import axios from 'axios';
-import DrawScriptCof from './drawScriptCof'
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
 const {Content,} = Layout;

@@ -136,6 +136,7 @@ class ScriptIndex extends Component {
             let uuidIn = uuidv4();
             formulaArr[i].key = uuidIn
         }
+
         myDiagram =
             $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
                 {
@@ -597,11 +598,10 @@ class ScriptIndex extends Component {
         let originJson = JSON.parse(this.callbackJson());
         let detailJon = {class: "go.GraphLinksModel", nodeDataArray: [], linkDataArray: []};
         let keyInGroup = []
-        console.log("originJson", originJson);
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
-            if (originJson.nodeDataArray[i].key === nodedata.key) {
-                detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
-            }
+            // if (originJson.nodeDataArray[i].key === nodedata.key) {
+            //     detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
+            // }
             if (originJson.nodeDataArray[i].group === nodedata.key) {
                 detailJon.nodeDataArray.push(originJson.nodeDataArray[i]);
                 keyInGroup.push(originJson.nodeDataArray[i].key)
@@ -624,12 +624,9 @@ class ScriptIndex extends Component {
             }
         }
 
-        localStorage.setItem('detailJon', JSON.stringify(detailJon));
-        if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/segmentManage/:id') {
-            console.log("是在顶层")
-            localStorage.setItem('originJson', JSON.stringify(originJson));
-        }
+        sessionStorage.setItem(`${nodedata.key}`, JSON.stringify(detailJon));
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
+            this.props.saveTempScript()
             this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
@@ -637,9 +634,9 @@ class ScriptIndex extends Component {
 
     }
     delDiagram = ()=> {
-        myDiagram = null;
-        myPalette = null;
-        myOverview = null;
+        myDiagram.div = null;//设置这个才可以清空原来div与图像的联系，然后可以重新初始化图像 https://my.oschina.net/u/2391658/blog/856390
+        myPalette.div = null;
+        myOverview.div = null;
     }
 
     save = ()=> {

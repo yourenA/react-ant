@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   /* your reducers */
   global,
   login,
-  fetchTestConf
+  fetchTestConf,
 });
 
 export default rootReducer;

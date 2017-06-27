@@ -58,6 +58,8 @@ class ScriptManage extends Component {
     fetchHwData = (page = 1,q='', test_type='', test_part='', test_version='')=> {
         const that = this;
         this.setState({loading: true});
+        this.props.setSciptLoadedFalse();
+        sessionStorage.clear();
         axios({
             url: `${configJson.prefix}/test_scripts`,
             method: 'get',
@@ -71,7 +73,7 @@ class ScriptManage extends Component {
             headers: getHeader()
         })
             .then(function (response) {
-                console.log(response);
+                // console.log(response);
                 that.setState({
                     data: response.data.data,
                     meta: response.data.meta,
@@ -117,7 +119,7 @@ class ScriptManage extends Component {
             headers: getHeader()
         })
             .then(function (response) {
-                console.log(response);
+                // console.log(response);
                 message.success(messageJson[`edit script success`]);//这三条语句的顺序不能乱
                 that.setState({
                     editModal:false
