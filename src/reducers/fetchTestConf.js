@@ -1,13 +1,19 @@
-import {SET_SCRIPT_LOADED_FALSE,DEL_EDIT_RECORD,FETCH_DRAW_SCRIPT_SUCCESS,FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PARTS_SUCCESS,FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS} from '../actions/fetchTestConf';
+import {SET_SCRIPT_LOADED_FALSE,DEL_EDIT_RECORD,FETCH_DRAW_SCRIPT_SUCCESS,FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PRODUCTS_SUCCESS,
+    FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS,FETCH_BATCHES_SUCCESS,FETCH_PERMISSIONS_SUCCESS,FETCH_GROUP_SUCCESS,
+    FETCH_MANUFACTURE_SUCCESS} from '../actions/fetchTestConf';
 
 const initState = {
     scriptLoaded: false,
     scriptJson:'{}',
     editRecord:null,
     test_type: [],
-    parts:[],
+    products:[],
     hardware_versions:[],
-    segments:[]
+    segments:[],
+    batches:[],
+    permissions:[],
+    groups:[],
+    manufactures:[]
 }
 
 export default function (state = initState, action) {
@@ -35,10 +41,10 @@ export default function (state = initState, action) {
                 ...state,
                 test_type: action.test_type
             };
-        case FETCH_PARTS_SUCCESS:
+        case FETCH_PRODUCTS_SUCCESS:
             return {
                 ...state,
-                parts: action.parts
+                products: action.products
             };
         case FETCH_HARDWARE_VERSIONS_SUCCESS:
             return {
@@ -49,6 +55,26 @@ export default function (state = initState, action) {
             return {
                 ...state,
                 segments: action.segments
+            };
+        case FETCH_BATCHES_SUCCESS:
+            return {
+                ...state,
+                batches: action.batches
+            };
+        case FETCH_PERMISSIONS_SUCCESS:
+            return {
+                ...state,
+                permissions: action.permissions
+            };
+        case FETCH_GROUP_SUCCESS:
+            return {
+                ...state,
+                groups: action.groups
+            };
+        case FETCH_MANUFACTURE_SUCCESS:
+            return{
+                ...state,
+                manufactures:action.manufactures
             };
         default:
             return state

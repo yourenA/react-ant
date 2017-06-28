@@ -5,10 +5,14 @@ import {getHeader} from './../common/common.js';
 import configJson from './../common/config.json';
 import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
-export const FETCH_PARTS_SUCCESS = 'FETCH_PARTS_SUCCESS';
+export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
+export const FETCH_BATCHES_SUCCESS = 'FETCH_BATCHES_SUCCESS';
+export const FETCH_PERMISSIONS_SUCCESS = 'FETCH_PERMISSIONS_SUCCESS';
+export const FETCH_GROUP_SUCCESS = 'FETCH_GROUP_SUCCESS';
+export const FETCH_MANUFACTURE_SUCCESS = 'FETCH_MANUFACTURE_SUCCESS';
 export const DEL_EDIT_RECORD = 'DEL_EDIT_RECORD';
 export const SET_SCRIPT_LOADED_FALSE = 'DEL_EDIT_RECORD';
 
@@ -70,10 +74,10 @@ export function fetchAllTestType() {
     }
 }
 
-export function fetchAllParts() {
+export function fetchAllProducts() {
     return dispatch => {
         axios({
-            url: `${configJson.prefix}/parts`,
+            url: `${configJson.prefix}/products`,
             method: 'get',
             params: {
                 return: 'all'
@@ -82,8 +86,8 @@ export function fetchAllParts() {
         })
             .then(function (response) {
                 dispatch({
-                    type: FETCH_PARTS_SUCCESS,
-                    parts: response.data.data
+                    type: FETCH_PRODUCTS_SUCCESS,
+                    products: response.data.data
                 });
             })
             .catch(function (error) {
@@ -128,6 +132,91 @@ export function fetchAllSegments() {
                 dispatch({
                     type: FETCH_SEGMENTS_SUCCESS,
                     segments: response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+
+export function fetchAllBatches() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/batches`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_BATCHES_SUCCESS,
+                    batches: response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+
+export function fetchAllPermissions() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/permissions`,
+            method: 'get',
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_PERMISSIONS_SUCCESS,
+                    permissions: response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+
+export function fetchAllGroup() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/roles`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_GROUP_SUCCESS,
+                    groups: response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+
+export function fetchAllManufacture() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/companies`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_MANUFACTURE_SUCCESS,
+                    manufactures: response.data.data
                 });
             })
             .catch(function (error) {

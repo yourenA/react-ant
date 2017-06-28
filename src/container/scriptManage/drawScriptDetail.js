@@ -100,9 +100,12 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
+        console.log('originJson',originJson)
+        console.log('changeJson',changeJson)
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
             return (a.key === b.key)
         }).concat(changeJson.nodeDataArray);
+
         let resultLinkJson = _.differenceWith(originJson.linkDataArray, nowJson.linkDataArray, _.isEqual).concat(changeJson.linkDataArray);
         for (let j = 0, len = resultLinkJson.length; j < len; j++) {
             delete  resultLinkJson[j].points

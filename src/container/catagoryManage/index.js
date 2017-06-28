@@ -8,8 +8,11 @@ import SearchWrap from  './search';
 import configJson from './../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import messageJson from './../../common/message.json';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import AddOrEditName from './addOrEditNmae';
-class HardwareTest extends Component {
+class Catagory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,6 +33,7 @@ class HardwareTest extends Component {
 
     componentDidMount() {
         this.fetchHwData();
+        this.props.fetchAllProducts()
     }
 
     fetchHwData = (page = 1, q = '',selectType='')=> {
@@ -73,15 +77,15 @@ class HardwareTest extends Component {
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
         for (let key in addName) {
-            if(key==='part_id'){
-                addName.part_id=addName.part_id.key
+            if(key==='product_id'){
+                addName.product_id=addName.product_id.key
             }
         }
         console.log("addName", addName);
         axios({
             url: `${configJson.prefix}${this.props.match.url}`,
             method: 'post',
-            params: addName,
+            data: addName,
             headers: getHeader()
         })
             .then(function (response) {
@@ -101,15 +105,15 @@ class HardwareTest extends Component {
         const that = this;
         const {page, q}=this.state;
         for (let key in editName) {
-            if(key==='part_id'){
-                editName.part_id=editName.part_id.key
+            if(key==='product_id'){
+                editName.product_id=editName.product_id.key
             }
         }
         console.log("editName", editName);
         axios({
             url: `${configJson.prefix}${this.props.match.url}/${this.state.editId}`,
             method: 'put',
-            params: editName,
+            data: editName,
             headers: getHeader()
         })
             .then(function (response) {
@@ -164,8 +168,6 @@ class HardwareTest extends Component {
                 return '产品管理';
             case '/test_types':
                 return '测试类型';
-            case '/parts':
-                return '测试部件';
             case '/hardware_versions':
                 return '硬件版本';
             case '/test_stands':
@@ -177,12 +179,11 @@ class HardwareTest extends Component {
     renderSearchTitle = ()=> {
         switch (this.props.match.url) {
             case '/products':
-                return '产品编码';
+                return '产品代码';
             case '/test_types':
                 return '测试类型';
-            case '/parts':
             case '/hardware_versions':
-                return '部件名称';
+                return '版本号';
             case '/test_stands':
                 return '测试架名称';
             default:
@@ -230,17 +231,13 @@ class HardwareTest extends Component {
         }];
         if (this.props.match.url === '/products') {
             columns.push({
-                title: '产品编号',
+                title: '产品代码',
                 dataIndex: 'code',
                 key: 'code'
             }, {
                 title: '产品名称',
                 dataIndex: 'name',
                 key: 'name',
-            }, {
-                title: '部件名称',
-                dataIndex: 'part_name',
-                key: 'part_name',
             });
         } else if (this.props.match.url === '/test_types') {
             columns.push( {
@@ -248,18 +245,16 @@ class HardwareTest extends Component {
                 dataIndex: 'name',
                 key: 'name'
             });
-        }else if (this.props.match.url === '/parts') {
-            columns.push( {
-                title: '部件名称',
-                dataIndex: 'name',
-                key: 'name'
-            });
-        } else if (this.props.match.url === '/hardware_versions') {
+        }else if (this.props.match.url === '/hardware_versions') {
             columns.push({
-                title: '部件名称',
-                dataIndex: 'part_name',
-                key: 'part_name'
+                title: '产品名称',
+                dataIndex: 'product_name',
+                key: 'product_name'
             }, {
+                title: '产品代码',
+                dataIndex: 'product_code',
+                key: 'product_code'
+            },{
                 title: '硬件版本',
                 dataIndex: 'version',
                 key: 'version'
@@ -286,7 +281,7 @@ class HardwareTest extends Component {
                         <span className="ant-divider"/>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                     onConfirm={this.delData.bind(this, record.id)}>
-                            <button className="ant-btn ant-btn-danger" disabled={this.props.match.url === '/parts'?true:false}>删除
+                            <button className="ant-btn ant-btn-danger" >删除
                             </button>
                         </Popconfirm>
                     </div>
@@ -304,7 +299,7 @@ class HardwareTest extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchWrap searchTitle={this.renderSearchTitle()}
-                                        onChangeSearch={this.onChangeSearch} type={this.props.match.url} {...this.state} />
+                                        onChangeSearch={this.onChangeSearch} type={this.props.match.url} {...this.props} {...this.state} />
                             {this.renderAddBtn()}
                         </div>
                         <Table bordered className="main-table"
@@ -333,7 +328,7 @@ class HardwareTest extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName text1={this.renderSearchTitle()} type={this.props.match.url} ref="EditName"
+                        <AddOrEditName {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url} ref="EditName"
                                        isEdit={true} editRecord={this.state.editRecord}/>
                     </Modal>
                     <Modal
@@ -353,7 +348,7 @@ class HardwareTest extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName text1={this.renderSearchTitle()} type={this.props.match.url} ref="AddName"/>
+                        <AddOrEditName  {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url} ref="AddName"/>
                     </Modal>
                 </div>
             </div>
@@ -361,5 +356,12 @@ class HardwareTest extends Component {
     }
 }
 
-
-export default HardwareTest
+function mapStateToProps(state) {
+    return {
+        fetchTestConf: state.fetchTestConf,
+    };
+}
+function mapDispatchToProps(dispath) {
+    return bindActionCreators(fetchTestConfAction, dispath);
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Catagory);

@@ -38,14 +38,10 @@ export function login(user,from,history) {
         })
             .then(function (response) {
                 console.log(response);
-                sessionStorage.setItem('username',user.username);
-                sessionStorage.setItem('usertoken',response.data.token);
-                sessionStorage.setItem('permissions',JSON.stringify(response.data.permissions.data));
-                if(user.remember === true){
-                    localStorage.setItem('username',user.username);
+                localStorage.setItem('username',user.username);
+                localStorage.setItem('userrole',response.data.role_name);
                     localStorage.setItem('usertoken',response.data.token);
                     localStorage.setItem('permissions',JSON.stringify(response.data.permissions.data));
-                }
                 message.success(messageJson['sign in success']);
                 dispatch({
                     type: LOGIN_SUCCESS,
@@ -60,12 +56,7 @@ export function login(user,from,history) {
                     message.error(messageJson['network error'],3);
                     return false
                 }
-                if(error.response.status === 409){
-                    message.error(messageJson['email no active']);
-                    dispatch({
-                        type: ACTIVE_FAIL,
-                    });
-                } else if(error.response.status === 403){
+                else if(error.response.status === 403){
                     message.error(messageJson['sign in fail']);
                 }else{
                     message.error(messageJson['unknown error']);

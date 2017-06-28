@@ -9,8 +9,10 @@ import {
 } from 'react-router-dom'
 import {Layout, Menu, Icon} from 'antd';
 import './index.less'
-import Topic from './topic'
+import ManufactureInfo from './manufacture/index'
+import GroupManage from './groupManage/index'
 import UserManage from './userManage/index'
+import {testPermission} from './../../common/common'
 const {Sider} = Layout;
 
 class SystemManage extends React.Component {
@@ -53,30 +55,49 @@ class SystemManage extends React.Component {
                                 defaultOpenKeys={['sub1']}
                                 style={{height: '100%'}}
                             >
-                                <Menu.Item key={`/systemManage/manufacturerInfo`}>
-                                    <Link title=" 制造厂商信息" to={`/systemManage/manufacturerInfo`}><Icon type="car"/>
-                                        <span className="nav-text">
-                                    制造厂商信息
-                                </span></Link>
-                                </Menu.Item>
+                                {
+                                    (testPermission('company_management') ) ?
+                                        <Menu.Item key={`/systemManage/manufactureInfo`}>
+                                            <Link title=" 制造厂商信息" to={`/systemManage/manufactureInfo`}><Icon
+                                                type="car"/>
+                                                <span className="nav-text">
+                                                    制造厂商信息
+                                                </span>
+                                            </Link>
+                                        </Menu.Item>
+                                        : null
+                                }
+
                                 <Menu.Item key={`/systemManage/systemConfig`}>
                                     <Link title=" 系统参数设置" to={`/systemManage/systemConfig`}><Icon type="tool"/>
                                         <span className="nav-text">
-                                    系统参数设置
-                                </span></Link>
+                                                    系统参数设置
+                                             </span>
+                                    </Link>
                                 </Menu.Item>
-                                <Menu.Item key={`/systemManage/groupManage`}>
-                                    <Link title=" 组管理" to={`/systemManage/groupManage`}><Icon type="usergroup-add"/>
-                                        <span className="nav-text">
-                                    组管理
-                                </span></Link>
-                                </Menu.Item>
-                                <Menu.Item key={`/systemManage/userManage`}>
-                                    <Link title=" 用户管理" to={`/systemManage/userManage`}><Icon type="user"/>
-                                        <span className="nav-text">
-                                    用户管理
-                                </span></Link>
-                                </Menu.Item>
+                                {
+                                    (testPermission('user_management') ) ?
+                                        <Menu.Item key={`/systemManage/groupManage`}>
+                                            <Link title=" 组管理" to={`/systemManage/groupManage`}><Icon type="usergroup-add"/>
+                                                <span className="nav-text">
+                                                    组管理
+                                                </span>
+                                            </Link>
+                                        </Menu.Item>
+                                        : null
+                                }
+                                {
+                                    (testPermission('user_management') ) ?
+                                        <Menu.Item key={`/systemManage/userManage`}>
+                                            <Link title=" 用户管理" to={`/systemManage/userManage`}><Icon type="user"/>
+                                                <span className="nav-text">
+                                                    用户管理
+                                                </span>
+                                            </Link>
+                                        </Menu.Item>
+                                        : null
+                                }
+
                             </Menu>
                             <Icon
                                 className="trigger"
@@ -85,8 +106,9 @@ class SystemManage extends React.Component {
                             />
                         </Sider>
 
+                        <Route path={`/systemManage/manufactureInfo`} component={ManufactureInfo}/>
+                        <Route path={`/systemManage/groupManage`} component={GroupManage}/>
                         <Route path={`/systemManage/userManage`} component={UserManage}/>
-                        <Route path={`/systemManage/groupManage`} component={Topic}/>
 
                     </Layout>
 

@@ -81,7 +81,7 @@ exports.getHeader = () => {
  * 获取头信息
  * */
 const testPermission = (permisionName) => {
-    const permissions = JSON.parse(localStorage.getItem('permissions') || sessionStorage.getItem('permissions'));
+    const permissions = JSON.parse(localStorage.getItem('permissions'));
     for(let i=0;i<permissions.length;i++){
         if(permissions[i].name===permisionName){
             return true;

@@ -11,27 +11,10 @@ class UserManageSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            partNameArr: []
         };
     }
 
     componentDidMount() {
-        const that = this;
-        axios({
-            url: `${configJson.prefix}/parts`,
-            method: 'get',
-            params: {
-                return: 'all'
-            },
-            headers: getHeader()
-        }).then(function (response) {
-            console.log(response.data);
-            that.setState({
-                partNameArr: response.data.data
-            })
-        }).catch(function (error) {
-            console.log('获取出错', error);
-        })
     }
 
     onChangeSelect = (group)=> {
@@ -47,9 +30,9 @@ class UserManageSearch extends Component {
                 <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
                         onChange={this.onChangeSelect}
                 >
-                    { this.state.partNameArr.map((item, key) => {
+                    { this.props.fetchTestConf.groups.map((item, key) => {
                         return (
-                            <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                            <Option key={item.id} value={item.id.toString()}>{item.display_name}</Option>
                         )
                     }) }
                 </Select>

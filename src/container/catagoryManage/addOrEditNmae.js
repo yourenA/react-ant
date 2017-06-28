@@ -4,37 +4,16 @@
 import React from 'react';
 import {Form, Input, Select} from 'antd';
 import {formItemLayout} from './../../common/common'
-import axios from 'axios'
-import configJson from './../../common/config.json';
-import {getHeader} from './../../common/common';
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            partNameArr: [],
         };
     }
 
     componentDidMount() {
-        const that=this;
-        axios({
-            url: `${configJson.prefix}/parts`,
-            method: 'get',
-            params: {
-                return: 'all'
-            },
-            headers: getHeader()
-        }).then(function (response) {
-            console.log(response.data);
-            that.setState({
-                partNameArr:response.data.data
-            })
-        }).catch(function (error) {
-            console.log('获取出错', error);
-        })
     }
 
     render() {
@@ -44,7 +23,7 @@ class AddOrEditNameForm extends React.Component {
                 {this.props.type === '/products' ?
                     <div>
                         <FormItem
-                            label={'产品编号'}
+                            label={'产品代码'}
                             {...formItemLayout}>
                             {getFieldDecorator('code', {
                                 initialValue: this.props.isEdit ? this.props.editRecord.code : '',
@@ -63,22 +42,6 @@ class AddOrEditNameForm extends React.Component {
                                 <Input  />
                             )}
                         </FormItem>
-                        <FormItem
-                            label="部件名称"
-                            {...formItemLayout}>
-                            {getFieldDecorator('part_id', {
-                                initialValue: this.props.isEdit ? {key:this.props.editRecord.part_id.toString(),label:this.props.editRecord.part_name} : {key:'',label:''},
-                                rules: [{required: true, message: '请输入部件名称'}],
-                            })(
-                                <Select labelInValue={true} allowClear={true}>
-                                    { this.state.partNameArr.map((item, key) => {
-                                        return (
-                                            <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
-                                        )
-                                    }) }
-                                </Select>
-                            )}
-                        </FormItem>
                     </div>
                     : null}
                 {this.props.type === '/test_types' ?
@@ -89,20 +52,6 @@ class AddOrEditNameForm extends React.Component {
                             {getFieldDecorator('name', {
                                 initialValue: this.props.isEdit ? this.props.editRecord.name : '',
                                 rules: [{required: true, message: `请输入测试类型`}],
-                            })(
-                                <Input  />
-                            )}
-                        </FormItem>
-                    </div>
-                    : null}
-                {this.props.type === '/parts'  ?
-                    <div>
-                        <FormItem
-                            label='部件名称'
-                            {...formItemLayout}>
-                            {getFieldDecorator('name', {
-                                initialValue: this.props.isEdit ? this.props.editRecord.name : '',
-                                rules: [{required: true, message: '请输入部件名称'}],
                             })(
                                 <Input  />
                             )}
@@ -122,14 +71,14 @@ class AddOrEditNameForm extends React.Component {
                             )}
                         </FormItem>
                         <FormItem
-                            label="部件名称"
+                            label="产品名称"
                             {...formItemLayout}>
-                            {getFieldDecorator('part_id', {
-                                initialValue: this.props.isEdit ? {key:this.props.editRecord.part_id.toString(),label:this.props.editRecord.part_name} : {key:'',label:''},
-                                rules: [{required: true, message: '请输入部件名称'}],
+                            {getFieldDecorator('product_id', {
+                                initialValue: this.props.isEdit?{key:this.props.editRecord.product_id.toString(),label:this.props.editRecord.product_name}:{key:'',label:''},
+                                rules: [{required: true, message: '请选择产品名称'}],
                             })(
                                 <Select labelInValue={true} allowClear={true}>
-                                    { this.state.partNameArr.map((item, key) => {
+                                    { this.props.fetchTestConf.products.map((item, key) => {
                                         return (
                                             <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
                                         )

@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import {Breadcrumb, Table, Pagination, Button, Modal} from 'antd';
 import axios from 'axios'
-import SearchWrap from  './../scriptManage/search';
+import SearchWrap from  './search';
 import {
     Link
 } from 'react-router-dom';
@@ -22,110 +22,9 @@ class HardwareTest extends Component {
             loading: false,
             q: '',
             page: 1,
-            order: 'asc',
-            test_type: '',
-            test_part: '',
-            test_version: '',
+            batches: '',
             meta: {pagination: {total: 0, per_page: 0}},
             showScriptModal: false,
-            scriptJson: {
-                "class": "go.GraphLinksModel",
-                "copiesArrays": true,
-                "copiesArrayObjects": true,
-                "nodeDataArray": [
-                    {
-                        "text": "subject 测试电源",
-                        "isGroup": true,
-                        "category": "OfGroups",
-                        "key": -7,
-                        "loc": "-81.734375 -74.5"
-                    },
-                    {
-                        "text": "subject 测试电源",
-                        "isGroup": true,
-                        "category": "OfGroups",
-                        "key": -2,
-                        "loc": "-91.984375 1417"
-                    },
-                    {
-                        "category": "formula",
-                        "formula": "test_3.3v_delay",
-                        "title": "unit 测试3.3v 上电延迟",
-                        "params": [{"name": "param1", "val": "100", "type": "init"}, {
-                            "name": "param2",
-                            "val": "120",
-                            "type": "string"
-                        }, {"name": "param3", "val": "130", "type": "init"}],
-                        "key": -8,
-                        "loc": "-307.734375 -198",
-                        "group": -7
-                    },
-                    {
-                        "category": "formula",
-                        "formula": "test_3.5v_delay",
-                        "title": "unit 测试3.5 上电延迟",
-                        "params": [{"name": "param1", "val": "100", "type": "init"}, {
-                            "name": "param2",
-                            "val": "120",
-                            "type": "init"
-                        }],
-                        "key": -9,
-                        "loc": "148.265625 49",
-                        "group": -7
-                    },
-                    {
-                        "category": "formula",
-                        "formula": "test_4.5v_delay",
-                        "title": "unit 测试4.5 上电延迟",
-                        "params": [{"name": "param1", "val": "100", "type": "init"}, {
-                            "name": "param2",
-                            "val": "120",
-                            "type": "init"
-                        }],
-                        "key": -11,
-                        "loc": "-388.734375 1322",
-                        "group": -2
-                    },
-                    {
-                        "category": "formula",
-                        "formula": "test_10v_delay",
-                        "title": "unit 测试10v 上电延迟",
-                        "params": [{"name": "param1", "val": "100", "type": "init"}, {
-                            "name": "param2",
-                            "val": "120",
-                            "type": "init"
-                        }, {"name": "param3", "val": "130", "type": "init"}, {
-                            "name": "param4",
-                            "val": "120",
-                            "type": "init"
-                        }, {"name": "param5", "val": "130", "type": "init"}, {
-                            "name": "param6",
-                            "val": "120",
-                            "type": "init"
-                        }, {"name": "param7", "val": "130", "type": "init"}],
-                        "key": -15,
-                        "loc": "203.265625 1512",
-                        "group": -2
-                    }
-                ],
-                "linkDataArray": [
-                    {
-                        "from": -8,
-                        "to": -9,
-                        "points": [-215.7215677848952, -198, -205.7215677848952, -198, -77.73437499999999, -198, -77.73437499999999, 48.999999999999986, 50.25281778489523, 48.999999999999986, 60.25281778489523, 48.999999999999986]
-                    },
-                    {
-                        "from": -11,
-                        "to": -15,
-                        "points": [-300.7215677848951, 1322, -290.7215677848951, 1322, -93.48437499999994, 1322, -93.48437499999994, 1512, 103.75281778489523, 1512, 113.75281778489523, 1512]
-                    },
-                    {
-                        "from": -7,
-                        "to": -2,
-                        "points": [-81.73437499999994, 87.67284749830793, -81.73437499999994, 97.67284749830793, -81.73437499999994, 668.4686523437499, -91.98437499999994, 668.4686523437499, -91.98437499999994, 1239.264457189192, -91.98437499999994, 1249.264457189192]
-                    }
-                ]
-            }
         };
     }
 
@@ -145,18 +44,18 @@ class HardwareTest extends Component {
 	}
      * */
     componentDidMount() {
-        this.setState({loading: true});
         this.fetchHwData();
-        this.props.fetchAllTestType();
-        this.props.fetchAllParts();
-        this.props.fetchAllHardwareVersions();
+        this.props.fetchAllBatches();
+        // this.props.fetchAllTestType();
+        // this.props.fetchAllParts();
+        // this.props.fetchAllHardwareVersions();
     }
 
-    fetchHwData = (page = 1, q = '', order = 'asc', test_type = '', test_part = '', test_version = '')=> {
+    fetchHwData = (page = 1, q = '', batches = '')=> {
         const that = this;
         this.setState({loading: true});
         axios({
-            url: `${configJson.prefix}/parts?return=all`,
+            url: `${configJson.prefix}/products?return=all`,
             method: 'get',
             headers: getHeader()
         })
@@ -164,46 +63,24 @@ class HardwareTest extends Component {
                 console.log(response);
                 that.setState({
                     loading: false,
-                    data: response.data.data
+                    data: response.data.data,
+                    meta: response.data.meta,
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q, test_type, test_part, test_version)=> {
+    onChangeSearch = (page, q, batches)=> {
         this.setState({
-            page, q, test_type, test_part, test_version
+            page, q, batches
         })
-        this.fetchHwData(page, q, test_type, test_part, test_version);
+        this.fetchHwData(page, q, batches);
     }
     onPageChange = (page) => {
-        const {test_type, test_part, test_version}=this.state
-        this.onChangeSearch(page, this.state.q,test_type, test_part, test_version);
+        const {q,batches}=this.state
+        this.onChangeSearch(page,q,batches);
     };
-    showScript = ()=> {
-        this.setState({
-            scriptJson:{ "class": "go.GraphLinksModel",
-                "copiesArrays": true,
-                "copiesArrayObjects": true,
-                "nodeDataArray": [
-                    {"text":"subject 测试电源", "isGroup":true, "category":"OfGroups", "key":-7, "loc":"-81.734375 -74.5"},
-                    {"text":"subject 测试电源", "isGroup":true, "category":"OfGroups", "key":-2, "loc":"-91.984375 1417"},
-                    {"category":"formula", "formula":"test_3.3v_delay", "title":"unit 测试3.3v 上电延迟", "params":[ {"name":"param1", "val":"100", "type":"init"},{"name":"param2", "val":"120", "type":"string"},{"name":"param3", "val":"130", "type":"init"} ], "key":-8, "loc":"-307.734375 -198", "group":-7},
-                    {"category":"formula", "formula":"test_3.5v_delay", "title":"unit 测试3.5 上电延迟", "params":[ {"name":"param1", "val":"100", "type":"init"},{"name":"param2", "val":"120", "type":"init"} ], "key":-9, "loc":"148.265625 49", "group":-7},
-                    {"category":"formula", "formula":"test_4.5v_delay", "title":"unit 测试4.5 上电延迟", "params":[ {"name":"param1", "val":"100", "type":"init"},{"name":"param2", "val":"120", "type":"init"} ], "key":-11, "loc":"-388.734375 1322", "group":-2},
-                    {"category":"formula", "formula":"test_10v_delay", "title":"unit 测试10v 上电延迟", "params":[ {"name":"param1", "val":"100", "type":"init"},{"name":"param2", "val":"120", "type":"init"},{"name":"param3", "val":"130", "type":"init"},{"name":"param4", "val":"120", "type":"init"},{"name":"param5", "val":"130", "type":"init"},{"name":"param6", "val":"120", "type":"init"},{"name":"param7", "val":"130", "type":"init"} ], "key":-15, "loc":"203.265625 1512", "group":-2}
-                ],
-                "linkDataArray": [
-                    {"from":-8, "to":-9, "points":[-215.7215677848952,-198,-205.7215677848952,-198,-77.73437499999999,-198,-77.73437499999999,48.999999999999986,50.25281778489523,48.999999999999986,60.25281778489523,48.999999999999986]},
-                    {"from":-11, "to":-15, "points":[-300.7215677848951,1322,-290.7215677848951,1322,-93.48437499999994,1322,-93.48437499999994,1512,103.75281778489523,1512,113.75281778489523,1512]},
-                    {"from":-7, "to":-2, "points":[-81.73437499999994,87.67284749830793,-81.73437499999994,97.67284749830793,-81.73437499999994,668.4686523437499,-91.98437499999994,668.4686523437499,-91.98437499999994,1239.264457189192,-91.98437499999994,1249.264457189192]}
-                ]},
-            showScriptModal: true,
-
-        })
-    }
-
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -224,27 +101,34 @@ class HardwareTest extends Component {
             dataIndex: 'name',
             key: 'name',
         }, {
-            title: '部件名称',
+            title: '生产批次',
             dataIndex: 'username',
             key: 'username'
         }, {
-            title: '测试类型',
-            dataIndex: 'description',
-            key: 'description',
+            title: '产品序列号',
+            dataIndex: 'product_name',
+            key: 'product_name',
+        },  {
+            title: '产品代码',
+            dataIndex: 'product_code',
+            key: 'product_code',
         }, {
+            title: '产品名称',
+            dataIndex: 'version',
+            key: 'version',
+        }, {
+            title: '测试类型',
+            dataIndex: 'hardware_version_id',
+            key: 'hardware_version_id',
+        },{
             title: '操作',
             key: 'action',
-            width: 190,
+            width: 120,
             render: (text, record, index) => {
                 return (
                     <div key={index}>
-                        <Button onClick={this.showScript}>
-                            查看脚本
-                        </Button>
-                        <span className="ant-divider"/>
                         <Button type="primary">
                             <Link to={`${this.props.match.url}/${record.id}`}>进入测试</Link>
-
                         </Button>
                     </div>
 

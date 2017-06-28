@@ -78,13 +78,13 @@ class App extends Component {
                                 <Menu.Item key="/"><NavLink exact activeClassName="nav-selected"
                                                             to="/">主页</NavLink></Menu.Item>
                                 {
-                                    (login.login && testPermission('script_test') )?
+                                    (login.login && testPermission('hardware_testing') )?
                                         <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
                                                                                 to="/hardwareTest">硬件测试</NavLink></Menu.Item>
                                         :null
                                 }
                                 {
-                                    (login.login && testPermission('script_management') ) ?
+                                    (login.login && testPermission('test_script_management') ) ?
                                         <SubMenu title={<span>脚本管理</span>}>
                                             <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
                                                                                     to="/scriptManage">脚本管理</NavLink></Menu.Item>
@@ -94,25 +94,20 @@ class App extends Component {
                                         :null
                                 }
                                 {
-                                    (login.login && testPermission('product_management') ) ?
+                                    (login.login && testPermission('test_stand_management') ) ?
                                         <SubMenu title={<span>分类管理</span>}>
                                             {testPermission('product_management')?
                                                 <Menu.Item key="/products"><NavLink activeClassName="nav-selected" to="/products">产品管理</NavLink></Menu.Item>
                                                 :null
                                             }
-                                            {testPermission('test_type_management')?
+                                            {testPermission('product_management')?
                                                 <Menu.Item key="/test_types"><NavLink activeClassName="nav-selected"
                                                                                       to="/test_types">测试类型</NavLink></Menu.Item>
                                                 :null
                                             }
-                                            {testPermission('hardware_version_management')?
+                                            {testPermission('product_management')?
                                                 <Menu.Item key="/hardware_versions"><NavLink activeClassName="nav-selected"
                                                                                              to="/hardware_versions">硬件版本</NavLink></Menu.Item>
-                                                :null
-                                            }
-                                            {testPermission('part_management')?
-                                                <Menu.Item key="/parts"><NavLink activeClassName="nav-selected"
-                                                                                 to="/parts">测试部件</NavLink></Menu.Item>
                                                 :null
                                             }
                                             {testPermission('test_stand_management')?
@@ -123,7 +118,7 @@ class App extends Component {
                                         </SubMenu>
                                         :null
                                 }
-                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/manufacturerInfo">系统管理</NavLink></Menu.Item>
+                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/manufactureInfo">系统管理</NavLink></Menu.Item>
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
@@ -144,45 +139,45 @@ class App extends Component {
                     <Route exact path="/" component={Home}/>
                     <Route exact
                            path="/hardwareTest" render={(props) => {
-                        return (login.login && testPermission('script_test') )?
+                        return (login.login && testPermission('hardware_testing') )?
                             <HardwareTest {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route path="/hardwareTest/:uuid" render={(props) => {
-                        return (login.login && testPermission('script_test') ) ?
+                        return (login.login && testPermission('hardware_testing') ) ?
                             <HardwareTesting {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route exact
                         path="/scriptManage" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <ScriptManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
                         path="/scriptManage/:id" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <DrawScript {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
 
                     <Route
                         path="/scriptDetail/:id" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <ScriptDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
 
                     <Route exact
                            path="/segmentManage" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <SegmentManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
                         path="/segmentManage/:id" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <DrawSegment {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
                         path="/segmentDetail/:id" render={(props) => {
-                        return (login.login && testPermission('script_management') ) ?
+                        return (login.login && testPermission('test_script_management') ) ?
                             <DrawSegmentDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
@@ -197,17 +192,12 @@ class App extends Component {
                     }}/>
                     <Route
                         path="/test_types" render={(props) => {
-                        return (login.login && testPermission('test_type_management') )  ?
-                            <CatagoryManage  {...props}/> : login.login? <Nopermission/> :<Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
-                    }}/>
-                    <Route
-                        path="/parts" render={(props) => {
-                        return (login.login && testPermission('part_management') ) ?
+                        return (login.login && testPermission('product_management') )  ?
                             <CatagoryManage  {...props}/> : login.login? <Nopermission/> :<Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
                         path="/hardware_versions" render={(props) => {
-                        return (login.login && testPermission('hardware_version_management') ) ?
+                        return (login.login && testPermission('product_management') ) ?
                             <CatagoryManage  {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
