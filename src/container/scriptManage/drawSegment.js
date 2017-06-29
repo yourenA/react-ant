@@ -98,7 +98,7 @@ class AddProgramSegment extends Component {
                 </Breadcrumb>
                 <div className="content-container">
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <Button type='primary' onClick={()=>{this.setState({saveModal:true})}}>{this.props.location.state.newSegment ?'保存' :'保存修改'}</Button>
+                    <Button type='primary' style={{float:'right'}} onClick={()=>{this.setState({saveModal:true})}}>{this.props.location.state.newSegment ?'保存' :'保存修改'}</Button>
                     <ScriptIndex ref="ScriptIndex" isNew={this.props.location.state.newSegment} {...this.props} json={this.state.segmentJson}/>
                 </div>
                 <Modal

@@ -29,11 +29,9 @@ class DrawScriptDetail extends Component {
 
     componentDidMount() {
         this.props.fetchAllTestType();
-        this.props.fetchAllParts();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
-        this.refs.ScriptIndex.init();
-        this.refs.ScriptIndex.load(sessionStorage.getItem(this.props.match.params.id));
+        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
         this.fetchScript(localStorage.getItem('manageScriptId'))
         // this.setState({
         //     [this.props.match.params.id]: localStorage.getItem('detailJon')
@@ -81,6 +79,7 @@ class DrawScriptDetail extends Component {
                     }
                 }
             }
+            sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(idJson))
             console.log("idJson", idJson)
             this.refs.ScriptIndex.load(idJson);
 
@@ -100,7 +99,8 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
-        console.log('originJson',originJson)
+        console.log('resultTempJson',originJson)
+        console.log('nowJson',nowJson)
         console.log('changeJson',changeJson)
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
             return (a.key === b.key)
@@ -110,12 +110,15 @@ class DrawScriptDetail extends Component {
         for (let j = 0, len = resultLinkJson.length; j < len; j++) {
             delete  resultLinkJson[j].points
         }
+        //重新生成json的时候需要添加copiesArrays: true,copiesArrayObjects: true,不然数据就会相互影响
         let resultTempJson = {
             class: "go.GraphLinksModel",
+            copiesArrays: true,
+            copiesArrayObjects: true,
             nodeDataArray: resultNodeJson,
             linkDataArray: resultLinkJson
         };
-        console.log("临时保存", resultTempJson);
+        console.log("修改后resultTempJson", resultTempJson);
         sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));
         // sessionStorage.setItem('originJson',JSON.stringify(resultTempJson))
     }

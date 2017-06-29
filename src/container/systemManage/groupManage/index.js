@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, Layout,message} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal,  Layout} from 'antd';
 import axios from 'axios'
 import configJson from './../../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../../common/common';

@@ -90,7 +90,7 @@ class FetchSegments extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="inline-block">
                 <span>选择代码段: </span>
                 <Select   className="search-select"
                           showSearch

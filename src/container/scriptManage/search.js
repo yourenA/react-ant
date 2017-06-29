@@ -49,19 +49,6 @@ class TopicTable extends Component {
                     }) }
                 </Select>
                 <span className="ant-divider"/>
-                <span>测试部件: </span>
-                <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
-                        onChange={this.onChangeTestPart}
-                        showSearch
-                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                >
-                    { this.props.fetchTestConf.parts.map((item, key) => {
-                        return (
-                            <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
-                        )
-                    }) }
-                </Select>
-                <span className="ant-divider"/>
                 <span>测试版本: </span>
                 <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
                         onChange={this.onChangeTestVersion}

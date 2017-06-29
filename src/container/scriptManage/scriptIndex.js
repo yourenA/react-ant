@@ -110,7 +110,7 @@ class ScriptIndex extends Component {
         var arr = adorn.adornedPart.data.params;
         myDiagram.model.addArrayItem(arr, {});
     }
-    init = ()=> {
+    init = (cb,cbArg)=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
@@ -147,6 +147,9 @@ class ScriptIndex extends Component {
                     "animationManager.duration": 1, // slightly longer than default (600ms) animation
                     "undoManager.isEnabled": true,  // enable Ctrl-Z to undo and Ctrl-Y to redo 可以撤销
                 });
+
+        myDiagram.model.copiesArrays = true;//设置这个使用itemArr数据才不会互相影响
+        myDiagram.model.copiesArrayObjects = true;//设置这个使用itemArr数据才不会互相影响
         myDiagram.addDiagramListener("Modified", function (e) {
             var button = document.getElementById("SaveButton");
             if (button) button.disabled = !myDiagram.isModified;//当图标不修改时，保存按钮不可用
@@ -520,8 +523,7 @@ class ScriptIndex extends Component {
         // temporary links used by LinkingTool and RelinkingTool are also orthogonal:
         myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
         myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
-        myDiagram.model.copiesArrays = true;//设置这个使用itemArr数据才不会互相影响
-        myDiagram.model.copiesArrayObjects = true;//设置这个使用itemArr数据才不会互相影响
+
         myPalette =
             $(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
 
@@ -534,8 +536,7 @@ class ScriptIndex extends Component {
                      * model根据category来识别定义的图形
                      * 当没有category时使用 myDiagram.nodeTemplateMap.add("")定义的图形
                      * */
-                    model: new go.GraphLinksModel([  //定义图形 specify the contents of the Palette
-                    ].concat(formulaArr))
+                    model: new go.GraphLinksModel(formulaArr)
                 });
 
         myDiagram.linkTemplate =
@@ -585,7 +586,11 @@ class ScriptIndex extends Component {
             $(go.Overview, "myOverviewDiv",  // the HTML DIV element for the Overview
                 {observed: myDiagram, contentAlignment: go.Spot.Center});   // tell it which Diagram to show and pan
         if (!this.props.isNew) {
-            this.load(this.props.json)
+                that.load(that.props.json)
+        }
+
+        if(cb){
+                cb(cbArg)
         }
 
     }
@@ -596,7 +601,7 @@ class ScriptIndex extends Component {
         var nodedata = contextmenu.data;
         // compute the next color for the node
         let originJson = JSON.parse(this.callbackJson());
-        let detailJon = {class: "go.GraphLinksModel", nodeDataArray: [], linkDataArray: []};
+        let detailJon = {class: "go.GraphLinksModel",copiesArrays: true, copiesArrayObjects: true, nodeDataArray: [], linkDataArray: []};
         let keyInGroup = []
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
             // if (originJson.nodeDataArray[i].key === nodedata.key) {
@@ -869,10 +874,15 @@ class ScriptIndex extends Component {
 
                     </div>
                     <div className="drawScript-content">
+                        {(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id')?
+                            <div className="detail-header">
+                                {this.props.location.state.groupNmae}
+                            </div>
+                            :null}
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}>
 
                         </div>
-                        <div className="drawScript-overview" id="myOverviewDiv"></div>
+                        <div className="drawScript-overview" id="myOverviewDiv" style={{top:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id')?'46px':'0'}}></div>
                     </div>
                 </div>
                 <div>

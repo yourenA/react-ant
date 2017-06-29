@@ -1,6 +1,7 @@
 @charset "UTF-8";
 .testing-header {
   display: flex;
+  justify-content: space-between;
   align-items:center;
   .testing-config {
     flex: 1;
@@ -12,6 +13,13 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-right: 20px;
+      position: relative;
+      .change{
+        position: absolute;
+        right: 20px;
+        top: 5px;
+      }
     }
     .no-hide{
       vertical-align: text-top;

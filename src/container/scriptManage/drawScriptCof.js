@@ -61,27 +61,6 @@ class DrawScriptConf extends React.Component {
                         </div>
                         <div className="testing-config-item no-hide">
                             <FormItem
-                                label="测试部件"
-                                {...DrawScriptConfLayout}>
-                                {getFieldDecorator('part_id', {
-                                    initialValue: this.props.fetchTestConf.editRecord ? {key:this.props.fetchTestConf.editRecord.part_id.toString(),label:this.props.fetchTestConf.editRecord.part_name} : {key:'',label:''},
-                                    rules: [{required: true, message: `请选择测试部件`}],
-                                })(
-                                    <Select
-                                        showSearch
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                        style={{width:'150px'}} labelInValue={true} allowClear={true}>
-                                        { this.props.fetchTestConf.parts.map((item, key) => {
-                                            return (
-                                                <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
-                                            )
-                                        }) }
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </div>
-                        <div className="testing-config-item no-hide">
-                            <FormItem
                                 label="硬件版本"
                                 {...DrawScriptConfLayout}>
                                 {getFieldDecorator('hardware_version_id', {

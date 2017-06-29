@@ -3,9 +3,6 @@
  */
 import React, {Component} from 'react';
 import { Select} from 'antd';
-import axios from 'axios'
-import configJson from './../../../common/config.json';
-import {getHeader} from './../../../common/common';
 const Option = Select.Option;
 class UserManageSearch extends Component {
     constructor(props) {

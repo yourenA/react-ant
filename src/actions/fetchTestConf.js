@@ -10,11 +10,12 @@ export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS'
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
 export const FETCH_BATCHES_SUCCESS = 'FETCH_BATCHES_SUCCESS';
+export const FETCH_TEST_STAND_SUCCESS = 'FETCH_TEST_STAND_SUCCESS';
 export const FETCH_PERMISSIONS_SUCCESS = 'FETCH_PERMISSIONS_SUCCESS';
 export const FETCH_GROUP_SUCCESS = 'FETCH_GROUP_SUCCESS';
 export const FETCH_MANUFACTURE_SUCCESS = 'FETCH_MANUFACTURE_SUCCESS';
 export const DEL_EDIT_RECORD = 'DEL_EDIT_RECORD';
-export const SET_SCRIPT_LOADED_FALSE = 'DEL_EDIT_RECORD';
+export const SET_SCRIPT_LOADED_FALSE = 'SET_SCRIPT_LOADED_FALSE';
 
 export function delEditRecord() {
     return dispatch => {
@@ -154,6 +155,27 @@ export function fetchAllBatches() {
                 dispatch({
                     type: FETCH_BATCHES_SUCCESS,
                     batches: response.data.data
+                });
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+export function fetchAllTestStand() {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/test_stands`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_TEST_STAND_SUCCESS,
+                    test_stands: response.data.data
                 });
             })
             .catch(function (error) {

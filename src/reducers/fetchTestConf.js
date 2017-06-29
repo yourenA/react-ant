@@ -1,6 +1,6 @@
 import {SET_SCRIPT_LOADED_FALSE,DEL_EDIT_RECORD,FETCH_DRAW_SCRIPT_SUCCESS,FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PRODUCTS_SUCCESS,
     FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS,FETCH_BATCHES_SUCCESS,FETCH_PERMISSIONS_SUCCESS,FETCH_GROUP_SUCCESS,
-    FETCH_MANUFACTURE_SUCCESS} from '../actions/fetchTestConf';
+    FETCH_MANUFACTURE_SUCCESS,FETCH_TEST_STAND_SUCCESS} from '../actions/fetchTestConf';
 
 const initState = {
     scriptLoaded: false,
@@ -13,7 +13,8 @@ const initState = {
     batches:[],
     permissions:[],
     groups:[],
-    manufactures:[]
+    manufactures:[],
+    test_stands:[]
 }
 
 export default function (state = initState, action) {
@@ -60,6 +61,11 @@ export default function (state = initState, action) {
             return {
                 ...state,
                 batches: action.batches
+            };
+        case FETCH_TEST_STAND_SUCCESS:
+            return {
+                ...state,
+                test_stands: action.test_stands
             };
         case FETCH_PERMISSIONS_SUCCESS:
             return {

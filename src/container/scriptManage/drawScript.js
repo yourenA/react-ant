@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout,message,Icon} from 'antd';
+import {Breadcrumb, Layout,message,Icon,Modal,Button} from 'antd';
 import DrawScriptCof from './drawScriptCof'
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
@@ -12,7 +12,7 @@ import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/com
 import configJson from './../../common/config.json';
 import axios from 'axios';
 import messageJson from './../../common/message.json';
-
+import AddOrEditName from './addOrEditNmae';
 import ScriptIndex from './scriptIndex.js'
 import FetchSegments from './fetchSegments'
 const {Content,} = Layout;
@@ -28,12 +28,12 @@ class DrawScript extends Component {
     }
 
      componentDidMount () {
+         console.log('componentDidMount')
         if (!this.props.location.state.newScript) {
 
             localStorage.setItem('manageScriptId',this.props.location.state.editRecord.id);
             if(this.props.fetchTestConf.scriptLoaded){
-                this.refs.ScriptIndex.init()
-                this.refs.ScriptIndex.load(sessionStorage.getItem('resultTempJson'));
+                this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem('resultTempJson'));
             }else{
                 this.props.fetchDrawScript(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
             }
@@ -42,11 +42,15 @@ class DrawScript extends Component {
             this.refs.ScriptIndex.init()
         }
         this.props.fetchAllTestType();
-        this.props.fetchAllParts();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
     }
-
+    componentWillReceiveProps(nextProps) {
+        if (this.props.match.params.id !== nextProps.match.params.id) {
+            this.refs.ScriptIndex.delDiagram();
+            this.props.fetchDrawScript(nextProps.location.state.editRecord.id, this.refs.ScriptIndex.init)
+        }
+    }
     saveScript = ()=> {
 
         let myDiagram=this.refs.ScriptIndex.callbackDiagram();
@@ -54,19 +58,16 @@ class DrawScript extends Component {
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
         const content=JSON.parse( myDiagram.model.toJson());
         delPointsInLink(content.linkDataArray)
-        // for(let i=0,len=content.linkDataArray.length;i<len;i++){
-        //     delete  content.linkDataArray[i].points
-        // }
-        const url=this.props.location.state.newScript ?`/test_scripts`:`/test_scripts/${this.props.match.params.id}`
-        const method=this.props.location.state.newScript ?`POST`:`PUT`;
-        const msg=this.props.location.state.newScript ?messageJson[`add script success`]:messageJson[`edit script success`];
+        const newScript=this.props.location.state.newScript
+        const url= newScript?`/test_scripts`:`/test_scripts/${this.props.match.params.id}`
+        const method=newScript ?`POST`:`PUT`;
+        const msg=newScript ?messageJson[`add script success`]:messageJson[`edit script success`];
         axios({
             url: `${configJson.prefix}${url}`,
             method: method,
             data: {
                 name:DrawScriptCof.name,
                 test_type_id:DrawScriptCof.test_type_id?DrawScriptCof.test_type_id.key:'',
-                part_id:DrawScriptCof.part_id?DrawScriptCof.part_id.key:'',
                 hardware_version_id:DrawScriptCof.hardware_version_id?DrawScriptCof.hardware_version_id.key:'',
                 content: JSON.stringify(content),
             },
@@ -75,8 +76,14 @@ class DrawScript extends Component {
             .then(function (response) {
                 console.log(response);
                 message.success(msg);
+                newScript
+                    ? setTimeout(function () {
+                    that.props.history.replace({pathname:`/scriptManage/${response.data.id}`,state: { newScript: false , scriptJson:JSON.parse(response.data.content),editRecord:response.data}})
+                },1000)
+                    :that.props.fetchDrawScript(that.props.match.params.id);
+
                 that.setState({
-                    editRecord:response.data
+                    saveScriptModal:false
                 })
             }).catch(function (error) {
             console.log('获取出错',error);
@@ -113,9 +120,12 @@ class DrawScript extends Component {
                                 <Icon type="arrow-left" />
                             </div>
                         </div>
-                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props}/>
                         <div className="testing-start">
-                            <div className="testing-start-btn testing-save-btn" onClick={this.saveScript}>
+                            <div className="testing-start-btn testing-save-btn" onClick={()=>{
+                                this.setState({
+                                    saveScriptModal:true
+                                })
+                            }}>
                                 保存脚本
                             </div>
                         </div>
@@ -123,6 +133,25 @@ class DrawScript extends Component {
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
                     <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex" {...this.props} isNew={this.props.location.state.newScript} json={this.props.fetchTestConf.scriptJson}/>
                 </div>
+                <Modal
+                    key={ Date.parse(new Date())}
+                    visible={this.state.saveScriptModal}
+                    title={this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}
+                    onCancel={()=> {
+                        this.setState({saveScriptModal: false})
+                    }}
+                    footer={[
+                        <Button key="back" type="ghost" size="large"
+                                onClick={()=> {
+                                    this.setState({saveScriptModal: false})
+                                }}>取消</Button>,
+                        <Button key="submit" type="primary" size="large" onClick={this.saveScript}>
+                            保存
+                        </Button>,
+                    ]}
+                >
+                    <AddOrEditName ref="DrawScriptCofForm" fetchTestConf={this.props.fetchTestConf} editRecord={this.props.fetchTestConf.editRecord}/>
+                </Modal>
             </Content>
         )
     }

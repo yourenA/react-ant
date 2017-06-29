@@ -25,7 +25,6 @@ class ScriptManage extends Component {
             page: 1,
             q:'',
             test_type: '',
-            test_part: '',
             test_version: '',
             meta: {pagination: {total: 0, per_page: 0}},
             editModal:false,
@@ -51,11 +50,10 @@ class ScriptManage extends Component {
 
         this.fetchHwData();
         this.props.fetchAllTestType();
-        this.props.fetchAllParts();
         this.props.fetchAllHardwareVersions();
     }
 
-    fetchHwData = (page = 1,q='', test_type='', test_part='', test_version='')=> {
+    fetchHwData = (page = 1,q='', test_type='',test_version='')=> {
         const that = this;
         this.setState({loading: true});
         this.props.setSciptLoadedFalse();
@@ -67,7 +65,6 @@ class ScriptManage extends Component {
                 page: page,
                 query:q,
                 test_type_id:test_type,
-                part_id:test_part,
                 hardware_version_id:test_version
             },
             headers: getHeader()
@@ -88,7 +85,7 @@ class ScriptManage extends Component {
     delData=(id)=>{
         console.log('id',id)
         const that=this;
-        const {page, q, test_type, test_part, test_version}=this.state;
+        const {page, q, test_type,  test_version}=this.state;
         axios({
             url: `${configJson.prefix}/test_scripts/${id}`,
             method: 'delete',
@@ -96,7 +93,7 @@ class ScriptManage extends Component {
         })
             .then(function (response) {
                 console.log(response);
-                that.fetchHwData(page, q, test_type, test_part, test_version);
+                that.fetchHwData(page, q, test_type, test_version);
                 message.success(messageJson[`del script success`]);
             }).catch(function (error) {
             console.log('获取出错',error);
@@ -105,7 +102,7 @@ class ScriptManage extends Component {
     }
     editData=()=>{
         const that=this;
-        const {page, q, test_type, test_part, test_version}=this.state;
+        const {page, q, test_type,  test_version}=this.state;
         const editScriptName = this.refs.editScriptName.getFieldsValue();
         axios({
             url: `${configJson.prefix}/test_scripts/${this.state.editRecord.id}`,
@@ -113,7 +110,6 @@ class ScriptManage extends Component {
             params: {
                 name:editScriptName.name,
                 test_type_id:editScriptName.test_type_id.key,
-                part_id:editScriptName.part_id.key,
                 hardware_version_id:editScriptName.hardware_version_id.key,
             },
             headers: getHeader()
@@ -124,21 +120,21 @@ class ScriptManage extends Component {
                 that.setState({
                     editModal:false
                 })
-                that.fetchHwData(page, q, test_type, test_part, test_version);
+                that.fetchHwData(page, q, test_type, test_version);
             }).catch(function (error) {
             console.log('获取出错',error);
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q, test_type, test_part, test_version)=> {
+    onChangeSearch = (page, q, test_type,test_version)=> {
         this.setState({
-            page, q, test_type, test_part, test_version
+            page, q, test_type,  test_version
         })
-        this.fetchHwData(page, q, test_type, test_part, test_version);
+        this.fetchHwData(page, q, test_type,test_version);
     }
     onPageChange = (page) => {
-        const {q, test_type, test_part, test_version}=this.state
-        this.onChangeSearch(page, q, test_type, test_part, test_version);
+        const {q, test_type,  test_version}=this.state
+        this.onChangeSearch(page, q, test_type, test_version);
     };
     render() {
         const {data, page, meta} = this.state;
@@ -160,13 +156,13 @@ class ScriptManage extends Component {
             dataIndex: 'name',
             key: 'name',
         }, {
-            title: '部件名称',
-            dataIndex: 'part_name',
-            key: 'part_name'
+            title: '产品代码',
+            dataIndex: 'product_code',
+            key: 'product_code'
         }, {
             title: '测试类型',
-            dataIndex: 'type_type_name',
-            key: 'type_type_name',
+            dataIndex: 'test_type_name',
+            key: 'test_type_name',
         }, {
             title: '硬件版本',
             dataIndex: 'hardware_version',

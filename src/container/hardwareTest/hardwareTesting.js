@@ -2,23 +2,31 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Select, Input, Button, Tree} from 'antd';
+import {Breadcrumb, Icon, Input, Button, Tree,Modal,Select} from 'antd';
+
 import './hardwareTesting.less'
-const Option = Select.Option;
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as fetchTestConfAction from './../../actions/fetchTestConf';
 const TreeNode = Tree.TreeNode;
+const Option = Select.Option;
 class HardwareTesting extends Component {
     constructor(props) {
         super(props);
         this.state = {
             test_script:'123fa fa fafafffa 123fa fa fafafffa 123fa fa fafafffa 123fa fa fafafffa f',
-            part_name:'part_name',
+            product_name:'product_name',
             hardware_version:'hardware_version',
             manufacturer:'manufacturer',
             test_type:'test_type',
-            test_stand:'test_stand',
+            test_stand:'test_standtest_standtest_standtest_stand',
             product_code:'product_code',
             adapter:'adapter',
-            product_sn:'product_sn'
+            product_sn:'product_sn',
+            batches:'batches',
+            inputDisabled:true,
+            standModal:false,
+            adapterModal:false
         };
     }
 
@@ -27,6 +35,11 @@ class HardwareTesting extends Component {
     }
     startTesting=()=>{
         console.log('开始测试')
+    }
+    toggleInput=()=>{
+        this.setState({
+            inputDisabled:!this.state.inputDisabled
+        })
     }
     render() {
         return (
@@ -46,18 +59,13 @@ class HardwareTesting extends Component {
                                         <span title={this.state.test_script}>测试脚本 : {this.state.test_script}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.part_name}>部件名称 : {this.state.part_name}</span>
+                                        <span title={this.state.product_name}>产品名称 : {this.state.product_name}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span>硬件版本 :
-                                            <Select style={{width: 150}} defaultValue={ '0' }
-                                                    onChange={this.onChangeOnline_status}>
-                                                <Option value="0">所有状态</Option>
-                                                <Option value="1">在线</Option>
-                                                <Option value="-1">离线</Option>
-                                                <Option value="-2">未激活</Option>
-                                            </Select>
-                                        </span>
+                                        <span title={this.state.hardware_version}>硬件版本 : {this.state.hardware_version}</span>
+                                    </div>
+                                    <div className="testing-config-item">
+                                        <span title={this.state.batches}>产品批次 : {this.state.batches}</span>
                                     </div>
                                 </div>
                                 <div className="testing-config-row">
@@ -68,15 +76,12 @@ class HardwareTesting extends Component {
                                         <span title={this.state.test_type}>测试类型 : {this.state.test_type}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span>测试架   :
-                                         <Select style={{width: 150}} defaultValue={ '0' }
-                                                 onChange={this.onChangeOnline_status}>
-                                                <Option value="0">所有状态</Option>
-                                                <Option value="1">在线</Option>
-                                                <Option value="-1">离线</Option>
-                                                <Option value="-2">未激活</Option>
-                                            </Select>
-                                        </span>
+                                        <span title={this.state.test_stand}>测试架 : {this.state.test_stand}</span>
+                                        <Button className='change' type='primary' onClick={()=>{
+                                            this.setState({
+                                                standModal:true
+                                            })
+                                        }}>更改</Button>
                                     </div>
                                 </div>
                                 <div className="testing-config-row">
@@ -84,19 +89,18 @@ class HardwareTesting extends Component {
                                         <span title={this.state.product_code}>产品代码 : {this.state.product_code}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span>适配器 :
-                                            <Select style={{width: 70}} defaultValue={ '0' }
-                                                    onChange={this.onChangeOnline_status}>
-                                                <Option value="0">所有状态</Option>
-                                                <Option value="1">在线</Option>
-                                                <Option value="-1">离线</Option>
-                                                <Option value="-2">未激活</Option>
-                                            </Select>
-                                            <Button type="primary">重新获取</Button></span>
+                                        <span title={this.state.adapter}>适配器 : {this.state.adapter}</span>
+                                        <Button  className='change'  type='primary'  onClick={()=>{
+                                            this.setState({
+                                                adapterModal:true
+                                            })
+                                        }}>更改</Button>
                                     </div>
                                     <div className="testing-config-item">
                                         <span>产品SN :
-                                        <Input style={{width: 150}} placeholder=""/>
+                                            <Input disabled={this.state.inputDisabled} style={{width: 130}} placeholder=""/>
+                                            <Icon onClick={this.toggleInput} type={this.state.inputDisabled?'lock':'unlock'}
+                                                  title={this.state.inputDisabled?'打开':'关闭'} style={{fontSize:'20px',cursor:'pointer'}}/>
                                         </span>
                                     </div>
                                 </div>
@@ -129,9 +133,76 @@ class HardwareTesting extends Component {
                             <div className="testing-content-data"></div>
                         </div>
                     </div>
+                    <Modal
+                        key={ Date.parse(new Date())}
+                        visible={this.state.standModal}
+                        title="测试架"
+                        onCancel={()=> {
+                            this.setState({standModal: false})
+                        }}
+                        footer={[
+                            <Button key="back" type="ghost" size="large"
+                                    onClick={()=> {
+                                        this.setState({standModal: false})
+                                    }}>取消</Button>,
+                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                                保存
+                            </Button>,
+                        ]}
+                    >
+                        <Select allowClear={true} dropdownMatchSelectWidth={false} style={{width:'100%'}}
+                                onChange={this.onChangeStand}
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            { this.props.fetchTestConf.test_stands.map((item, key) => {
+                                return (
+                                    <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                                )
+                            }) }
+                        </Select>
+                    </Modal>
+                    <Modal
+                        key={ Date.parse(new Date())+1}
+                        visible={this.state.adapterModal}
+                        title="适配器"
+                        onCancel={()=> {
+                            this.setState({adapterModal: false})
+                        }}
+                        footer={[
+                            <Button key="back" type="ghost" size="large"
+                                    onClick={()=> {
+                                        this.setState({adapterModal: false})
+                                    }}>取消</Button>,
+                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                                保存
+                            </Button>,
+                        ]}
+                    >
+                        <Select allowClear={true} dropdownMatchSelectWidth={false} style={{width:'100%'}}
+                                onChange={this.onChangeStand}
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            { this.props.fetchTestConf.test_stands.map((item, key) => {
+                                return (
+                                    <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                                )
+                            }) }
+                        </Select>
+                    </Modal>
                 </div>
             </div>
         )
     }
 }
-export default HardwareTesting
+
+function mapStateToProps(state) {
+    return {
+        fetchTestConf: state.fetchTestConf,
+    };
+}
+function mapDispatchToProps(dispath) {
+    return bindActionCreators(fetchTestConfAction, dispath);
+}
+export default connect(mapStateToProps,mapDispatchToProps)(HardwareTesting);
