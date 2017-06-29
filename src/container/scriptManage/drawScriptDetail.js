@@ -2,18 +2,19 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout, Icon} from 'antd';
+import {Breadcrumb, Layout, Icon,Modal,Button,message} from 'antd';
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, delPointsInLink} from './../../common/common.js';
+import {getHeader, delPointsInLink,converErrorCodeToMsg} from './../../common/common.js';
 import configJson from './../../common/config.json';
 import axios from 'axios';
-import DrawScriptCof from './drawScriptCof'
+import messageJson from './../../common/message.json';
+import AddOrEditName from './addOrEditNmae';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
-var _ = require('lodash');
+const _ = require('lodash');
 const {Content,} = Layout;
 
 class DrawScriptDetail extends Component {
@@ -23,7 +24,8 @@ class DrawScriptDetail extends Component {
             segmentsJson: '{}',
             detailJson: localStorage.getItem('detailJon'),
             detailIndex: 0,
-            editRecord: null
+            editRecord: null,
+            saveScriptModal:false
         };
     }
 
@@ -85,10 +87,41 @@ class DrawScriptDetail extends Component {
 
         }
     }
+    saveScript = ()=> {
+        const that=this
+        const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
+        const content=this.saveTempScript(false,true);
+        console.log('content',content)
+        delPointsInLink(content.linkDataArray)
+        const url= `/test_scripts/${localStorage.getItem('manageScriptId')}`;
+        const method=`PUT`;
+        const msg=messageJson[`edit script success`];
+        axios({
+            url: `${configJson.prefix}${url}`,
+            method: method,
+            data: {
+                name:DrawScriptCof.name,
+                test_type_id:DrawScriptCof.test_type_id?DrawScriptCof.test_type_id.key:'',
+                hardware_version_id:DrawScriptCof.hardware_version_id?DrawScriptCof.hardware_version_id.key:'',
+                content: JSON.stringify(content),
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response);
+                message.success(msg);
+                that.fetchScript(localStorage.getItem('manageScriptId'));
 
-    saveTempScript = ()=> {
+                that.setState({
+                    saveScriptModal:false
+                })
+            }).catch(function (error) {
+            console.log('获取出错',error);
+            converErrorCodeToMsg(error)
+        })
+    }
+    saveTempScript = (canBack,returnJson)=> {
         const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));
-
         const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));
         let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());
         for (let i = 0, len = changeJson.nodeDataArray.length; i < len; i++) {
@@ -120,7 +153,12 @@ class DrawScriptDetail extends Component {
         };
         console.log("修改后resultTempJson", resultTempJson);
         sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));
-        // sessionStorage.setItem('originJson',JSON.stringify(resultTempJson))
+        if(returnJson){
+            return resultTempJson
+        }
+        if(canBack){
+            this.props.history.goBack()
+        }
     }
     turnBack = ()=> {
         this.props.history.push('/scriptManage')
@@ -131,18 +169,22 @@ class DrawScriptDetail extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.state.editRecord? this.state.editRecord.name: ''}'`}</Breadcrumb.Item>
                     <Breadcrumb.Item>修改脚本"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <div className="testing-header">
                         <div className="testing-start">
-                            <div className="testing-start-btn  testing-save-btn">
+                            <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
                                 <Icon type="arrow-left"/>
                             </div>
                         </div>
-                        <DrawScriptCof ref="DrawScriptCofForm"  {...this.props} {...this.state}/>
                         <div className="testing-start">
-                            <div className="testing-start-btn testing-save-btn" onClick={this.saveTempScript}>
+                            <div className="testing-start-btn testing-save-btn" onClick={()=>{
+                                this.setState({
+                                    saveScriptModal:true
+                                })
+                            }}>
                                 保存脚本
                             </div>
                         </div>
@@ -151,6 +193,25 @@ class DrawScriptDetail extends Component {
                     <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true}
                                  json={this.state.detailJson}/>
                 </div>
+                <Modal
+                    key={ Date.parse(new Date())}
+                    visible={this.state.saveScriptModal}
+                    title={this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}
+                    onCancel={()=> {
+                        this.setState({saveScriptModal: false})
+                    }}
+                    footer={[
+                        <Button key="back" type="ghost" size="large"
+                                onClick={()=> {
+                                    this.setState({saveScriptModal: false})
+                                }}>取消</Button>,
+                        <Button key="submit" type="primary" size="large" onClick={this.saveScript}>
+                            保存
+                        </Button>,
+                    ]}
+                >
+                    <AddOrEditName ref="DrawScriptCofForm" fetchTestConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
+                </Modal>
             </Content>
         )
     }

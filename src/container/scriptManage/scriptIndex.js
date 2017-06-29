@@ -631,8 +631,13 @@ class ScriptIndex extends Component {
 
         sessionStorage.setItem(`${nodedata.key}`, JSON.stringify(detailJon));
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
-            this.props.saveTempScript()
-            this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+            console.log(this.props)
+            this.props.saveTempScript();
+            if(this.props.location.pathname==='/scriptManage/newScript'){
+                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,newScript:true}})
+            }else{
+                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+            }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
         }
@@ -879,8 +884,7 @@ class ScriptIndex extends Component {
                                 {this.props.location.state.groupNmae}
                             </div>
                             :null}
-                        <div className="" id="myDiagramDiv" onScroll={this.onscroll}>
-
+                        <div className="" id="myDiagramDiv" onScroll={this.onscroll} style={{height:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id')?'700px':'746px'}}>
                         </div>
                         <div className="drawScript-overview" id="myOverviewDiv" style={{top:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id')?'46px':'0'}}></div>
                     </div>

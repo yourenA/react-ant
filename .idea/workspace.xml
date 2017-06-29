@@ -3,23 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.less" afterPath="$PROJECT_DIR$/src/App.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/actions/fetchTestConf.js" afterPath="$PROJECT_DIR$/src/actions/fetchTestConf.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" afterPath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" afterPath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScriptCof.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScriptCof.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/index.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/search.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/search.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/search.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/search.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/reducers/fetchTestConf.js" afterPath="$PROJECT_DIR$/src/reducers/fetchTestConf.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,70 +28,68 @@
     <favorites_list name="HW-TEST" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="drawScript.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1202">
-              <caret line="71" column="43" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
-              <folding>
-                <element signature="e#50#89#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="drawScriptDetail.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
-              <folding>
-                <element signature="e#1495#2031#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="605">
-              <caret line="884" column="93" selection-start-line="884" selection-start-column="93" selection-end-line="884" selection-end-column="93" />
-              <folding>
-                <element signature="e#544#866#0" expanded="false" />
-                <element signature="e#1925#2748#0" expanded="false" />
-                <element signature="e#2780#3001#0" expanded="false" />
-                <element signature="e#3040#3710#0" expanded="false" />
-                <element signature="e#3740#3912#0" expanded="false" />
-                <element signature="e#3940#4135#0" expanded="false" />
-                <element signature="e#4169#4364#0" expanded="false" />
-                <element signature="e#31700#31827#0" expanded="false" />
-                <element signature="e#31852#31900#0" expanded="false" />
-                <element signature="e#31928#31960#0" expanded="false" />
-                <element signature="e#32064#38366#0" expanded="false" />
-                <element signature="e#32096#36378#0" expanded="false" />
-                <element signature="e#38388#38517#0" expanded="false" />
-                <element signature="e#38542#38641#0" expanded="false" />
-                <element signature="e#38667#39558#0" expanded="false" />
-                <element signature="e#39585#39718#0" expanded="false" />
-                <element signature="e#39741#39864#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="drawScript.less" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.less">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.67318434">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="drawScript.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-297">
+                  <caret line="93" column="41" selection-start-line="93" selection-start-column="41" selection-end-line="93" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#50#89#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="824">
+                  <caret line="634" column="40" selection-start-line="634" selection-start-column="40" selection-end-line="634" selection-end-column="40" />
+                  <folding>
+                    <element signature="e#544#866#0" expanded="false" />
+                    <element signature="e#1925#2748#0" expanded="false" />
+                    <element signature="e#2780#3001#0" expanded="false" />
+                    <element signature="e#3040#3710#0" expanded="false" />
+                    <element signature="e#3740#3912#0" expanded="false" />
+                    <element signature="e#3940#4135#0" expanded="false" />
+                    <element signature="e#4169#4364#0" expanded="false" />
+                    <element signature="e#31984#32111#0" expanded="false" />
+                    <element signature="e#32136#32184#0" expanded="false" />
+                    <element signature="e#32212#32244#0" expanded="false" />
+                    <element signature="e#32348#38650#0" expanded="false" />
+                    <element signature="e#32380#36662#0" expanded="false" />
+                    <element signature="e#38672#38801#0" expanded="false" />
+                    <element signature="e#38826#38925#0" expanded="false" />
+                    <element signature="e#38951#39842#0" expanded="false" />
+                    <element signature="e#39869#40002#0" expanded="false" />
+                    <element signature="e#40025#40148#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="drawScriptDetail.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-1106">
+                  <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#50#89#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -166,10 +151,10 @@
         <option value="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" />
         <option value="$PROJECT_DIR$/src/actions/fetchTestConf.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
       </list>
     </option>
   </component>
@@ -519,18 +504,18 @@
       <workItem from="1498442252292" duration="24578000" />
       <workItem from="1498528405839" duration="25055000" />
       <workItem from="1498614581702" duration="26613000" />
-      <workItem from="1498700306057" duration="15110000" />
+      <workItem from="1498700306057" duration="23209000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="277724000" />
+    <option name="totallyTimeSpent" value="285823000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1926" height="1056" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23834746" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.05190678" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -621,6 +606,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="52" column="27" selection-start-line="52" selection-start-column="27" selection-end-line="52" selection-end-column="27" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -704,6 +692,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="783">
           <caret line="95" column="44" selection-start-line="95" selection-start-column="44" selection-end-line="95" selection-end-column="44" />
+          <folding>
+            <element signature="e#50#75#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -936,16 +927,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.less">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+        <state relative-caret-position="270">
+          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="884" column="93" selection-start-line="884" selection-start-column="93" selection-end-line="884" selection-end-column="93" />
+        <state relative-caret-position="824">
+          <caret line="634" column="40" selection-start-line="634" selection-start-column="40" selection-end-line="634" selection-end-column="40" />
           <folding>
             <element signature="e#544#866#0" expanded="false" />
             <element signature="e#1925#2748#0" expanded="false" />
@@ -954,36 +945,36 @@
             <element signature="e#3740#3912#0" expanded="false" />
             <element signature="e#3940#4135#0" expanded="false" />
             <element signature="e#4169#4364#0" expanded="false" />
-            <element signature="e#31700#31827#0" expanded="false" />
-            <element signature="e#31852#31900#0" expanded="false" />
-            <element signature="e#31928#31960#0" expanded="false" />
-            <element signature="e#32064#38366#0" expanded="false" />
-            <element signature="e#32096#36378#0" expanded="false" />
-            <element signature="e#38388#38517#0" expanded="false" />
-            <element signature="e#38542#38641#0" expanded="false" />
-            <element signature="e#38667#39558#0" expanded="false" />
-            <element signature="e#39585#39718#0" expanded="false" />
-            <element signature="e#39741#39864#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1202">
-          <caret line="71" column="43" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
-          <folding>
-            <element signature="e#50#89#0" expanded="true" />
+            <element signature="e#31984#32111#0" expanded="false" />
+            <element signature="e#32136#32184#0" expanded="false" />
+            <element signature="e#32212#32244#0" expanded="false" />
+            <element signature="e#32348#38650#0" expanded="false" />
+            <element signature="e#32380#36662#0" expanded="false" />
+            <element signature="e#38672#38801#0" expanded="false" />
+            <element signature="e#38826#38925#0" expanded="false" />
+            <element signature="e#38951#39842#0" expanded="false" />
+            <element signature="e#39869#40002#0" expanded="false" />
+            <element signature="e#40025#40148#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+        <state relative-caret-position="-1106">
+          <caret line="85" column="41" selection-start-line="85" selection-start-column="41" selection-end-line="85" selection-end-column="41" />
           <folding>
-            <element signature="e#1495#2031#0" expanded="false" />
+            <element signature="e#50#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-297">
+          <caret line="93" column="41" selection-start-line="93" selection-start-column="41" selection-end-line="93" selection-end-column="41" />
+          <folding>
+            <element signature="e#50#89#0" expanded="true" />
           </folding>
         </state>
       </provider>

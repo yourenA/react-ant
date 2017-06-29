@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import {Breadcrumb, Layout,message,Icon,Modal,Button} from 'antd';
-import DrawScriptCof from './drawScriptCof'
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -28,12 +27,12 @@ class DrawScript extends Component {
     }
 
      componentDidMount () {
-         console.log('componentDidMount')
         if (!this.props.location.state.newScript) {
 
             localStorage.setItem('manageScriptId',this.props.location.state.editRecord.id);
             if(this.props.fetchTestConf.scriptLoaded){
                 this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem('resultTempJson'));
+                this.props.fetchDrawScript(this.props.location.state.editRecord.id)
             }else{
                 this.props.fetchDrawScript(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
             }
@@ -52,7 +51,6 @@ class DrawScript extends Component {
         }
     }
     saveScript = ()=> {
-
         let myDiagram=this.refs.ScriptIndex.callbackDiagram();
         const that=this
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
