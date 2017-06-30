@@ -35,11 +35,6 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllSegments();
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
         this.fetchScript(localStorage.getItem('manageScriptId'))
-        // this.setState({
-        //     [this.props.match.params.id]: localStorage.getItem('detailJon')
-        // }, function () {
-        //     console.log("this.state",this.state)
-        // })
     }
 
     fetchScript = (id, cb)=> {
@@ -62,28 +57,53 @@ class DrawScriptDetail extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("this.props",this.props)
+        console.log("nextProps",nextProps)
         if (this.props.match.params.id !== nextProps.match.params.id) {
+
             this.refs.ScriptIndex.delDiagram();
             this.refs.ScriptIndex.init();
             // console.log("this.state",this.state)
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
-            const idJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
-            for (let i = 0, len = idJson.nodeDataArray.length; i < len; i++) {
-                if (idJson.nodeDataArray[i].isGroup === true) {
-                    console.log('存在分组')
-                    if (sessionStorage.getItem(idJson.nodeDataArray[i].key)) {
-                        idJson.nodeDataArray.push(..._.differenceWith(JSON.parse(sessionStorage.getItem(idJson.nodeDataArray[i].key)).nodeDataArray, idJson.nodeDataArray,function (a,b) {
+            const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
+
+            const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
+            const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
+            console.log("this.props.match.params.id",this.props.match.params.id,thisPropsIdJson)
+            console.log("nextProps.match.params.id",nextProps.match.params.id,JSON.parse(sessionStorage.getItem(nextProps.match.params.id)))
+
+            if(this.props.history.action==='POP'){
+                console.log('POP');
+                console.log(`preSessionJson`,preSessionJson);
+                for(let i=0,len=sessionStorage.length;i<len;i++){
+                    console.log(sessionStorage.key(i))
+                    let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+                    let intersectJsonNode=_.differenceWith(preSessionJson.nodeDataArray,thisPropsIdJson.nodeDataArray,function (a,b) {
+                        return (a.key === b.key)
+                    })
+                    let intersectJsonLink=_.differenceWith(preSessionJson.linkDataArray,thisPropsIdJson.linkDataArray,_.isEqual)
+                    if(intersectJsonNode.length){
+                        sessionJson.nodeDataArray=_.differenceWith(sessionJson.nodeDataArray,intersectJsonNode,function (a,b) {
                             return (a.key === b.key)
-                        }));
-                        idJson.linkDataArray.push(..._.differenceWith(JSON.parse(sessionStorage.getItem(idJson.nodeDataArray[i].key)).linkDataArray, idJson.linkDataArray,function (a,b) {
-                            return (a.from === b.from &&  a.to === b.to)
-                        }))
+                        });
+                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
+                    }
+                    if(intersectJsonLink.length){
+                        sessionJson.linkDataArray=_.differenceWith(sessionJson.linkDataArray,intersectJsonLink,_.isEqual);
+                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
                     }
                 }
+                nextPropsIdJson.nodeDataArray=_.differenceWith(nextPropsIdJson.nodeDataArray, preSessionJson.nodeDataArray,function (a,b) {
+                    return (a.key === b.key)
+                }).concat(thisPropsIdJson.nodeDataArray)
+
+                nextPropsIdJson.linkDataArray=_.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray,_.isEqual)
+                    .concat(thisPropsIdJson.linkDataArray);
             }
-            sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(idJson))
-            console.log("idJson", idJson)
-            this.refs.ScriptIndex.load(idJson);
+
+            sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
+            console.log("nextPropsIdJson", nextPropsIdJson)
+            this.refs.ScriptIndex.load(nextPropsIdJson);
 
         }
     }
@@ -132,7 +152,6 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
-        console.log('resultTempJson',originJson)
         console.log('nowJson',nowJson)
         console.log('changeJson',changeJson)
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
@@ -151,12 +170,12 @@ class DrawScriptDetail extends Component {
             nodeDataArray: resultNodeJson,
             linkDataArray: resultLinkJson
         };
-        console.log("修改后resultTempJson", resultTempJson);
         sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));
         if(returnJson){
             return resultTempJson
         }
         if(canBack){
+            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
             this.props.history.goBack()
         }
     }

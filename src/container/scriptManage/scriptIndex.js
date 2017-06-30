@@ -631,7 +631,6 @@ class ScriptIndex extends Component {
 
         sessionStorage.setItem(`${nodedata.key}`, JSON.stringify(detailJon));
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
-            console.log(this.props)
             this.props.saveTempScript();
             if(this.props.location.pathname==='/scriptManage/newScript'){
                 this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,newScript:true}})
