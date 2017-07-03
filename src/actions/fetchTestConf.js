@@ -6,6 +6,7 @@ import configJson from './../common/config.json';
 import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
+export const FETCH_ALL_SCRIPT_SUCCESS = 'FETCH_ALL_SCRIPT_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
@@ -48,6 +49,7 @@ export function setSegmentLoadedFalse() {
         });
     }
 }
+
 export function fetchDrawScript(id, cb) {
     return dispatch => {
         axios({
@@ -112,6 +114,29 @@ export function fetchAllTestType() {
             });
     }
 }
+export function fetchAllScript(hardware_version_id) {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/test_scripts`,
+            method: 'get',
+            params: {
+                hardware_version_id:hardware_version_id||'',
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_ALL_SCRIPT_SUCCESS,
+                    script: response.data.data,
+                });
+
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
 
 export function fetchAllProducts() {
     return dispatch => {
@@ -135,12 +160,13 @@ export function fetchAllProducts() {
     }
 }
 
-export function fetchAllHardwareVersions() {
+export function fetchAllHardwareVersions(product_id) {
     return dispatch => {
         axios({
             url: `${configJson.prefix}/hardware_versions`,
             method: 'get',
             params: {
+                product_id:product_id||'',
                 return: 'all'
             },
             headers: getHeader()

@@ -10,6 +10,7 @@ import Nopermission from './container/nopermission';
 import Home from './container/home';
 import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
+import ProductionManage from './container/productionManage/index';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
 import SegmentManage from './container/scriptManage/segmentManage';
@@ -84,6 +85,12 @@ class App extends Component {
                                         :null
                                 }
                                 {
+                                    (login.login && testPermission('production_management') )?
+                                        <Menu.Item key="/productionManagement"><NavLink activeClassName="nav-selected"
+                                                                                to="/productionManagement">生产管理</NavLink></Menu.Item>
+                                        :null
+                                }
+                                {
                                     (login.login && testPermission('test_script_management') ) ?
                                         <SubMenu title={<span>脚本管理</span>}>
                                             <Menu.Item key="/scriptManage"><NavLink activeClassName="nav-selected"
@@ -145,6 +152,10 @@ class App extends Component {
                     <Route path="/hardwareTest/:uuid" render={(props) => {
                         return (login.login && testPermission('hardware_testing') ) ?
                             <HardwareTesting {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+                    <Route path="/productionManagement" render={(props) => {
+                        return (login.login && testPermission('production_management') ) ?
+                            <ProductionManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>

@@ -1,7 +1,7 @@
 import {SET_SCRIPT_LOADED_FALSE,SET_SEGMENT_LOADED_FALSE,DEL_EDIT_RECORD,DEL_SEGMENT_EDIT_RECORD,FETCH_DRAW_SCRIPT_SUCCESS,
     FETCH_DRAW_SEGMENT_SUCCESS,FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PRODUCTS_SUCCESS,
     FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS,FETCH_BATCHES_SUCCESS,FETCH_PERMISSIONS_SUCCESS,FETCH_GROUP_SUCCESS,
-    FETCH_MANUFACTURE_SUCCESS,FETCH_TEST_STAND_SUCCESS,} from '../actions/fetchTestConf';
+    FETCH_MANUFACTURE_SUCCESS,FETCH_TEST_STAND_SUCCESS,FETCH_ALL_SCRIPT_SUCCESS} from '../actions/fetchTestConf';
 
 const initState = {
     scriptLoaded: false,
@@ -11,6 +11,7 @@ const initState = {
     editRecord:null,
     editSegmentRecord:null,
     test_type: [],
+    script: [],
     products:[],
     hardware_versions:[],
     segments:[],
@@ -63,6 +64,11 @@ export default function (state = initState, action) {
             return {
                 ...state,
                 test_type: action.test_type
+            };
+        case FETCH_ALL_SCRIPT_SUCCESS:
+            return {
+                ...state,
+                script: action.script
             };
         case FETCH_PRODUCTS_SUCCESS:
             return {

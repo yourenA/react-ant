@@ -20,6 +20,16 @@ exports.formItemLayout={
         sm: {span: 18},
     }
 };
+exports.addSeriaNumLayout={
+    labelCol: {
+        xs: {span: 8},
+        sm: {span: 8},
+    },
+    wrapperCol: {
+        xs: {span: 16},
+        sm: {span: 16},
+    }
+};
 exports.DrawScriptConfLayout={
     labelCol: {
         xs: {span: 7},
