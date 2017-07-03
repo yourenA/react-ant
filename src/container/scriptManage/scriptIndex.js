@@ -833,50 +833,32 @@ class ScriptIndex extends Component {
         if (!input) return;
         input.focus();
 
-        myPalette.startTransaction("highlight search");
+        myDiagram.startTransaction("highlight search");
 
         if (input.value) {
             // search four different data properties for the string, any of which may match for success
             // create a case insensitive RegExp from what the user typed
             var regex = new RegExp(input.value, "i");
-            console.log("regex", regex)
-            var results = myPalette.findNodesByExample({name: regex},
+            var results = myDiagram.findNodesByExample({name: regex},
                 {text: regex},
                 {title: regex});
+            myDiagram.highlightCollection(results);
+
             // try to center the diagram at the first node that was found
-            if (results.count > 0) myPalette.centerRect(results.first().actualBounds);
+            if (results.count > 0) myDiagram.centerRect(results.first().actualBounds);
         } else {  // empty string only clears highlighteds collection
-            myPalette.clearHighlighteds();
+            myDiagram.clearHighlighteds();
         }
+        myDiagram.commitTransaction("highlight search");
+
 
 
     }
     keypressInput = (e)=> {
-        console.log(e.which);//react使用which代替keycode
         if (e.which === 13) {
             this.searchDiagram()
         }
     }
-    saveScript = ()=> {
-        const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue()
-        console.log('保存', DrawScriptCof)
-    }
-    turnBack = ()=> {
-        if (this.state.isChange) {
-            console.log('已经修改，请确认')
-        } else {
-            this.props.history.goBack()
-        }
-    }
-    contentHadChanged = ()=> {
-        this.setState({
-            isChange: true
-        })
-    }
-    addProgramSegment = ()=> {
-        this.props.history.push('/addProgramSegment')
-    }
-
     render() {
         return (
             <div>
@@ -895,17 +877,16 @@ class ScriptIndex extends Component {
                         <div className="drawScript-overview" id="myOverviewDiv" style={{top:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id')?'46px':'0'}}></div>
                     </div>
                 </div>
-                <div>
-                    <Button onClick={this.addGraphical}>向图上添加图形</Button>
+                <div className="drawScript-search">
+                    <input id="mySearch" type="text" onKeyPress={this.keypressInput}/>
+                    <Button onClick={this.searchDiagram}>检索</Button>
                 </div>
+
                 <div>
                     <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
                     <Button onClick={this.loadTextArea}>将JSON转为图表</Button>
                 </div>
-                <div>
-                    <input id="mySearch" type="text" onKeyPress={this.keypressInput}/>
-                    <Button onClick={this.searchDiagram}>search</Button>
-                </div>
+
 
                 <textarea id="mySavedModel"></textarea>
             </div>

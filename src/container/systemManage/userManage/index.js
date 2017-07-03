@@ -32,7 +32,8 @@ class UserManage extends Component {
 
     componentDidMount() {
         this.fetchHwData();
-        this.props.fetchAllGroup()
+        this.props.fetchAllGroup();
+        this.props.fetchAllManufacture()
     }
 
     fetchHwData = (page = 1, q = '', group = '') => {
@@ -66,6 +67,7 @@ class UserManage extends Component {
         }
         if(userrole==='系统管理员'){
             data.role_id=addName.role_id.key
+            data.company_id=addName.company_id.key
         }
         axios({
             url: `${configJson.prefix}/users`,
@@ -138,7 +140,7 @@ class UserManage extends Component {
             const that = this;
             const {page, q,group}=this.state;
             axios({
-                url: `${configJson.prefix}/users/${this.state.editId}`,
+                url: `${configJson.prefix}/users/${this.state.editId}/password`,
                 method: 'put',
                 data: resetPassword,
                 headers: getHeader()
@@ -146,6 +148,9 @@ class UserManage extends Component {
                 .then(function (response) {
                     console.log(response.data);
                     message.success(messageJson[`reset password success`]);
+                    that.setState({
+                        resetPasswordModal:false
+                    });
                     that.fetchHwData(page, q,group);
                 }).catch(function (error) {
                 console.log('获取出错', error);
@@ -221,9 +226,13 @@ class UserManage extends Component {
                 )
             }
         }];
+        columns.splice(1,0,{
+            title: '厂商名称',
+            dataIndex: 'company_name',
+            key: 'company_name'
+        })
         return (
             <Layout style={{padding: '0 24px 24px'}}>
-
                     <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>系统管理</Breadcrumb.Item>
                         <Breadcrumb.Item>用户管理</Breadcrumb.Item>

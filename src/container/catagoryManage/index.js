@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm,message} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
 import configJson from './../../common/config.json';
@@ -16,39 +16,42 @@ class Catagory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index:1,
+            index: 1,
             data: [],
             loading: false,
             q: '',
-            selectType:'',
+            selectType: '',
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
             addModal: false,
             addVersionModal: false,
             editRecord: {},
-            editId:''
+            editId: ''
         };
     }
 
     componentDidMount() {
         this.fetchHwData();
-        this.props.fetchAllProducts()
+        this.props.fetchAllProducts();
+        if (this.props.match.url === '/test_stands') {
+            this.props.fetchAllManufacture()
+        }
     }
 
-    fetchHwData = (page = 1, q = '',selectType='')=> {
+    fetchHwData = (page = 1, q = '', selectType = '')=> {
         this.setState({loading: true});
         const that = this;
         this.setState({loading: true});
-        let params =  {
+        let params = {
             page: page,
             query: q,
         };
-        if(this.props.match.url==='/hardware_versions'){
-            params={
+        if (this.props.match.url === '/hardware_versions') {
+            params = {
                 page: page,
                 query: q,
-                part_id:selectType
+                part_id: selectType
             }
         }
         axios({
@@ -77,8 +80,11 @@ class Catagory extends Component {
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
         for (let key in addName) {
-            if(key==='product_id'){
-                addName.product_id=addName.product_id.key
+            if (key === 'product_id') {
+                addName.product_id = addName.product_id.key
+            }
+            if (key === 'company_id') {
+                addName.company_id = addName.company_id.key
             }
         }
         console.log("addName", addName);
@@ -92,7 +98,7 @@ class Catagory extends Component {
                 console.log(response.data);
                 message.success(messageJson[`add ${that.props.match.url} success`]);
                 that.setState({
-                    addModal:false
+                    addModal: false
                 })
                 that.fetchHwData(page, q);
             }).catch(function (error) {
@@ -100,13 +106,16 @@ class Catagory extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    editData=()=>{
+    editData = ()=> {
         const editName = this.refs.EditName.getFieldsValue();
         const that = this;
         const {page, q}=this.state;
         for (let key in editName) {
-            if(key==='product_id'){
-                editName.product_id=editName.product_id.key
+            if (key === 'product_id') {
+                editName.product_id = editName.product_id.key
+            }
+            if (key === 'company_id') {
+                editName.company_id = editName.company_id.key
             }
         }
         console.log("editName", editName);
@@ -120,7 +129,7 @@ class Catagory extends Component {
                 console.log(response.data);
                 message.success(messageJson[`edit ${that.props.match.url} success`]);
                 that.setState({
-                    editModal:false
+                    editModal: false
                 });
                 that.fetchHwData(page, q);
             }).catch(function (error) {
@@ -146,13 +155,13 @@ class Catagory extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q,selectType)=> {
-        if(this.props.match.url==='/hardware_versions'){
+    onChangeSearch = (page, q, selectType)=> {
+        if (this.props.match.url === '/hardware_versions') {
             this.setState({
-                page, q,selectType
+                page, q, selectType
             })
-            this.fetchHwData(page, q,selectType);
-        }else{
+            this.fetchHwData(page, q, selectType);
+        } else {
             this.setState({
                 page, q
             })
@@ -203,7 +212,7 @@ class Catagory extends Component {
             case '/hardware_versions':
                 return <span>
                     <span className="ant-divider"/>
-                    <Button icon="plus"  type="primary"  onClick={()=> {
+                    <Button icon="plus" type="primary" onClick={()=> {
                         this.setState({addModal: true})
                     }}>
                     添加版本</Button>
@@ -219,12 +228,12 @@ class Catagory extends Component {
             title: '序号',
             dataIndex: 'id',
             key: 'id',
-            width:'45px',
-            className:'table-index',
+            width: '45px',
+            className: 'table-index',
             render: (text, record, index) => {
                 return (
                     <span>
-                            {index+1}
+                            {index + 1}
                         </span>
                 )
             }
@@ -240,12 +249,12 @@ class Catagory extends Component {
                 key: 'name',
             });
         } else if (this.props.match.url === '/test_types') {
-            columns.push( {
+            columns.push({
                 title: '测试类型',
                 dataIndex: 'name',
                 key: 'name'
             });
-        }else if (this.props.match.url === '/hardware_versions') {
+        } else if (this.props.match.url === '/hardware_versions') {
             columns.push({
                 title: '产品名称',
                 dataIndex: 'product_name',
@@ -254,17 +263,23 @@ class Catagory extends Component {
                 title: '产品代码',
                 dataIndex: 'product_code',
                 key: 'product_code'
-            },{
+            }, {
                 title: '硬件版本',
                 dataIndex: 'version',
                 key: 'version'
             });
-        }else if (this.props.match.url === '/test_stands') {
+        } else if (this.props.match.url === '/test_stands') {
             columns.push({
                 title: '测试架名称',
                 dataIndex: 'name',
                 key: 'name'
             });
+            localStorage.getItem('userrole') === '系统管理员' ?
+                columns.push({
+                    title: '厂商名称',
+                    dataIndex: 'company_name',
+                    key: 'company_name'
+                }) : null;
         }
         columns.push({
             title: '操作',
@@ -274,14 +289,14 @@ class Catagory extends Component {
                 return (
                     <div key={index}>
                         <Button onClick={()=> {
-                            this.setState({editId:record.id,editModal: true, editRecord: record})
+                            this.setState({editId: record.id, editModal: true, editRecord: record})
                         }}>
                             编辑
                         </Button>
                         <span className="ant-divider"/>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                     onConfirm={this.delData.bind(this, record.id)}>
-                            <button className="ant-btn ant-btn-danger" >删除
+                            <button className="ant-btn ant-btn-danger">删除
                             </button>
                         </Popconfirm>
                     </div>
@@ -299,7 +314,8 @@ class Catagory extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchWrap searchTitle={this.renderSearchTitle()}
-                                        onChangeSearch={this.onChangeSearch} type={this.props.match.url} {...this.props} {...this.state} />
+                                        onChangeSearch={this.onChangeSearch}
+                                        type={this.props.match.url} {...this.props} {...this.state} />
                             {this.renderAddBtn()}
                         </div>
                         <Table bordered className="main-table"
@@ -328,7 +344,8 @@ class Catagory extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url} ref="EditName"
+                        <AddOrEditName {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url}
+                                       ref="EditName"
                                        isEdit={true} editRecord={this.state.editRecord}/>
                     </Modal>
                     <Modal
@@ -348,7 +365,8 @@ class Catagory extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName  {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url} ref="AddName"/>
+                        <AddOrEditName  {...this.props} text1={this.renderSearchTitle()} type={this.props.match.url}
+                                        ref="AddName"/>
                     </Modal>
                 </div>
             </div>
@@ -364,4 +382,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispath) {
     return bindActionCreators(fetchTestConfAction, dispath);
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Catagory);
+export default connect(mapStateToProps, mapDispatchToProps)(Catagory);

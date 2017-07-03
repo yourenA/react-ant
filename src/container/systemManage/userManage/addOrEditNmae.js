@@ -64,6 +64,26 @@ class AddOrEditNameForm extends React.Component {
                                 </FormItem>
                                 :null
                         }
+                        {
+                            (localStorage.getItem('userrole')==='系统管理员'&& !this.props.isEdit) ?
+                                <FormItem
+                                    label="厂商名称"
+                                    {...formItemLayout}>
+                                    {getFieldDecorator('company_id', {
+                                        initialValue: {key:'',label:''},
+                                        rules: [{required: true, message: '请选择厂商'}],
+                                    })(
+                                        <Select labelInValue={true} allowClear={true}>
+                                            { this.props.fetchTestConf.manufactures.map((item, key) => {
+                                                return (
+                                                    <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                                                )
+                                            }) }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                :null
+                        }
 
                     </div>
             </Form>
