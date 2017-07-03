@@ -38,7 +38,10 @@ class DrawScript extends Component {
             }
         }else{
             this.props.delEditRecord();
-            this.refs.ScriptIndex.init()
+            this.refs.ScriptIndex.init();
+            if(sessionStorage.getItem('resultTempJson')){
+                this.refs.ScriptIndex.load(sessionStorage.getItem('resultTempJson'))
+            }
         }
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();

@@ -22,7 +22,6 @@ class DrawScriptDetail extends Component {
         super(props);
         this.state = {
             segmentsJson: '{}',
-            detailJson: localStorage.getItem('detailJon'),
             detailIndex: 0,
             editRecord: null,
             saveScriptModal:false
@@ -57,8 +56,6 @@ class DrawScriptDetail extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("this.props",this.props)
-        console.log("nextProps",nextProps)
         if (this.props.match.params.id !== nextProps.match.params.id) {
 
             this.refs.ScriptIndex.delDiagram();
@@ -74,7 +71,6 @@ class DrawScriptDetail extends Component {
 
             if(this.props.history.action==='POP'){
                 console.log('POP');
-                console.log(`preSessionJson`,preSessionJson);
                 for(let i=0,len=sessionStorage.length;i<len;i++){
                     console.log(sessionStorage.key(i))
                     let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
@@ -210,7 +206,7 @@ class DrawScriptDetail extends Component {
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
                     <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true}
-                                 json={this.state.detailJson}/>
+                                />
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

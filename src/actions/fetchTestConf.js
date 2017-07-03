@@ -9,13 +9,16 @@ export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
+export const FETCH_DRAW_SEGMENT_SUCCESS = 'FETCH_DRAW_SEGMENT_SUCCESS';
 export const FETCH_BATCHES_SUCCESS = 'FETCH_BATCHES_SUCCESS';
 export const FETCH_TEST_STAND_SUCCESS = 'FETCH_TEST_STAND_SUCCESS';
 export const FETCH_PERMISSIONS_SUCCESS = 'FETCH_PERMISSIONS_SUCCESS';
 export const FETCH_GROUP_SUCCESS = 'FETCH_GROUP_SUCCESS';
 export const FETCH_MANUFACTURE_SUCCESS = 'FETCH_MANUFACTURE_SUCCESS';
 export const DEL_EDIT_RECORD = 'DEL_EDIT_RECORD';
+export const DEL_SEGMENT_EDIT_RECORD = 'DEL_SEGMENT_EDIT_RECORD';
 export const SET_SCRIPT_LOADED_FALSE = 'SET_SCRIPT_LOADED_FALSE';
+export const SET_SEGMENT_LOADED_FALSE = 'SET_SEGMENT_LOADED_FALSE';
 
 export function delEditRecord() {
     return dispatch => {
@@ -24,10 +27,24 @@ export function delEditRecord() {
         });
     }
 }
+export function delSegmentEditRecord() {
+    return dispatch => {
+        dispatch({
+            type: DEL_SEGMENT_EDIT_RECORD,
+        });
+    }
+}
 export function setSciptLoadedFalse() {
     return dispatch => {
         dispatch({
             type: SET_SCRIPT_LOADED_FALSE,
+        });
+    }
+}
+export function setSegmentLoadedFalse() {
+    return dispatch => {
+        dispatch({
+            type: SET_SEGMENT_LOADED_FALSE,
         });
     }
 }
@@ -43,6 +60,27 @@ export function fetchDrawScript(id, cb) {
                     type: FETCH_DRAW_SCRIPT_SUCCESS,
                     scriptJson: response.data.content,
                     editRecord: response.data
+                });
+
+                if (cb) cb()
+            })
+            .catch(function (error) {
+                console.log('获取出错', error)
+            });
+    }
+}
+export function fetchDrawSegment(id, cb) {
+    return dispatch => {
+        axios({
+            url: `${configJson.prefix}/flow_diagrams/${id}`,
+            method: 'get',
+            headers: getHeader()
+        })
+            .then(function (response) {
+                dispatch({
+                    type: FETCH_DRAW_SEGMENT_SUCCESS,
+                    segmentJson: response.data.content,
+                    editSegmentRecord: response.data
                 });
 
                 if (cb) cb()
