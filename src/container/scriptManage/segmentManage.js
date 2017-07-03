@@ -12,6 +12,9 @@ import SearchSegment from './searchSegment'
 import {getHeader,converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as fetchTestConfAction from './../../actions/fetchTestConf';
 class SegmentManage extends Component {
     constructor(props) {
         super(props);
@@ -33,6 +36,8 @@ class SegmentManage extends Component {
     fetchHwData = (page = 1,q='')=> {
         this.setState({loading: true});
         const that = this;
+        this.props.setSegmentLoadedFalse();
+        sessionStorage.clear();
         axios({
             url: `${configJson.prefix}/flow_diagrams`,
             method: 'get',
@@ -128,11 +133,7 @@ class SegmentManage extends Component {
             title: '名称',
             dataIndex: 'name',
             key: 'name',
-        }, {
-            title: '脚本',
-            dataIndex: 'content',
-            key: 'content'
-        }, {
+        },  {
             title: '操作',
             key: 'action',
             width: 265,
@@ -216,4 +217,13 @@ class SegmentManage extends Component {
 
 }
 
-export default SegmentManage;
+
+function mapStateToProps(state) {
+    return {
+        fetchTestConf: state.fetchTestConf,
+    };
+}
+function mapDispatchToProps(dispath) {
+    return bindActionCreators(fetchTestConfAction, dispath);
+}
+export default connect(mapStateToProps,mapDispatchToProps)(SegmentManage);

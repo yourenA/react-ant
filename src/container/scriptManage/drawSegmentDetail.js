@@ -2,14 +2,15 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout,Input, Icon, Button,Modal} from 'antd';
+import {Breadcrumb, Layout,Input, Icon, Button,Modal,message} from 'antd';
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader,delPointsInLink} from './../../common/common.js';
+import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common';
 import configJson from './../../common/config.json';
 import axios from 'axios';
+import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
 const _ = require('lodash');
@@ -28,7 +29,9 @@ class DrawScriptDetail extends Component {
     componentDidMount() {
         this.props.fetchAllSegments();
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
-        this.fetchScript(localStorage.getItem('manageSegmentId'))
+        if (!this.props.location.state.newSegment) {
+            this.fetchScript(localStorage.getItem('manageSegmentId'))
+        }
     }
 
     fetchScript = (id, cb)=> {
@@ -63,7 +66,7 @@ class DrawScriptDetail extends Component {
             const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
 
             if(this.props.history.action==='POP'){
-                console.log('POP');
+                // console.log('POP');
                 for(let i=0,len=sessionStorage.length;i<len;i++){
                     console.log(sessionStorage.key(i))
                     let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
@@ -91,7 +94,7 @@ class DrawScriptDetail extends Component {
             }
 
             sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
-            console.log("nextPropsIdJson", nextPropsIdJson)
+            // console.log("nextPropsIdJson", nextPropsIdJson)
             this.refs.ScriptIndex.load(nextPropsIdJson);
 
         }
@@ -137,7 +140,34 @@ class DrawScriptDetail extends Component {
         }
     }
 
-    saveScript = ()=> {
+    saveCode = ()=> {
+        const that=this;
+        const content=this.saveTempScript(false,true);
+        console.log('content',content)
+        delPointsInLink(content.linkDataArray)
+        const newSegment=!this.state.editRecord
+        const url=newSegment ?`/flow_diagrams`:`/flow_diagrams/${localStorage.getItem('manageSegmentId')}`;
+        const method=newSegment ?`post`:`put`;
+        const meg=newSegment ?messageJson[`add segment success`]:messageJson[`edit segment success`];
+        axios({
+            url: `${configJson.prefix}${url}`,
+            method: method,
+            data: {
+                name:this.refs.scriptCodeNmae.refs.input.value,
+                content: JSON.stringify(content),
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response);
+                message.success(meg);
+                that.setState({
+                    saveModal:false
+                })
+            }).catch(function (error) {
+            console.log('获取出错',error);
+            converErrorCodeToMsg(error)
+        })
     }
     turnBack = ()=> {
     }
@@ -147,6 +177,7 @@ class DrawScriptDetail extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本段'${ this.state.editRecord.name}'`  :'新建脚本段' }</Breadcrumb.Item>
                     <Breadcrumb.Item>修改脚本段"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
@@ -186,7 +217,7 @@ class DrawScriptDetail extends Component {
                         </Button>,
                     ]}
                 >
-                    <Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae" onChange={this.changeSaveName} placeholder="Basic usage" />
+                    <Input defaultValue={this.state.editRecord?this.state.editRecord.name:''} ref="scriptCodeNmae"  placeholder="Basic usage" />
                 </Modal>
             </Content>
         )

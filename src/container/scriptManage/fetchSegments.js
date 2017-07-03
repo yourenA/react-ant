@@ -10,6 +10,12 @@ import uuidv4 from 'uuid/v4';
 const Option = Select.Option;
 
 class FetchSegments extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            segmentsJson: '{}',
+        };
+    }
     onChangeSegment=(id)=>{
         const that = this;
         axios({

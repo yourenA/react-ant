@@ -33,9 +33,9 @@ class AddProgramSegment extends Component {
             // this.fetchScript(this.props.location.state.editRecord.id,this.refs.ScriptIndex.init)
             if(this.props.fetchTestConf.segmentLoaded){
                 this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem('segmentTempJson'));
-                this.props.fetchDrawScript(this.props.location.state.editRecord.id)
+                this.props.fetchDrawSegment(this.props.location.state.editRecord.id)
             }else{
-                this.props.fetchDrawScript(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
+                this.props.fetchDrawSegment(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
             }
 
         }else{
@@ -50,7 +50,7 @@ class AddProgramSegment extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
             this.refs.ScriptIndex.delDiagram();
-            this.props.fetchDrawScript(nextProps.location.state.editRecord.id, this.refs.ScriptIndex.init)
+            this.props.fetchDrawSegment(nextProps.location.state.editRecord.id, this.refs.ScriptIndex.init)
         }
     }
     saveCode=()=>{
@@ -102,7 +102,7 @@ class AddProgramSegment extends Component {
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
+                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.props.location.state.newSegment ? '新建脚本段' : '编辑脚本段'}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
@@ -142,7 +142,7 @@ class AddProgramSegment extends Component {
                         </Button>,
                     ]}
                 >
-                    <Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae" onChange={this.changeSaveName} placeholder="Basic usage" />
+                    <Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae"  placeholder="Basic usage" />
                 </Modal>
             </Content>
         )

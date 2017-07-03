@@ -33,7 +33,9 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
-        this.fetchScript(localStorage.getItem('manageScriptId'))
+        if (!this.props.location.state.newScript) {
+            this.fetchScript(localStorage.getItem('manageScriptId'))
+        }
     }
 
     fetchScript = (id, cb)=> {
@@ -66,13 +68,12 @@ class DrawScriptDetail extends Component {
 
             const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
             const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
-            console.log("this.props.match.params.id",this.props.match.params.id,thisPropsIdJson)
-            console.log("nextProps.match.params.id",nextProps.match.params.id,JSON.parse(sessionStorage.getItem(nextProps.match.params.id)))
+            // console.log("this.props.match.params.id",this.props.match.params.id,thisPropsIdJson)
+            // console.log("nextProps.match.params.id",nextProps.match.params.id,JSON.parse(sessionStorage.getItem(nextProps.match.params.id)))
 
             if(this.props.history.action==='POP'){
-                console.log('POP');
+                // console.log('POP');
                 for(let i=0,len=sessionStorage.length;i<len;i++){
-                    console.log(sessionStorage.key(i))
                     let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
                     let intersectJsonNode=_.differenceWith(preSessionJson.nodeDataArray,thisPropsIdJson.nodeDataArray,function (a,b) {
                         return (a.key === b.key)
@@ -98,7 +99,7 @@ class DrawScriptDetail extends Component {
             }
 
             sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
-            console.log("nextPropsIdJson", nextPropsIdJson)
+            // console.log("nextPropsIdJson", nextPropsIdJson)
             this.refs.ScriptIndex.load(nextPropsIdJson);
 
         }
@@ -109,9 +110,10 @@ class DrawScriptDetail extends Component {
         const content=this.saveTempScript(false,true);
         console.log('content',content)
         delPointsInLink(content.linkDataArray)
-        const url= `/test_scripts/${localStorage.getItem('manageScriptId')}`;
-        const method=`PUT`;
-        const msg=messageJson[`edit script success`];
+        const newScript=!this.state.editRecord
+        const url= newScript?`/test_scripts`:`/test_scripts/${localStorage.getItem('manageScriptId')}`;
+        const method=newScript ?`POST`:`PUT`;
+        const msg=newScript ?messageJson[`add script success`]:messageJson[`edit script success`];
         axios({
             url: `${configJson.prefix}${url}`,
             method: method,
@@ -180,11 +182,12 @@ class DrawScriptDetail extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.state.editRecord? this.state.editRecord.name: ''}'`}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本'${ this.state.editRecord.name}'`  :'新建脚本' }</Breadcrumb.Item>
                     <Breadcrumb.Item>修改脚本"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">

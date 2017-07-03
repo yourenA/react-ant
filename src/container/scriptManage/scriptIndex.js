@@ -636,11 +636,16 @@ class ScriptIndex extends Component {
             if(this.props.location.pathname==='/scriptManage/newScript'){
                 this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,newScript:true}})
             }else{
-                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,newScript:true}})
+                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
             }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
-            this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+            if(this.props.location.pathname==='/segmentManage/newSegment'){
+                this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,newSegment:true}})
+            }else{
+                this.props.history.push({pathname: `/segmentDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+            }
+
         }
 
     }
