@@ -24,11 +24,12 @@ class TopicTable extends Component {
                 <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
                         onChange={this.onChangeBatches}
                         showSearch
+                        style={{width: 150}}
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                     { this.props.fetchTestConf.batches.map((item, key) => {
                         return (
-                            <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                            <Option key={item.id} value={item.id.toString()}>{item.code}</Option>
                         )
                     }) }
                 </Select>

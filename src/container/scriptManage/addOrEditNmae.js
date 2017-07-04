@@ -19,6 +19,7 @@ class AddOrEditNameForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
+        console.log('this.props',this.props)
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
                 {this.props.isSegment?

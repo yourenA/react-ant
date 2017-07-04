@@ -3,8 +3,6 @@
  */
 import {message } from 'antd';
 import messageJson from './message.json';
-import axios from 'axios';
-import configJson from './../common/config.json';
 import {signout} from './../actions/login';
 import {store} from './../index'
 /**

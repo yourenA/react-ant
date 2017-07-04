@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Tooltip} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Tooltip, Badge} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
 import configJson from './../../common/config.json';
@@ -14,6 +14,7 @@ import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import AddOrEditName from './addOrEditNmae';
 import EditName from './editNmae';
 import AddSeriaNum from './addSeriaNum';
+const _ = require('lodash');
 class ProductionManage extends Component {
     constructor(props) {
         super(props);
@@ -27,9 +28,10 @@ class ProductionManage extends Component {
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
             addModal: false,
-            addSerialNumModal:false,
+            addSerialNumModal: false,
             editRecord: {},
-            editId: ''
+            editId: '',
+            selectedRowKeys: []
         };
     }
 
@@ -68,7 +70,8 @@ class ProductionManage extends Component {
         })
     }
 
-    addData = (next)=> {
+    addData = (addSerialNum)=> {
+        console.log("addSerialNum", addSerialNum)
         const that = this;
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
@@ -90,12 +93,14 @@ class ProductionManage extends Component {
                 console.log(response.data);
                 message.success(messageJson[`add batches success`]);
                 that.setState({
-                    addModal: false
+                    addModal: false,
                 })
                 that.fetchHwData(page, q);
-                if(next){
+                if (addSerialNum) {
                     that.setState({
-                        addSerialNumModal: true
+                        addSerialNumModal: true,
+                        editRecord: response.data,
+                        editId: response.data.id
                     })
                 }
             }).catch(function (error) {
@@ -103,9 +108,40 @@ class ProductionManage extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    addSerialNum=()=>{
+    addSerialNum = ()=> {
         const addSerialNum = this.refs.addSerialNum.getFieldsValue();
-        console.log("addSerialNum",addSerialNum)
+        const sendData = {
+            batch_id: this.state.editId,
+            production_quantity: parseInt(addSerialNum.production_quantity),
+            generation_method: addSerialNum.generation_method
+        }
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/product_serial_numbers`,
+            method: 'post',
+            data: sendData,
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response.data);
+                message.success(messageJson[`add product_serial_numbers success`]);
+                that.setState({
+                    addSerialNumModal: false,
+                })
+                const changeIndex=_.findIndex(that.state.data, function(o) { return o.id == that.state.editId; });
+                if(addSerialNum.generation_method==='new'){
+                    that.state.data[changeIndex].production_quantity=sendData.production_quantity;
+                }else if(addSerialNum.generation_method==='append'){
+                    that.state.data[changeIndex].production_quantity=that.state.data[changeIndex].production_quantity+sendData.production_quantity;
+                }
+                that.setState({
+                    data:that.state.data
+                })
+
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
     }
     editData = ()=> {
         const editName = this.refs.EditName.getFieldsValue();
@@ -118,6 +154,7 @@ class ProductionManage extends Component {
             product_id: editName.product_id ? editName.product_id.key : '',
             description: editName.description
         }
+        console.log('sendData', sendData)
         axios({
             url: `${configJson.prefix}/batches/${this.state.editId}`,
             method: 'put',
@@ -163,8 +200,8 @@ class ProductionManage extends Component {
     onPageChange = (page) => {
         this.onChangeSearch(page, this.state.q);
     };
-    confirm=(id)=>{
-        console.log('确认',id);
+    confirm = (id)=> {
+        console.log('确认', id);
         const that = this;
         const {page, q}=this.state;
         axios({
@@ -181,6 +218,7 @@ class ProductionManage extends Component {
             converErrorCodeToMsg(error)
         })
     }
+
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -189,6 +227,7 @@ class ProductionManage extends Component {
             key: 'id',
             width: '45px',
             className: 'table-index',
+            fixed: 'left',
             render: (text, record, index) => {
                 return (
                     <span>
@@ -200,6 +239,8 @@ class ProductionManage extends Component {
             title: '生产批次号',
             dataIndex: 'code',
             key: 'code',
+            fixed: 'left',
+            width: 150,
         }, {
             title: '制造厂商',
             dataIndex: 'company_name',
@@ -208,6 +249,7 @@ class ProductionManage extends Component {
             title: '产品代码',
             dataIndex: 'product_code',
             key: 'product_code',
+            width: 120
         }, {
             title: '硬件版本',
             dataIndex: 'hardware_version',
@@ -240,18 +282,30 @@ class ProductionManage extends Component {
             dataIndex: 'status',
             key: 'status',
             render: (text, record, index)=> {
-                return (
-                    <p>{record.status_explain}</p>
-                )
+                if (text === 1) {
+                    return (
+                        <p><Badge status="success"/>{record.status_explain}</p>
+                    )
+                } else {
+                    return (
+                        <p><Badge status="default"/>{record.status_explain}</p>
+                    )
+                }
+
             }
         }, {
             title: '操作',
             key: 'action',
-            width: 220,
+            width: 330,
+            fixed: 'right',
             render: (text, record, index) => {
                 return (
                     record.status === -1 ?
                         <div key={index}>
+                            <Button type="primary" onClick={()=> {
+                                this.setState({editId: record.id, addSerialNumModal: true, editRecord: record})
+                            }}>
+                                添加序列号</Button> <span className="ant-divider"/>
                             <Popconfirm placement="topRight" title={ `确定要确认吗?`}
                                         onConfirm={this.confirm.bind(this, record.id)}>
                                 <Button type='primary'>确认
@@ -275,12 +329,11 @@ class ProductionManage extends Component {
                 )
             }
         }];
-
         return (
             <div>
                 <div className="content">
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>生产管理</Breadcrumb.Item>
+                        <Breadcrumb.Item>生产批次管理</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
@@ -291,12 +344,9 @@ class ProductionManage extends Component {
                             this.setState({addModal: true})
                         }}>
                             添加生产批次</Button>
-                            <span className="ant-divider"/><Button type="primary" icon="plus" onClick={()=> {
-                            this.setState({addSerialNumModal: true})
-                        }}>
-                            添加产品序列号</Button>
                         </div>
                         <Table bordered className="main-table"
+                               scroll={{x: 1500}}
                                loading={this.state.loading}
                                rowKey="id" columns={columns}
                                dataSource={data} pagination={false}/>
@@ -337,7 +387,7 @@ class ProductionManage extends Component {
                                     onClick={()=> {
                                         this.setState({addModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.addData}>
+                            <Button key="submit" type="primary" size="large" onClick={()=>this.addData()}>
                                 保存
                             </Button>,
                             <Button key="submitAndNext" type="primary" size="large" onClick={()=>this.addData(true)}>
@@ -348,8 +398,9 @@ class ProductionManage extends Component {
                         <AddOrEditName  {...this.props} ref="AddName"/>
                     </Modal>
                     <Modal
+                        key={ Date.parse(new Date()) + 2}
                         visible={this.state.addSerialNumModal}
-                        title={`添加产品序列号`}
+                        title={`添加${this.state.editRecord ? this.state.editRecord.code : ''}产品序列号`}
                         onCancel={()=> {
                             this.setState({addSerialNumModal: false})
                         }}

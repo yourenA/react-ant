@@ -243,7 +243,7 @@ class ScriptManage extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName ref="editScriptName" testConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
+                        <AddOrEditName ref="editScriptName" fetchTestConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
                     </Modal>
                 </div>
             </div>

@@ -48,6 +48,7 @@
   "two password no same":"两次密码不相同",
   "reset password success":"重置密码成功",
   "add batches success":"添加批次成功",
+  "add product_serial_numbers success":"添加产品序列号成功",
   "edit batches success":"修改批次成功",
   "del batches success":"删除批次成功",
   "confirm batches success":"确认批次成功"

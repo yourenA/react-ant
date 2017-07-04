@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox,Layout,Breadcrumb} from 'antd';
+import {Form, Icon, Input, Button,Layout,Breadcrumb} from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {

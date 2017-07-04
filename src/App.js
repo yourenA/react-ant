@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu} from 'antd';
+import {Layout, Menu,Modal,Button} from 'antd';
 import {
     BrowserRouter as Router,
     Route,
@@ -21,6 +21,7 @@ import CatagoryManage from './container/catagoryManage/index';
 import SystemManage from './container/systemManage/index';
 import Login from './container/login';
 import Register from './container/register';
+import SystemJournalModal from './component/systemJournalModal'
 import './App.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -32,13 +33,23 @@ const SubMenu = Menu.SubMenu;
 class App extends Component {
     constructor(props) {
         super(props);
+        this.timer=null;
         this.state = {
-            pathname: ''
+            pathname: '',
+            systemJournalModal:false,
+            systemJournalInfo:[{
+                info:'无效Product Code: 00.000000',
+                dateTime: new Date().toLocaleString()
+            },{
+                info:'无效Product Code: 00.01200011',
+                dateTime: new Date().toLocaleString()
+            }]
         }
+    }
+    componentDidMount(){
     }
 
     componentWillMount() {
-        // console.log(window.location.pathname);
         if (window.location.pathname.indexOf('systemManage') >= 0) {
             this.setState({
                 pathname: '/systemManage'
@@ -52,12 +63,19 @@ class App extends Component {
     }
 
     handleClick = (e) => {
-        this.setState({
-            pathname: e.key,
-        });
-        if (e.key === '/signout') {
-            this.props.signout();
+        if(e.key==='systemJournal'){
+            this.setState({
+                systemJournalModal:true
+            })
+        }else{
+            this.setState({
+                pathname: e.key,
+            });
+            if (e.key === '/signout') {
+                this.props.signout();
+            }
         }
+
     }
 
     render() {
@@ -138,9 +156,25 @@ class App extends Component {
                                     <Menu.Item key="/register"><NavLink activeClassName="nav-selected"
                                                                         to="/register">注册</NavLink></Menu.Item>
                                 </SubMenu>}
-
+                                <Menu.Item key="systemJournal" className="systemJournal-nav">系统日志</Menu.Item>
                             </Menu>
                         </Header>
+                        <Modal
+                            className="big-modal"
+                            visible={this.state.systemJournalModal}
+                            title={`系统日志`}
+                            onCancel={()=> {
+                                this.setState({systemJournalModal: false})
+                            }}
+                            footer={[
+                                <Button key="back" type="ghost" size="large"
+                                        onClick={()=> {
+                                            this.setState({systemJournalModal: false})
+                                        }}>确定</Button>,
+                            ]}
+                        >
+                            <SystemJournalModal systemJournalInfo={this.state.systemJournalInfo} ref="SystemJournalModal"/>
+                        </Modal>
                     </div>
 
                     <Route exact path="/" component={Home}/>

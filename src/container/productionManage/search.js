@@ -2,9 +2,8 @@
  * Created by Administrator on 2017/3/24.
  */
 import React, {Component} from 'react';
-import {Input, Select} from 'antd';
+import {Input} from 'antd';
 const Search = Input.Search;
-const Option = Select.Option;
 class TopicTable extends Component {
     constructor(props) {
         super(props);

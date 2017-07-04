@@ -73,7 +73,6 @@ class AddOrEditNameForm extends React.Component {
     }
 
     render() {
-        const that = this
         const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">

@@ -30,22 +30,22 @@ class AddSeriaNum extends React.Component {
                     <FormItem
                         label={'产品序列号生成数量'}
                         {...addSeriaNumLayout}>
-                        {getFieldDecorator('name', {
-                            initialValue: '',
+                        {getFieldDecorator('production_quantity', {
+                            initialValue: 0,
                             rules: [{required: true, message: `请输入产品序列号生成数量`}],
                         })(
-                            <Input  />
+                            <Input type="number" />
                         )}
                     </FormItem>
                     <FormItem
                         {...addSeriaNumLayout}
                     >
-                        {getFieldDecorator('radio-button',{
-                            initialValue: 'a',
+                        {getFieldDecorator('generation_method',{
+                            initialValue: 'new',
                         })(
                             <RadioGroup>
-                                <Radio style={radioStyle}  value="a">全新生成 <span className="radio-text">如果之前已生成过，则会清空之前的所有序列号</span></Radio>
-                                <Radio style={radioStyle}  value="b">增量生成 <span className="radio-text">如果之前已生成过，则会在后面继续增加新的序列号</span></Radio>
+                                <Radio style={radioStyle}  value="new">全新生成 <span className="radio-text">如果之前已生成过，则会清空之前的所有序列号</span></Radio>
+                                <Radio style={radioStyle}  value="append">增量生成 <span className="radio-text">如果之前已生成过，则会在后面继续增加新的序列号</span></Radio>
                             </RadioGroup>
                         )}
                     </FormItem>
