@@ -2,13 +2,14 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal,  Layout} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal,  Layout,message} from 'antd';
 import axios from 'axios'
-import configJson from './../../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import messageJson from './../../../common/message.json';
+import configJson from './../../../common/config.json';
 import * as fetchTestConfAction from './../../../actions/fetchTestConf';
 const {Content,} = Layout;
 class Manufacture extends Component {
@@ -56,6 +57,33 @@ class Manufacture extends Component {
     }
     editData=()=>{
         const editName = this.refs.EditName.getFieldsValue();
+        const permissions=Object.keys(editName).filter((item,index)=>{
+            return editName[item]===true
+        })
+        const sendData={
+            name:this.state.editRecord.name,
+            display_name:editName.display_name,
+            permissions:permissions
+        }
+        const {page, q}=this.state;
+        const that=this;
+        axios({
+            url: `${configJson.prefix}/roles/${this.state.editId}`,
+            method: 'put',
+            params: sendData,
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response.data);
+                message.success(messageJson[`edit group success`]);
+                that.setState({
+                    editModal:false
+                });
+                that.fetchHwData(page, q);
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
     }
 
     onChangeSearch = (page, q,)=> {

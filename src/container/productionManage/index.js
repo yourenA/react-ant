@@ -129,14 +129,17 @@ class ProductionManage extends Component {
                     addSerialNumModal: false,
                 })
                 const changeIndex=_.findIndex(that.state.data, function(o) { return o.id == that.state.editId; });
-                if(addSerialNum.generation_method==='new'){
-                    that.state.data[changeIndex].production_quantity=sendData.production_quantity;
-                }else if(addSerialNum.generation_method==='append'){
-                    that.state.data[changeIndex].production_quantity=that.state.data[changeIndex].production_quantity+sendData.production_quantity;
+                if(changeIndex>=0){
+                    if(addSerialNum.generation_method==='new'){
+                        that.state.data[changeIndex].production_quantity=sendData.production_quantity;
+                    }else if(addSerialNum.generation_method==='append'){
+                        that.state.data[changeIndex].production_quantity=that.state.data[changeIndex].production_quantity+sendData.production_quantity;
+                    }
+                    that.setState({
+                        data:that.state.data
+                    })
                 }
-                that.setState({
-                    data:that.state.data
-                })
+
 
             }).catch(function (error) {
             console.log('获取出错', error);

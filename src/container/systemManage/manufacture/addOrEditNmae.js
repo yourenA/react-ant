@@ -34,16 +34,6 @@ class AddOrEditNameForm extends React.Component {
                             )}
                         </FormItem>
                         <FormItem
-                            label={'制造商编码'}
-                            {...formItemLayout}>
-                            {getFieldDecorator('code', {
-                                initialValue: this.props.isEdit ? this.props.editRecord.code : '',
-                                rules: [{required: true, message: `请输入制造厂编码`}],
-                            })(
-                                <Input  />
-                            )}
-                        </FormItem>
-                        <FormItem
                             label={'制造商电话'}
                             {...formItemLayout}>
                             {getFieldDecorator('telephone', {

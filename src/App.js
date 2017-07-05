@@ -64,9 +64,7 @@ class App extends Component {
 
     handleClick = (e) => {
         if(e.key==='systemJournal'){
-            this.setState({
-                systemJournalModal:true
-            })
+            this.refs.SystemJournalModal.setSystemJournalModalTrue()
         }else{
             this.setState({
                 pathname: e.key,
@@ -159,22 +157,7 @@ class App extends Component {
                                 <Menu.Item key="systemJournal" className="systemJournal-nav">系统日志</Menu.Item>
                             </Menu>
                         </Header>
-                        <Modal
-                            className="big-modal"
-                            visible={this.state.systemJournalModal}
-                            title={`系统日志`}
-                            onCancel={()=> {
-                                this.setState({systemJournalModal: false})
-                            }}
-                            footer={[
-                                <Button key="back" type="ghost" size="large"
-                                        onClick={()=> {
-                                            this.setState({systemJournalModal: false})
-                                        }}>确定</Button>,
-                            ]}
-                        >
-                            <SystemJournalModal systemJournalInfo={this.state.systemJournalInfo} ref="SystemJournalModal"/>
-                        </Modal>
+                            <SystemJournalModal systemJournalModal={this.state.systemJournalModal} ref="SystemJournalModal"/>
                     </div>
 
                     <Route exact path="/" component={Home}/>

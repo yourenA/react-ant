@@ -12,6 +12,7 @@ import './index.less'
 import ManufactureInfo from './manufacture/index'
 import GroupManage from './groupManage/index'
 import UserManage from './userManage/index'
+import Nopermission from './../../container/nopermission';
 import {testPermission} from './../../common/common'
 const {Sider} = Layout;
 
@@ -106,9 +107,20 @@ class SystemManage extends React.Component {
                             />
                         </Sider>
 
-                        <Route path={`/systemManage/manufactureInfo`} component={ManufactureInfo}/>
-                        <Route path={`/systemManage/groupManage`} component={GroupManage}/>
-                        <Route path={`/systemManage/userManage`} component={UserManage}/>
+                        <Route path={`/systemManage/manufactureInfo`}
+                               render={(props) => {
+                                   return (testPermission('company_management') ) ?
+                                       <ManufactureInfo {...props}/> :<Nopermission/>;
+                               }}
+                               />
+                        <Route path={`/systemManage/groupManage`} render={(props) => {
+                            return (testPermission('user_management') ) ?
+                                <GroupManage {...props}/> :<Nopermission/>;
+                        }} />
+                        <Route path={`/systemManage/userManage`} render={(props) => {
+                            return (testPermission('user_management') ) ?
+                                <UserManage {...props}/> :<Nopermission/>;
+                        }} />
 
                     </Layout>
 

@@ -44,6 +44,7 @@
   "del manufacture success":"删除制造商成功",
   "add user success":"添加用户成功",
   "edit user success":"修改用户成功",
+  "edit group success":"修改用户组成功",
   "del user success":"删除用户成功",
   "two password no same":"两次密码不相同",
   "reset password success":"重置密码成功",
