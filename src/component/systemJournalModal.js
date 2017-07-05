@@ -21,12 +21,12 @@ class SystemJournal extends React.Component {
                     info: '无效Product Code: 00.000000',
                     dateTime: new Date().toLocaleString()
                 })
-            }, function () {
+            }/*, function () {
                 let systemJournalContent = document.querySelector('.systemJournal-info');
                 if (systemJournalContent) {
                     systemJournalContent.scrollTop = systemJournalContent.scrollHeight;//要在里面这一层添加height: 67vh;overflow-y: scroll;
                 }
-            });
+            }*/);
         }, 5000)
     }
 
@@ -60,11 +60,12 @@ class SystemJournal extends React.Component {
                         系统日志
                     </div>
                     <div className="systemJournal-info">
+                        <div className="systemJournal-scroll">
+                            div
+                        </div>
                         {this.state.systemJournalInfo.map((item, index)=> {
                             return (
-                                <div key={index}>
-                                    <p ><span >时间: {item.dateTime } </span><span>{item.info}</span></p>
-                                </div>
+                                    <p key={index}><span >时间: {item.dateTime } </span><span>{item.info}</span></p>
                             )
                         })}
                     </div>

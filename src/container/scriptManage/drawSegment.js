@@ -58,30 +58,44 @@ class AddProgramSegment extends Component {
         const that=this;
         this.refs.ScriptIndex.save();
         const content=JSON.parse( myDiagram.model.toJson());
-        delPointsInLink(content.linkDataArray)
-        const newScript=this.props.location.state.newSegment
-        const url=newScript ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`
-        const method=newScript ?`post`:`put`;
-        const meg=newScript ?messageJson[`add segment success`]:messageJson[`edit segment success`];
-        axios({
-            url: `${configJson.prefix}${url}`,
-            method: method,
-            data: {
-                name:this.refs.scriptCodeNmae.refs.input.value,
-                content: JSON.stringify(content),
-            },
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response);
-                message.success(meg);
-                that.setState({
-                    saveModal:false
-                })
-            }).catch(function (error) {
-            console.log('获取出错',error);
-            converErrorCodeToMsg(error)
-        })
+        let externalCount=0;
+        let externalTitle=''
+        for(let i=0,len=content.nodeDataArray.length;i<len;i++){
+            if(content.nodeDataArray[i].isGroup===true && !content.nodeDataArray[i].group){
+                externalTitle=content.nodeDataArray[i].title;
+                externalCount++
+            }
+        }
+        console.log('externalCount',externalCount)
+        if(externalCount!==1){
+            message.error('最外层只能有一个分组')
+        }else{
+            delPointsInLink(content.linkDataArray)
+            const newScript=this.props.location.state.newSegment
+            const url=newScript ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`
+            const method=newScript ?`post`:`put`;
+            const meg=newScript ?messageJson[`add segment success`]:messageJson[`edit segment success`];
+            axios({
+                url: `${configJson.prefix}${url}`,
+                method: method,
+                data: {
+                    name:externalTitle,
+                    content: JSON.stringify(content),
+                },
+                headers: getHeader()
+            })
+                .then(function (response) {
+                    console.log(response);
+                    message.success(meg);
+                    that.setState({
+                        saveModal:false
+                    })
+                }).catch(function (error) {
+                console.log('获取出错',error);
+                converErrorCodeToMsg(error)
+            })
+        }
+
     }
     saveTempScript=()=>{
         let myDiagram=this.refs.ScriptIndex.callbackDiagram();
@@ -142,7 +156,7 @@ class AddProgramSegment extends Component {
                         </Button>,
                     ]}
                 >
-                    <Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae"  placeholder="Basic usage" />
+                    {/*<Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae"  placeholder="Basic usage" />*/}
                 </Modal>
             </Content>
         )

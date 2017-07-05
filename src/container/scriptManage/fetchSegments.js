@@ -35,6 +35,7 @@ class FetchSegments extends Component {
     }
     addGraphical = ()=> {
         let myDiagram=this.props.ScriptIndex.callbackDiagram()
+        let scrollAndBounds=this.props.ScriptIndex.callbackScrollAndBounds();
         let originHadJson = JSON.parse(this.state.segmentsJson);
         if(!originHadJson.nodeDataArray){
             return false
@@ -50,8 +51,22 @@ class FetchSegments extends Component {
                 // if( originHadJson.nodeDataArray[i].group){
                 //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
                 // }
-                // let parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
-                // originHadJson.nodeDataArray[i].loc = `${parseInt(parseLoc[0]) + this.state.scrollLeft} ${parseInt(parseLoc[1]) + this.state.scrollTop}`
+                if(originHadJson.nodeDataArray[i].isGroup===true && !originHadJson.nodeDataArray[i].group){
+                    const parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
+                    const externalX=scrollAndBounds.left+scrollAndBounds.scrollLeft+100;
+                    const externalY=scrollAndBounds.top+scrollAndBounds.scrollTop+180;
+                    originHadJson.nodeDataArray[i].loc = `${externalX} ${externalY}`;
+                    const distanceX=parseInt(parseLoc[0])-externalX;
+                    const distanceY=parseInt(parseLoc[1])-externalY;
+                    for (let m = 0, len5 = keyUuidArr.length; m < len5; m++) {
+                        if(m!==i){
+                            const parseLeftOverLoc = originHadJson.nodeDataArray[m].loc.split(' ');
+                            originHadJson.nodeDataArray[m].loc = `${parseInt(parseLeftOverLoc[0])-distanceX} ${parseInt(parseLeftOverLoc[1])-distanceY}`;
+                        }
+
+                    }
+                }else{
+                }
 
 
                 if (originHadJson.nodeDataArray[i].group) {

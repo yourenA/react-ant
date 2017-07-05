@@ -464,17 +464,17 @@ class ScriptIndex extends Component {
                     background: "#FFFFFF",
                     isSubGraphExpanded: false,
                     // highlight when dragging into the Group
-                    mouseDragEnter: function (e, grp, prev) {
-                        that.highlightGroup(e, grp, true);
-                    },
-                    mouseDragLeave: function (e, grp, next) {
-                        that.highlightGroup(e, grp, false);
-                    },
+                    // mouseDragEnter: function (e, grp, prev) {//注释掉不可以直接往group里面添加
+                    //     that.highlightGroup(e, grp, true);
+                    // },
+                    // mouseDragLeave: function (e, grp, next) {//注释掉不可以直接往group里面添加
+                    //     that.highlightGroup(e, grp, false);
+                    // },
                     // computesBoundsAfterDrag: true,//不设置这个才会拖动的时候同时改变大小
                     // when the selection is dropped into a Group, add the selected Parts into that Group;
                     // if it fails, cancel the tool, rolling back any changes
-                    mouseDrop: that.finishDrop,
-                    handlesDragDropForMembers: true,  // don't need to define handlers on member Nodes and Links
+                    // mouseDrop: that.finishDrop,//注释掉不可以直接往group里面添加
+                    handlesDragDropForMembers: false,  //设为false不可以直接往group里面添加
                     // Groups containing Groups lay out their members horizontally
                 },
                 new go.Binding("background", "isHighlighted", function (h) {
@@ -668,163 +668,6 @@ class ScriptIndex extends Component {
     load = (json)=> {
         myDiagram.model = go.Model.fromJson(json);
     }
-    addGraphical = ()=> {
-        const originHadJson = {
-            nodeDataArray: [
-                {
-                    "title": "unit",
-                    "isGroup": true,
-                    "category": "OfGroups",
-                    "key": "5f42b271-f681-4b57-a695-3dcb4aa2add2",
-                    "loc": "-385.2614237491539 61.73857625084602",
-                    "group": -6
-                },
-                {
-                    "category": "set",
-                    "params": [{"key": "11", "value": "11"}, {"key": "22", "value": "22"}],
-                    "text": "设置参数",
-                    "key": -7,
-                    "loc": "93 84.99999999999994",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "category": "item",
-                    "title": "语句",
-                    "params": [{"key": "2", "value": "2"}],
-                    "key": "73f0dba7-34fb-4359-9fe8-fdad19146a5b",
-                    "loc": "-173 234",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "category": "item",
-                    "title": "语句",
-                    "params": [{"key": "4", "value": "4"}],
-                    "key": "df00d9f6-ce5d-45d8-9978-d5140c9c8167",
-                    "loc": "-64.99999999999994 459.0000000000001",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "category": "item",
-                    "title": "语句",
-                    "params": [{"key": "1", "value": "1"}],
-                    "key": "86d675c8-cde6-41ae-a525-95f7bcc9538f",
-                    "loc": "-170.9999999999999 110.99999999999983",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "category": "item",
-                    "title": "语句",
-                    "params": [{"key": "3", "value": "3"}],
-                    "key": "84b34504-495d-4c02-b2a8-19c5e28983ce",
-                    "loc": "-307 467",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "text": "条件语句",
-                    "category": "if",
-                    "figure": "Diamond",
-                    "key": "99a50da8-cf12-4943-8c21-615c7ed68493",
-                    "loc": "-179 330",
-                    "group": "5f42b271-f681-4b57-a695-3dcb4aa2add2"
-                },
-                {
-                    "title": "project",
-                    "isGroup": true,
-                    "category": "OfGroups",
-                    "key": -6,
-                    "loc": "-721.522847498308 8.477152501692025"
-                },
-                {
-                    "title": "unit",
-                    "isGroup": true,
-                    "category": "OfGroups",
-                    "key": -9,
-                    "loc": "-708.261423749154 383.2729253109046",
-                    "group": -6
-                },
-                {
-                    "category": "item",
-                    "title": "语句",
-                    "params": [{"key": "22", "value": "22"}],
-                    "key": -8,
-                    "loc": "-630 420",
-                    "group": -9
-                }
-            ],
-            linkDataArray: [
-                {
-                    "from": "86d675c8-cde6-41ae-a525-95f7bcc9538f",
-                    "to": "73f0dba7-34fb-4359-9fe8-fdad19146a5b",
-                },
-                {
-                    "from": "73f0dba7-34fb-4359-9fe8-fdad19146a5b",
-                    "to": "99a50da8-cf12-4943-8c21-615c7ed68493",
-                },
-                {
-                    "from": "99a50da8-cf12-4943-8c21-615c7ed68493",
-                    "to": "84b34504-495d-4c02-b2a8-19c5e28983ce",
-                    "visible": true,
-                },
-                {
-                    "from": "99a50da8-cf12-4943-8c21-615c7ed68493",
-                    "to": "df00d9f6-ce5d-45d8-9978-d5140c9c8167",
-                    "visible": true,
-                    "condition": "N"
-                },
-                {
-                    "from": "5f42b271-f681-4b57-a695-3dcb4aa2add2",
-                    "to": -9,
-                }
-            ]
-        };
-        let keyUuidArr = [];
-        for (let k = 0, len3 = originHadJson.nodeDataArray.length; k < len3; k++) {
-            let uuid2 = uuidv4();
-            keyUuidArr.push({key: originHadJson.nodeDataArray[k].key, uuid: uuid2});
-
-        }
-        for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
-            let parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
-            originHadJson.nodeDataArray[i].loc = `${parseInt(parseLoc[0]) + this.state.scrollLeft} ${parseInt(parseLoc[1]) + this.state.scrollTop}`
-            if (originHadJson.nodeDataArray[i].group) {
-                for (let n = 0, len4 = keyUuidArr.length; n < len4; n++) {
-                    if (originHadJson.nodeDataArray[i].group === keyUuidArr[n].key) {
-                        originHadJson.nodeDataArray[i].group = keyUuidArr[n].uuid
-                    }
-                }
-            }
-
-            if (originHadJson.nodeDataArray[i].isGroup) {
-                originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
-            }
-
-
-            for (let j = 0, len2 = originHadJson.linkDataArray.length; j < len2; j++) {
-                if (originHadJson.linkDataArray[j].from === keyUuidArr[i].key) {
-                    originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
-                    originHadJson.linkDataArray[j].from = keyUuidArr[i].uuid;
-                }
-                if (originHadJson.linkDataArray[j].to === keyUuidArr[i].key) {
-                    originHadJson.nodeDataArray[i].key = keyUuidArr[i].uuid;
-                    originHadJson.linkDataArray[j].to = keyUuidArr[i].uuid;
-                }
-            }
-        }
-
-        for (let h = 0, len = originHadJson.nodeDataArray.length; h < len; h++) {
-            myDiagram.model.addNodeData(originHadJson.nodeDataArray[h]);
-        }
-        for (let g = 0, len = originHadJson.linkDataArray.length; g < len; g++) {
-            myDiagram.model.addLinkData(originHadJson.linkDataArray[g]);
-        }
-
-    }
-    onscroll = (e)=> {
-        this.setState({
-            scrollTop: e.target.scrollTop,
-            scrollLeft: e.target.scrollLeft
-        })
-    }
     loadTextArea = ()=> {
         myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     }
@@ -859,6 +702,27 @@ class ScriptIndex extends Component {
             this.searchDiagram()
         }
     }
+    onscroll = (e)=> {
+        this.setState({
+            scrollTop: e.target.scrollTop,
+            scrollLeft: e.target.scrollLeft
+        })
+    }
+    getCenter=()=>{
+        var bottom=myDiagram.computeBounds().bottom
+        var top=myDiagram.computeBounds().top
+        const {scrollTop,scrollLeft}=this.state
+        console.log("top",top)
+        console.log("bottom",bottom)
+        console.log("bottom-top",bottom-top)
+        console.log("top+scrollTop",top+scrollTop)
+    }
+    callbackScrollAndBounds=()=>{
+        const left=myDiagram.computeBounds().left
+        const top=myDiagram.computeBounds().top
+        const {scrollTop,scrollLeft}=this.state
+        return {top,left,scrollTop,scrollLeft}
+    }
     render() {
         return (
             <div>
@@ -883,6 +747,7 @@ class ScriptIndex extends Component {
                 </div>
 
                 <div>
+                    <Button id="getCenter" onClick={this.getCenter}>获取画布中心</Button>
                     <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
                     <Button onClick={this.loadTextArea}>将JSON转为图表</Button>
                 </div>
