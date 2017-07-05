@@ -173,6 +173,8 @@ class Catagory extends Component {
     };
     renderTitle = ()=> {
         switch (this.props.match.url) {
+            case '/companies':
+                return '制造厂商';
             case '/products':
                 return '产品管理';
             case '/test_types':
@@ -181,12 +183,15 @@ class Catagory extends Component {
                 return '硬件版本';
             case '/test_stands':
                 return '测试架';
+
             default:
                 return ''
         }
     }
     renderSearchTitle = ()=> {
         switch (this.props.match.url) {
+            case '/companies':
+                return '厂商名称';
             case '/products':
                 return '产品代码';
             case '/test_types':
@@ -201,6 +206,7 @@ class Catagory extends Component {
     }
     renderAddBtn = ()=> {
         switch (this.props.match.url) {
+            case '/companies':
             case '/products':
             case '/test_types':
             case '/parts':
@@ -238,7 +244,13 @@ class Catagory extends Component {
                 )
             }
         }];
-        if (this.props.match.url === '/products') {
+        if (this.props.match.url === '/companies') {
+            columns.push({
+                title: '制造厂商名称',
+                dataIndex: 'name',
+                key: 'name'
+            })
+        } else if (this.props.match.url === '/products') {
             columns.push({
                 title: '产品代码',
                 dataIndex: 'code',

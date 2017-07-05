@@ -119,6 +119,10 @@ class App extends Component {
                                 {
                                     (login.login && testPermission('test_stand_management') ) ?
                                         <SubMenu title={<span>分类管理</span>}>
+                                            {testPermission('company_management')?
+                                                <Menu.Item key="/companies"><NavLink activeClassName="nav-selected" to="/companies">制造厂商</NavLink></Menu.Item>
+                                                :null
+                                            }
                                             {testPermission('product_management')?
                                                 <Menu.Item key="/products"><NavLink activeClassName="nav-selected" to="/products">产品管理</NavLink></Menu.Item>
                                                 :null
@@ -141,7 +145,7 @@ class App extends Component {
                                         </SubMenu>
                                         :null
                                 }
-                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/manufactureInfo">系统管理</NavLink></Menu.Item>
+                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/systemConfig">系统管理</NavLink></Menu.Item>
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
@@ -212,6 +216,11 @@ class App extends Component {
                         path="/systemManage" render={(props) => {
                         return login.login ?
                             <SystemManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                    }}/>
+                    <Route
+                        path="/companies" render={(props) => {
+                        return (login.login && testPermission('company_management') ) ?
+                            <CatagoryManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
                     }}/>
                     <Route
                         path="/products" render={(props) => {

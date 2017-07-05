@@ -56,7 +56,13 @@ class HardwareTesting extends Component {
                             <div className="testing-config">
                                 <div className="testing-config-row">
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_script}>测试脚本 : {this.state.test_script}</span>
+                                        <span title={this.state.test_script}>测试脚本 : {this.state.test_script}
+                                            <Button className='change' type='primary' onClick={()=>{
+                                                this.setState({
+                                                    standModal:true
+                                                })
+                                            }}>更改</Button>
+                                        </span>
                                     </div>
                                     <div className="testing-config-item">
                                         <span title={this.state.product_name}>产品名称 : {this.state.product_name}</span>
@@ -67,8 +73,6 @@ class HardwareTesting extends Component {
                                     <div className="testing-config-item">
                                         <span title={this.state.batches}>产品批次 : {this.state.batches}</span>
                                     </div>
-                                </div>
-                                <div className="testing-config-row">
                                     <div className="testing-config-item">
                                         <span title={this.state.manufacturer}>生产商 : {this.state.manufacturer}</span>
                                     </div>
@@ -83,8 +87,6 @@ class HardwareTesting extends Component {
                                             })
                                         }}>更改</Button>
                                     </div>
-                                </div>
-                                <div className="testing-config-row">
                                     <div className="testing-config-item">
                                         <span title={this.state.product_code}>产品代码 : {this.state.product_code}</span>
                                     </div>

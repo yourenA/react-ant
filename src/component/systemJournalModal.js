@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react';
-
+import {Icon} from 'antd'
 class SystemJournal extends React.Component {
     constructor(props) {
         super(props);
@@ -21,15 +21,17 @@ class SystemJournal extends React.Component {
                     info: '无效Product Code: 00.000000',
                     dateTime: new Date().toLocaleString()
                 })
-            }/*, function () {
-                let systemJournalContent = document.querySelector('.systemJournal-info');
-                if (systemJournalContent) {
-                    systemJournalContent.scrollTop = systemJournalContent.scrollHeight;//要在里面这一层添加height: 67vh;overflow-y: scroll;
-                }
-            }*/);
+            });
         }, 5000)
     }
-
+    scrollToTop=()=>{
+        const systemJournalContent = document.querySelector('.systemJournal-info');
+        systemJournalContent.scrollTop = 0;
+    }
+    scrollToBottom=()=>{
+        const systemJournalContent = document.querySelector('.systemJournal-info');
+        systemJournalContent.scrollTop = systemJournalContent.scrollHeight;
+    }
     componentWillUnmount() {
         console.log('componentWillUnmount')
         clearInterval(this.timer);
@@ -61,7 +63,12 @@ class SystemJournal extends React.Component {
                     </div>
                     <div className="systemJournal-info">
                         <div className="systemJournal-scroll">
-                            div
+                            <div>
+                                <Icon type="caret-up" className="scroll-icon" onClick={this.scrollToTop}/>
+                            </div>
+                            <div>
+                                <Icon type="caret-down" className="scroll-icon"  onClick={this.scrollToBottom}/>
+                            </div>
                         </div>
                         {this.state.systemJournalInfo.map((item, index)=> {
                             return (

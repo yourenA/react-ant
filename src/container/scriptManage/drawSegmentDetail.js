@@ -150,10 +150,13 @@ class DrawScriptDetail extends Component {
                 externalTitle=content.nodeDataArray[i].title;
                 externalCount++
             }
+            if(!content.nodeDataArray[i].isGroup && !content.nodeDataArray[i].group){
+                externalCount++
+            }
         }
         console.log('externalCount',externalCount)
         if(externalCount!==1){
-            message.error('最外层只能有一个分组')
+            message.error('最外层只能有一个分组节点')
         }else{
             delPointsInLink(content.linkDataArray)
             const newSegment=!this.state.editRecord

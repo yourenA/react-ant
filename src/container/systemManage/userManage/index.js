@@ -42,6 +42,9 @@ class UserManage extends Component {
         axios({
             url: `${configJson.prefix}/users`,
             method: 'get',
+            params:{
+                role_id:group
+            },
             headers: getHeader()
         })
             .then(function (response) {

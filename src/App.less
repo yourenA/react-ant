@@ -87,7 +87,7 @@
   .systemJournal-content{
     border-radius: 5px;
     margin: 0 auto;
-
+    min-width: 800px;
     position: relative;
     top: 100px;
     width: 80%;
@@ -103,10 +103,23 @@
     .systemJournal-info{
       height: 67vh;
       margin: 10px;
-      min-width: 800px;
+      min-width: 785px;
       overflow-y: scroll;
       p{
         margin-bottom: 10px;
+      }
+      .systemJournal-scroll{
+        position: absolute;
+        bottom: 10px;
+        right: 50px;
+        .scroll-icon{
+          font-size: 26px;
+          color: #bbbbbb;
+          cursor: pointer;
+          &:hover{
+            color: #468847;
+          }
+        }
       }
     }
   }
@@ -116,3 +129,4 @@
     margin-bottom: 0 !important;
   }
 }
+

@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import {Layout, Menu, Icon} from 'antd';
 import './index.less'
-import ManufactureInfo from './manufacture/index'
+import SystemConfig from './systemConfig/index'
 import GroupManage from './groupManage/index'
 import UserManage from './userManage/index'
 import Nopermission from './../../container/nopermission';
@@ -56,19 +56,6 @@ class SystemManage extends React.Component {
                                 defaultOpenKeys={['sub1']}
                                 style={{height: '100%'}}
                             >
-                                {
-                                    (testPermission('company_management') ) ?
-                                        <Menu.Item key={`/systemManage/manufactureInfo`}>
-                                            <Link title=" 制造厂商信息" to={`/systemManage/manufactureInfo`}><Icon
-                                                type="car"/>
-                                                <span className="nav-text">
-                                                    制造厂商信息
-                                                </span>
-                                            </Link>
-                                        </Menu.Item>
-                                        : null
-                                }
-
                                 <Menu.Item key={`/systemManage/systemConfig`}>
                                     <Link title=" 系统参数设置" to={`/systemManage/systemConfig`}><Icon type="tool"/>
                                         <span className="nav-text">
@@ -107,12 +94,10 @@ class SystemManage extends React.Component {
                             />
                         </Sider>
 
-                        <Route path={`/systemManage/manufactureInfo`}
-                               render={(props) => {
-                                   return (testPermission('company_management') ) ?
-                                       <ManufactureInfo {...props}/> :<Nopermission/>;
-                               }}
-                               />
+                        <Route path={`/systemManage/systemConfig`} render={(props) => {
+                            return (testPermission('system_management') ) ?
+                                <SystemConfig {...props}/> :<Nopermission/>;
+                        }} />
                         <Route path={`/systemManage/groupManage`} render={(props) => {
                             return (testPermission('user_management') ) ?
                                 <GroupManage {...props}/> :<Nopermission/>;
