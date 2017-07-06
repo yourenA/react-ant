@@ -73,7 +73,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "pm2": "pm2 start scripts/start.js --name HW-TEST",
+    "pm2": "pm2 start server.js --name HW-TEST",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
