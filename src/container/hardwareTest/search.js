@@ -22,7 +22,7 @@ class TopicTable extends Component {
                 >
                     { this.props.fetchTestConf.batches.map((item, key) => {
                         return (
-                            <Option key={item.id} value={item.id.toString()}>{item.code}</Option>
+                            <Option key={item.id} value={item.code.toString()}>{item.code}</Option>
                         )
                     }) }
                 </Select>

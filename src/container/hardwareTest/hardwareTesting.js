@@ -26,7 +26,8 @@ class HardwareTesting extends Component {
             batches:'batches',
             inputDisabled:true,
             standModal:false,
-            adapterModal:false
+            adapterModal:false,
+            startTestModal:false
         };
     }
 
@@ -34,7 +35,9 @@ class HardwareTesting extends Component {
         console.log('selected', selectedKeys, info);
     }
     startTesting=()=>{
-        console.log('开始测试')
+        this.setState({
+            startTestModal:true
+        })
     }
     toggleInput=()=>{
         this.setState({
@@ -64,14 +67,15 @@ class HardwareTesting extends Component {
                                             }}>更改</Button>
                                         </span>
                                     </div>
+
                                     <div className="testing-config-item">
-                                        <span title={this.state.product_name}>产品名称 : {this.state.product_name}</span>
+                                        <span title={this.state.batches}>产品批次 : {this.state.batches}</span>
                                     </div>
                                     <div className="testing-config-item">
                                         <span title={this.state.hardware_version}>硬件版本 : {this.state.hardware_version}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.batches}>产品批次 : {this.state.batches}</span>
+                                        <span title={this.state.product_name}>产品名称 : {this.state.product_name}</span>
                                     </div>
                                     <div className="testing-config-item">
                                         <span title={this.state.manufacturer}>生产商 : {this.state.manufacturer}</span>
@@ -192,6 +196,25 @@ class HardwareTesting extends Component {
                                 )
                             }) }
                         </Select>
+                    </Modal>
+                    <Modal
+                        key={ Date.parse(new Date())+2}
+                        visible={this.state.startTestModal}
+                        title="开始测试"
+                        onCancel={()=> {
+                            this.setState({startTestModal: false})
+                        }}
+                        footer={[
+                            <Button key="back" type="ghost" size="large"
+                                    onClick={()=> {
+                                        this.setState({startTestModal: false})
+                                    }}>取消</Button>,
+                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                                开始测试
+                            </Button>,
+                        ]}
+                    >
+                        产品序列号 : <Input ref="serialNumbers"  style={{width:'80%'}}/>
                     </Modal>
                 </div>
             </div>

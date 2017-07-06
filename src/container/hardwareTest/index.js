@@ -13,12 +13,11 @@ import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import configJson from './../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
-import Script from './../scriptManage/script';
 class HardwareTest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: {},
             loading: false,
             page: 1,
             batches: '',
@@ -54,16 +53,18 @@ class HardwareTest extends Component {
         const that = this;
         this.setState({loading: true});
         axios({
-            url: `${configJson.prefix}/products?return=all`,
+            url: `${configJson.prefix}/hardware_test_scripts`,
             method: 'get',
+            params:{
+                batch_code:batches
+            },
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response);
                 that.setState({
                     loading: false,
-                    data: response.data.data,
-                    meta: response.data.meta,
+                    data: response.data.data[0],
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -78,7 +79,6 @@ class HardwareTest extends Component {
     }
 
     render() {
-        const {data, page, meta} = this.state;
         return (
             <div>
                 <div className="content">
@@ -94,15 +94,15 @@ class HardwareTest extends Component {
                                     <div className="testing-config">
                                         <div className="testing-config-row">
                                             <div className="testing-config-item">
-                                                <span title={this.state.test_script}>生产批次 : this.state.test_scripttest_scripttest_scripttest_script</span>
+                                                <span title={this.state.data.batch_code}>生产批次 : {this.state.data.batch_code}</span>
                                             </div>
                                             <div className="testing-config-item">
                                                 <span
-                                                    title={this.state.test_script}>产品代码 : this.state.test_script</span>
+                                                    title={this.state.data.product_code}>产品代码 : {this.state.data.product_code}</span>
                                             </div>
                                             <div className="testing-config-item">
                                                 <span
-                                                    title={this.state.test_script}>产品名称 : this.state.test_script</span>
+                                                    title={this.state.data.product_name}>产品名称 : {this.state.data.product_name}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -115,21 +115,15 @@ class HardwareTest extends Component {
                                 <div className="choseTest-header">
                                     测试类型（点击下面名称进入测试）
                                 </div>
-                                <div>
-                                    <Button size="large" type="primary" style={{width:'100%'}}>
-                                        <Link to={`${this.props.match.url}/record.id`}>进入测试</Link>
-                                    </Button>
-                                </div>
-                                <div>
-                                    <Button size="large"  type="primary" style={{width:'100%'}}>
-                                        <Link to={`${this.props.match.url}/record.id`}>进入测试进入</Link>
-                                    </Button>
-                                </div>
-                                <div>
-                                    <Button size="large"  type="primary" style={{width:'100%'}}>
-                                        <Link to={`${this.props.match.url}/record.id`}>进入测试</Link>
-                                    </Button>
-                                </div>
+                                {this.state.data.test_types?this.state.data.test_types.data.map((item,index)=>{
+                                    return(
+                                        <div key={index}>
+                                            <Button size="large" type="primary" style={{width:'100%'}}>
+                                                <Link to={`${this.props.match.url}/${item.id}`}>{item.name}</Link>
+                                            </Button>
+                                        </div>
+                                    )
+                                }):null}
                             </div>
 
                         </div>

@@ -56,13 +56,16 @@ class SystemManage extends React.Component {
                                 defaultOpenKeys={['sub1']}
                                 style={{height: '100%'}}
                             >
+                                {
+                                    (testPermission('system_management') ) ?
                                 <Menu.Item key={`/systemManage/systemConfig`}>
                                     <Link title=" 系统参数设置" to={`/systemManage/systemConfig`}><Icon type="tool"/>
                                         <span className="nav-text">
                                                     系统参数设置
                                              </span>
                                     </Link>
-                                </Menu.Item>
+                                </Menu.Item>: null
+                                }
                                 {
                                     (testPermission('user_management') ) ?
                                         <Menu.Item key={`/systemManage/groupManage`}>

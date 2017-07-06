@@ -50,14 +50,13 @@ class SystemJournal extends React.Component {
         })
     }
     render() {
-        const systemJournalStyle=this.state.systemJournalModal?null:{width:'0px',height:'0px'};
-        const systemJournalContentStyle=this.state.systemJournalModal?{display:'block'}:{display:'none'}
+        const systemJournalStyle=this.state.systemJournalModal?null:{display:'none'};
         return (
             <div className="systemJournal" style={systemJournalStyle} >
                 <div className="systemJournal-mask" onClick={this.hideSystemJournal}>
 
                 </div>
-                <div className="systemJournal-content" style={systemJournalContentStyle}>
+                <div className="systemJournal-content" >
                     <div className="systemJournal-header">
                         系统日志
                     </div>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu,Modal,Button} from 'antd';
+import {Layout, Menu, Modal, Button} from 'antd';
 import {
     BrowserRouter as Router,
     Route,
@@ -33,20 +33,21 @@ const SubMenu = Menu.SubMenu;
 class App extends Component {
     constructor(props) {
         super(props);
-        this.timer=null;
+        this.timer = null;
         this.state = {
             pathname: '',
-            systemJournalModal:false,
-            systemJournalInfo:[{
-                info:'无效Product Code: 00.000000',
+            systemJournalModal: false,
+            systemJournalInfo: [{
+                info: '无效Product Code: 00.000000',
                 dateTime: new Date().toLocaleString()
-            },{
-                info:'无效Product Code: 00.01200011',
+            }, {
+                info: '无效Product Code: 00.01200011',
                 dateTime: new Date().toLocaleString()
             }]
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
     }
 
     componentWillMount() {
@@ -63,9 +64,9 @@ class App extends Component {
     }
 
     handleClick = (e) => {
-        if(e.key==='systemJournal'){
+        if (e.key === 'systemJournal') {
             this.refs.SystemJournalModal.setSystemJournalModalTrue()
-        }else{
+        } else {
             this.setState({
                 pathname: e.key,
             });
@@ -77,7 +78,7 @@ class App extends Component {
     }
 
     render() {
-        const login=this.props.loginState;
+        const login = this.props.loginState;
         return (
             <Router>
                 <div>
@@ -95,16 +96,16 @@ class App extends Component {
                                 <Menu.Item key="/"><NavLink exact activeClassName="nav-selected"
                                                             to="/">主页</NavLink></Menu.Item>
                                 {
-                                    (login.login && testPermission('hardware_testing') )?
+                                    (login.login && testPermission('hardware_testing') ) ?
                                         <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
                                                                                 to="/hardwareTest">硬件测试</NavLink></Menu.Item>
-                                        :null
+                                        : null
                                 }
                                 {
-                                    (login.login && testPermission('production_management') )?
+                                    (login.login && testPermission('production_management') ) ?
                                         <Menu.Item key="/productionManagement"><NavLink activeClassName="nav-selected"
-                                                                                to="/productionManagement">生产管理</NavLink></Menu.Item>
-                                        :null
+                                                                                        to="/productionManagement">生产管理</NavLink></Menu.Item>
+                                        : null
                                 }
                                 {
                                     (login.login && testPermission('test_script_management') ) ?
@@ -114,133 +115,156 @@ class App extends Component {
                                             <Menu.Item key="/segmentManage"><NavLink activeClassName="nav-selected"
                                                                                      to="/segmentManage">脚本段管理</NavLink></Menu.Item>
                                         </SubMenu>
-                                        :null
+                                        : null
                                 }
                                 {
                                     (login.login && testPermission('test_stand_management') ) ?
                                         <SubMenu title={<span>分类管理</span>}>
-                                            {testPermission('company_management')?
-                                                <Menu.Item key="/companies"><NavLink activeClassName="nav-selected" to="/companies">制造厂商</NavLink></Menu.Item>
-                                                :null
+                                            {testPermission('company_management') ?
+                                                <Menu.Item key="/companies"><NavLink activeClassName="nav-selected"
+                                                                                     to="/companies">制造厂商</NavLink></Menu.Item>
+                                                : null
                                             }
-                                            {testPermission('product_management')?
-                                                <Menu.Item key="/products"><NavLink activeClassName="nav-selected" to="/products">产品管理</NavLink></Menu.Item>
-                                                :null
+                                            {testPermission('product_management') ?
+                                                <Menu.Item key="/products"><NavLink activeClassName="nav-selected"
+                                                                                    to="/products">产品管理</NavLink></Menu.Item>
+                                                : null
                                             }
-                                            {testPermission('product_management')?
+                                            {testPermission('product_management') ?
                                                 <Menu.Item key="/test_types"><NavLink activeClassName="nav-selected"
                                                                                       to="/test_types">测试类型</NavLink></Menu.Item>
-                                                :null
+                                                : null
                                             }
-                                            {testPermission('product_management')?
-                                                <Menu.Item key="/hardware_versions"><NavLink activeClassName="nav-selected"
-                                                                                             to="/hardware_versions">硬件版本</NavLink></Menu.Item>
-                                                :null
+                                            {testPermission('product_management') ?
+                                                <Menu.Item key="/hardware_versions"><NavLink
+                                                    activeClassName="nav-selected"
+                                                    to="/hardware_versions">硬件版本</NavLink></Menu.Item>
+                                                : null
                                             }
-                                            {testPermission('test_stand_management')?
+                                            {testPermission('test_stand_management') ?
                                                 <Menu.Item key="/test_stands"><NavLink activeClassName="nav-selected"
                                                                                        to="/test_stands">测试架</NavLink></Menu.Item>
-                                                :null
+                                                : null
                                             }
                                         </SubMenu>
-                                        :null
+                                        : null
                                 }
-                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected" to="/systemManage/systemConfig">系统管理</NavLink></Menu.Item>
+                                {login.login ?
+                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected"
+                                                                        to="/systemManage/groupManage">系统管理</NavLink></Menu.Item>: null}
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
                                                                               to="/login">切换账号</NavLink></Menu.Item>
                                         <Menu.Item key="/signout">退出</Menu.Item>
                                     </SubMenu>
-                                    : <SubMenu className="float-right"  title={<span>登录/注册</span>}>
+                                    : <SubMenu className="float-right" title={<span>登录/注册</span>}>
                                     <Menu.Item key="/login"><NavLink activeClassName="nav-selected"
                                                                      to="/login">登录</NavLink></Menu.Item>
                                     <Menu.Item key="/register"><NavLink activeClassName="nav-selected"
                                                                         to="/register">注册</NavLink></Menu.Item>
                                 </SubMenu>}
-                                <Menu.Item key="systemJournal" className="systemJournal-nav">系统日志</Menu.Item>
+                                {login.login ?
+                                    <Menu.Item key="systemJournal"
+                                               className="systemJournal-nav">系统日志</Menu.Item> : null}
                             </Menu>
                         </Header>
-                            <SystemJournalModal systemJournalModal={this.state.systemJournalModal} ref="SystemJournalModal"/>
+                        <SystemJournalModal systemJournalModal={this.state.systemJournalModal}
+                                            ref="SystemJournalModal"/>
                     </div>
 
                     <Route exact path="/" component={Home}/>
                     <Route exact
                            path="/hardwareTest" render={(props) => {
-                        return (login.login && testPermission('hardware_testing') )?
-                            <HardwareTest {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                        return (login.login && testPermission('hardware_testing') ) ?
+                            <HardwareTest {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route path="/hardwareTest/:uuid" render={(props) => {
                         return (login.login && testPermission('hardware_testing') ) ?
-                            <HardwareTesting {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <HardwareTesting {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route path="/productionManagement" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
-                            <ProductionManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <ProductionManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route exact
-                        path="/scriptManage" render={(props) => {
+                           path="/scriptManage" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <ScriptManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <ScriptManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/scriptManage/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <DrawScript {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <DrawScript {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
 
                     <Route
                         path="/scriptDetail/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <ScriptDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <ScriptDetail {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
 
                     <Route exact
                            path="/segmentManage" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <SegmentManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <SegmentManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/segmentManage/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <DrawSegment {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <DrawSegment {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/segmentDetail/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
-                            <DrawSegmentDetail {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <DrawSegmentDetail {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/systemManage" render={(props) => {
                         return login.login ?
-                            <SystemManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <SystemManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/companies" render={(props) => {
                         return (login.login && testPermission('company_management') ) ?
-                            <CatagoryManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/products" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?
-                            <CatagoryManage {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/test_types" render={(props) => {
-                        return (login.login && testPermission('product_management') )  ?
-                            <CatagoryManage  {...props}/> : login.login? <Nopermission/> :<Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                        return (login.login && testPermission('product_management') ) ?
+                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/hardware_versions" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?
-                            <CatagoryManage  {...props}/> :login.login? <Nopermission/> : <Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
                         path="/test_stands" render={(props) => {
-                        return (login.login && testPermission('test_stand_management') )?
-                            <CatagoryManage  {...props}/> : login.login? <Nopermission/> :<Redirect to={{pathname: '/login',state: { from: props.location} }}/>;
+                        return (login.login && testPermission('test_stand_management') ) ?
+                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
 
 
@@ -249,9 +273,9 @@ class App extends Component {
         );
     }
 }
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        loginState:state.login,
+        loginState: state.login,
     };
 }
 function mapDispatchToProps(dispath) {
