@@ -28,7 +28,7 @@ class ScriptIndex extends Component {
     showLinkLabel = (e)=> {
         console.log('e.subject.fromNode.data', e.subject.fromNode.data)
         var label = e.subject.findObject("LABEL");// name: "LABEL"
-        if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond" || e.subject.fromNode.data.category === 'item' );
+        if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond" /*|| e.subject.fromNode.data.category === 'item'*/ );
         //如果figure=Diamond则线的文字可以编辑
     }
     nodeStyle = ()=> {
@@ -122,7 +122,7 @@ class ScriptIndex extends Component {
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
         let formulaArr = [
-            {category: "start", text: "开始"},
+            // {category: "start", text: "开始"},
             {text: "条件语句", category: "if", figure: "Diamond"},
             {text: "循环语句", category: "for", figure: "Diamond"},
             {text: "错误输出", category: "errOut"},
@@ -276,7 +276,11 @@ class ScriptIndex extends Component {
                 that.makePort("B", go.Spot.Bottom, true, false)
             ));
         myDiagram.nodeTemplateMap.add("start",
-            $(go.Node, "Spot", that.nodeStyle(),
+            $(go.Node, "Spot",
+                {
+                    locationSpot: go.Spot.TopCenter ,
+                    deletable: false  // do not allow this node to be removed by the user
+                }, that.nodeStyle(),
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#79C900", stroke: null}),
@@ -291,7 +295,10 @@ class ScriptIndex extends Component {
             ));
 
         myDiagram.nodeTemplateMap.add("end",
-            $(go.Node, "Spot", that.nodeStyle(),
+            $(go.Node, "Spot",
+                {
+                    locationSpot: go.Spot.BottomCenter
+                },that.nodeStyle(),
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#000", stroke: null}),
@@ -470,7 +477,7 @@ class ScriptIndex extends Component {
                     $(go.Panel, "Vertical",
                         {
                             name: "COLLAPSIBLE",  //定义下拉菜单COLLAPSIBLE identify to the PanelExpanderButton
-                            visible: true,
+                            visible: false,
                             stretch: go.GraphObject.Horizontal,  // take up whole available width
                             defaultAlignment: go.Spot.Center,  // thus no need to specify alignment on each element
                         },
@@ -752,13 +759,18 @@ class ScriptIndex extends Component {
         var nodedata = contextmenu.data;
         // compute the next color for the node
         let originJson = JSON.parse(this.callbackJson());
+        console.log("nodedata",nodedata)
         let detailJon = {
             class: "go.GraphLinksModel",
             copiesArrays: true,
             copiesArrayObjects: true,
-            nodeDataArray: [],
+            nodeDataArray: [ ],
             linkDataArray: []
         };
+        if(!sessionStorage.getItem(`${nodedata.key}`)){
+            detailJon.nodeDataArray.push({category: "start",key:uuidv4(), text: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
+            detailJon.nodeDataArray.push({category: "end",key:uuidv4(), text: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
+        }
         let keyInGroup = []
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
             // if (originJson.nodeDataArray[i].key === nodedata.key) {
@@ -893,8 +905,9 @@ class ScriptIndex extends Component {
         return (
             <div>
                 <div className="drawScript">
-                    <div className="drawScript-sidebar" id="myPaletteDiv">
-
+                    <div className="drawScript-sidebar">
+                        <div className="drawScript-overview" id="myOverviewDiv"></div>
+                        <div id="myPaletteDiv"></div>
                     </div>
                     <div className="drawScript-content">
                         {(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?
@@ -905,8 +918,7 @@ class ScriptIndex extends Component {
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}
                              style={{height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? '700px' : '746px'}}>
                         </div>
-                        <div className="drawScript-overview" id="myOverviewDiv"
-                             style={{top: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? '46px' : '0'}}></div>
+
                     </div>
                 </div>
                 <div className="drawScript-search">

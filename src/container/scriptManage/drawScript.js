@@ -14,6 +14,7 @@ import messageJson from './../../common/message.json';
 import AddOrEditName from './addOrEditNmae';
 import ScriptIndex from './scriptIndex.js'
 import FetchSegments from './fetchSegments'
+import uuidv4 from 'uuid/v4';
 const {Content,} = Layout;
 
 
@@ -41,6 +42,14 @@ class DrawScript extends Component {
             this.refs.ScriptIndex.init();
             if(sessionStorage.getItem('resultTempJson')){
                 this.refs.ScriptIndex.load(sessionStorage.getItem('resultTempJson'))
+            }else{
+                this.refs.ScriptIndex.load(JSON.stringify({
+                    class: "go.GraphLinksModel",
+                    copiesArrays: true,
+                    copiesArrayObjects: true,
+                    nodeDataArray: [ {category: "start",key:uuidv4(), text: "开始", loc:"0 0"},{category: "end",key:uuidv4(), text: "结束", loc:"0 400"}],
+                    linkDataArray: []
+                }))
             }
         }
         this.props.fetchAllTestType();
@@ -76,7 +85,6 @@ class DrawScript extends Component {
         })
             .then(function (response) {
                 console.log(response);
-                message.success(msg);
                 newScript
                     ? setTimeout(function () {
                     that.props.history.replace({pathname:`/scriptManage/${response.data.id}`,state: { newScript: false , scriptJson:JSON.parse(response.data.content),editRecord:response.data}})
@@ -112,7 +120,7 @@ class DrawScript extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑脚本'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <div className="testing-header">

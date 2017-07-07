@@ -4,9 +4,18 @@
   position: relative;
   .drawScript-sidebar {
     flex: 0 0 250px;
-    border: 1px solid #bbb;
+    border: 1px solid #bbbbbb;
     border-right: none;
     overflow: hidden;
+    #myOverviewDiv {
+      width: 249px;
+      height: 100px;
+      border-bottom: 2px solid #bbbbbb;
+    }
+    #myPaletteDiv{
+      width: 250px;
+      height:  calc(~'100% - 100px');
+    }
   }
   .drawScript-content {
     position: relative;
@@ -23,14 +32,7 @@
     #myDiagramDiv{
       height: 746px;
     }
-    .drawScript-overview {
-      position: absolute;
-      left: 0px;
-      top: 0;
-      width: 200px;
-      height: 100px;
-      border: 2px solid #bbbbbb;
-    }
+
   }
 
 }

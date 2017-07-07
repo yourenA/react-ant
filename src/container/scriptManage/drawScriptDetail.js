@@ -24,7 +24,7 @@ class DrawScriptDetail extends Component {
             segmentsJson: '{}',
             detailIndex: 0,
             editRecord: null,
-            saveScriptModal:false
+            saveScriptModal:false,
         };
     }
 
@@ -35,6 +35,9 @@ class DrawScriptDetail extends Component {
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
         if (!this.props.location.state.newScript) {
             this.fetchScript(localStorage.getItem('manageScriptId'))
+        }
+        if(!sessionStorage.getItem('breadcrumbArr')){
+            sessionStorage.setItem('breadcrumbArr',JSON.stringify([{key:this.props.match.params.id,value:this.props.location.state.groupNmae}]))
         }
     }
 
@@ -59,6 +62,19 @@ class DrawScriptDetail extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
+            const breadcrumbArr=JSON.parse(sessionStorage.getItem('breadcrumbArr'));
+            let theSameBreadcrumIndex=0;
+            for(let i=0,len=breadcrumbArr.length;i<len;i++){
+                if(breadcrumbArr[i].key===nextProps.match.params.id){
+                    theSameBreadcrumIndex=i+1
+                }
+            }
+            if(theSameBreadcrumIndex===0){
+                sessionStorage.setItem('breadcrumbArr',JSON.stringify(breadcrumbArr.concat({key:nextProps.match.params.id,value:nextProps.location.state.groupNmae})));
+            }else{
+                breadcrumbArr.splice(theSameBreadcrumIndex,breadcrumbArr.length)
+                sessionStorage.setItem('breadcrumbArr',JSON.stringify(breadcrumbArr));
+            }
 
             this.refs.ScriptIndex.delDiagram();
             this.refs.ScriptIndex.init();
@@ -67,6 +83,7 @@ class DrawScriptDetail extends Component {
             const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
 
             const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
+            console.log('nextPropsIdJson',nextPropsIdJson)
             const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
             // console.log("this.props.match.params.id",this.props.match.params.id,thisPropsIdJson)
             // console.log("nextProps.match.params.id",nextProps.match.params.id,JSON.parse(sessionStorage.getItem(nextProps.match.params.id)))
@@ -128,7 +145,14 @@ class DrawScriptDetail extends Component {
             .then(function (response) {
                 console.log(response);
                 message.success(msg);
-                that.fetchScript(localStorage.getItem('manageScriptId'));
+
+                newScript
+                    ? setTimeout(function () {
+                    that.props.history.replace({pathname:`/scriptManage/${response.data.id}`,state: { newScript: false , scriptJson:JSON.parse(response.data.content),editRecord:response.data}})
+                },1000)
+                    : that.fetchScript(localStorage.getItem('manageScriptId'));
+
+
 
                 that.setState({
                     saveScriptModal:false
@@ -138,10 +162,10 @@ class DrawScriptDetail extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    saveTempScript = (canBack,returnJson)=> {
-        const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));
-        const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));
-        let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());
+    saveTempScript = (canBack,returnJson,step)=> {
+        const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));//总的数据
+        const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));//获取页面进入前的数据
+        let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());//修改后的数据
         for (let i = 0, len = changeJson.nodeDataArray.length; i < len; i++) {
             if (!changeJson.nodeDataArray[i].group) {
                 changeJson.nodeDataArray[i].group = this.props.match.params.id
@@ -150,8 +174,6 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
-        console.log('nowJson',nowJson)
-        console.log('changeJson',changeJson)
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
             return (a.key === b.key)
         }).concat(changeJson.nodeDataArray);
@@ -168,7 +190,8 @@ class DrawScriptDetail extends Component {
             nodeDataArray: resultNodeJson,
             linkDataArray: resultLinkJson
         };
-        sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));
+        sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));//修改后总的数据
+        console.log('resultTempJson',resultTempJson)
         if(returnJson){
             return resultTempJson
         }
@@ -176,19 +199,33 @@ class DrawScriptDetail extends Component {
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
             this.props.history.goBack()
         }
+        if(step){
+            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
+            this.props.history.go(-step)
+        }
+    }
+    turnStepBack=(step)=>{
+        this.saveTempScript(null,null,step-1)
+        console.log("step",step-1)
     }
     turnBack = ()=> {
         this.props.history.push('/scriptManage')
     }
 
     render() {
-        console.log(this.props)
+        const breadcrumbArr=JSON.parse(sessionStorage.getItem('breadcrumbArr'))||[];
+        console.log("breadcrumbArr",breadcrumbArr)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本'${ this.state.editRecord.name}'`  :'新建脚本' }</Breadcrumb.Item>
-                    <Breadcrumb.Item>修改脚本"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
+                    {/*<Breadcrumb.Item>{this.props.location.state.groupNmae}</Breadcrumb.Item>*/}
+                    {breadcrumbArr.map((item,index)=>{
+                        return(
+                            <Breadcrumb.Item key={index}>{item.value}</Breadcrumb.Item>
+                        )
+                    })}
                 </Breadcrumb>
                 <div className="content-container">
                     <div className="testing-header">
