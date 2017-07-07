@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu, Modal, Button} from 'antd';
+import {Layout, Menu} from 'antd';
 import {
     BrowserRouter as Router,
     Route,

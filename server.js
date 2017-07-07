@@ -20,7 +20,7 @@ app.set('view engine', 'html');
 
 app.use(logger('dev'));
 
-app.get('/', function(req, res, next) {
+app.get('/*', function(req, res, next) {
     res.render('index');
 });
 
