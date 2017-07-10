@@ -58,9 +58,9 @@ $ npm start
 
     title:语句标题(可编辑)
     
-    params:参数(可编辑) 格式:同设置参数中的params
+    params:参数(可编辑) 格式:同“设置参数”中的params
     
-    errors:错误参数(可编辑) 格式:同设置参数中的params
+    errors:错误参数(可编辑) 格式:同“设置参数”中的params
     
 
 >nodeDataArray每个对象中的group:value表示当前图形在哪一个分组下，value值为分组的key值。如：
