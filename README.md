@@ -51,16 +51,16 @@ $ npm start
 * 设置参数 category:set(棕色矩形)
 
     text:描述(固定)
-    params:参数(可编辑) 格式:```[{key:xxx,value:xxx},{key:xxx,value:xxx},{key:xxx},{value:xxx},{}]```，其中key或value可以单独出现或只显示一个空对象{}，这种时候需要将其排除
+    params:参数(可编辑) 右击添加 格式:```[{key:xxx,value:xxx},{key:xxx,value:xxx},{key:xxx},{value:xxx},{}]```，其中key或value可以单独出现或只显示一个空对象{}，这种时候需要将其排除
 
 
 * 语句 category:item(黄色矩形)
 
     title:语句标题(可编辑)
     
-    params:参数(可编辑) 格式:同“设置参数”中的params
+    params:参数(可编辑) 右击添加  格式:同“设置参数”中的params
     
-    errors:错误参数(可编辑) 格式:同“设置参数”中的params
+    errors:错误参数(可编辑) 右击添加  格式:同“设置参数”中的params
     
 
 >nodeDataArray每个对象中的group:value表示当前图形在哪一个分组下，value值为分组的key值。如：

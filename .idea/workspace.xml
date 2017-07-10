@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,22 +48,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="619">
-              <caret line="551" column="24" selection-start-line="551" selection-start-column="24" selection-end-line="551" selection-end-column="24" />
+            <state relative-caret-position="511">
+              <caret line="547" column="17" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="756">
-                <caret line="79" column="21" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+              <first_editor relative-caret-position="621">
+                <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -135,8 +135,8 @@
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -424,12 +424,12 @@
       <workItem from="1499396870474" duration="669000" />
       <workItem from="1499399085403" duration="806000" />
       <workItem from="1499400396761" duration="18713000" />
-      <workItem from="1499650818416" duration="7616000" />
+      <workItem from="1499650818416" duration="7711000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439808000" />
+    <option name="totallyTimeSpent" value="439903000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -803,6 +803,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="547" column="17" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2079">
@@ -817,19 +825,11 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="756">
-            <caret line="79" column="21" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+          <first_editor relative-caret-position="621">
+            <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
             <folding />
           </first_editor>
           <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="551" column="24" selection-start-line="551" selection-start-column="24" selection-end-line="551" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
