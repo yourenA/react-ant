@@ -122,13 +122,12 @@ class ScriptIndex extends Component {
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
         let formulaArr = [
-            // {category: "start", text: "开始"},
+            {title: "分组", isGroup: true, category: "OfGroups"},
             {text: "条件语句", category: "if", figure: "Diamond"},
             {text: "循环语句", category: "for", figure: "Diamond"},
             {text: "错误输出", category: "errOut"},
             {category: "end", text: "结束"},
-            {category: "Comment", text: "备注"},
-            {title: "分组", isGroup: true, category: "OfGroups"},
+            {category: "comment", text: "备注"},
             {category: "set", params: [{}], text: '设置参数'},
             {
                 category: "item",
@@ -151,10 +150,15 @@ class ScriptIndex extends Component {
                 ],
             }];
 
-
         for (let i = 0, len = formulaArr.length; i < len; i++) {
             let uuidIn = uuidv4();
-            formulaArr[i].key = uuidIn
+            formulaArr[i].key = uuidIn;
+            // if(formulaArr[i].category==='OfGroups'){
+            //     groupId=uuidIn
+            // }
+            // if(formulaArr[i].category==='start'){
+            //     formulaArr[i].group=groupId
+            // }
         }
 
         myDiagram =
@@ -278,7 +282,6 @@ class ScriptIndex extends Component {
         myDiagram.nodeTemplateMap.add("start",
             $(go.Node, "Spot",
                 {
-                    locationSpot: go.Spot.TopCenter ,
                     deletable: false  // do not allow this node to be removed by the user
                 }, that.nodeStyle(),
                 $(go.Panel, "Auto",
@@ -296,9 +299,7 @@ class ScriptIndex extends Component {
 
         myDiagram.nodeTemplateMap.add("end",
             $(go.Node, "Spot",
-                {
-                    locationSpot: go.Spot.BottomCenter
-                },that.nodeStyle(),
+                that.nodeStyle(),
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#000", stroke: null}),
@@ -311,7 +312,7 @@ class ScriptIndex extends Component {
                 that.makePort("L", go.Spot.Left, false, true),
                 that.makePort("R", go.Spot.Right, false, true)
             ));
-        myDiagram.nodeTemplateMap.add("Comment",
+        myDiagram.nodeTemplateMap.add("comment",
             $(go.Node, "Auto", this.nodeStyle(),
                 $(go.Shape, "File",
                     {fill: "#EFFAB4", stroke: null}),
