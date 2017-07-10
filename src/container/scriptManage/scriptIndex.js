@@ -269,7 +269,7 @@ class ScriptIndex extends Component {
                             margin: 8,
                             maxSize: new go.Size(160, NaN),
                             wrap: go.TextBlock.WrapFit,
-                            editable: true//是否可以编辑，默认是false
+                            editable: false,//是否可以编辑，默认是false
                         },
                         new go.Binding("text").makeTwoWay())//TextBlock绑定text属性
                 ),

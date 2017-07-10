@@ -7,6 +7,9 @@ $ npm start
 
 ##流程图JSON字段
 ###nodeDataArray：图形节点
+  key:唯一标识
+  
+  loc：位置
 
 * 分组category：ofGroups (绿色矩形)
 
@@ -22,15 +25,15 @@ $ npm start
 
 * 条件语句 category:if(蓝色菱形)
 
-    text:描述(可编辑)
+    text:条件描述(可编辑)
 
 * 循环语句 category:for(紫色菱形)
 
-    text:描述(可编辑)
+    text:循环次数描述(可编辑)
 
 * 错误输出 category:errOut(红色椭圆形)
     
-    text:描述(可编辑)
+    text:描述(固定)
 
 * 备注 category:comment(浅黄色五边形)
 
@@ -55,9 +58,9 @@ $ npm start
 表示‘错误输出’这个图形在key为123456的分组之中
 
 ###linkDataArray：图形连线
-from:线的起点
+from:线的起点，指向nodeDataArray中对象的key
 
-to:线的终点
+to:线的终点，指向nodeDataArray中对象的key
 
 linkText:在“*条件语句*”或“*循环语句*”连线编辑后会出现这个字段，当没有编辑不会出现这个字段
 
