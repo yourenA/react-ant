@@ -57,7 +57,9 @@ $ npm start
 * 语句 category:item(黄色矩形)
 
     title:语句标题(可编辑)
+    
     params:参数(可编辑) 格式:同设置参数中的params
+    
     errors:错误参数(可编辑) 格式:同设置参数中的params
     
 
