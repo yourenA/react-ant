@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,17 +48,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="271" column="43" selection-start-line="271" selection-start-column="43" selection-end-line="271" selection-end-column="43" />
+            <state relative-caret-position="619">
+              <caret line="551" column="24" selection-start-line="551" selection-start-column="24" selection-end-line="551" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -135,8 +135,8 @@
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
       </list>
     </option>
   </component>
@@ -424,12 +424,12 @@
       <workItem from="1499396870474" duration="669000" />
       <workItem from="1499399085403" duration="806000" />
       <workItem from="1499400396761" duration="18713000" />
-      <workItem from="1499650818416" duration="7378000" />
+      <workItem from="1499650818416" duration="7616000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439570000" />
+    <option name="totallyTimeSpent" value="439808000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -803,14 +803,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="271" column="43" selection-start-line="271" selection-start-column="43" selection-end-line="271" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2079">
@@ -830,6 +822,14 @@
             <folding />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="619">
+          <caret line="551" column="24" selection-start-line="551" selection-start-column="24" selection-end-line="551" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -537,23 +537,23 @@ class ScriptIndex extends Component {
                 that.makePort("B", go.Spot.Bottom, true, false)
             ));
 
-        var UndesiredEventAdornment =
-            $(go.Adornment, "Spot",
-                $(go.Panel, "Auto",
-                    $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
-                    $(go.Placeholder)),
-                // the button to create a "next" node, at the top-right corner
-                $("Button",
-                    {
-                        alignment: go.Spot.BottomRight,
-                        click: this.addReason
-                    },  // this function is defined below
-                    new go.Binding("visible", "", function (a) {
-                        return !a.diagram.isReadOnly;
-                    }).ofObject(),
-                    $(go.Shape, "TriangleDown", {desiredSize: new go.Size(10, 10)})
-                )
-            );
+        // var UndesiredEventAdornment =
+        //     $(go.Adornment, "Spot",
+        //         $(go.Panel, "Auto",
+        //             $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
+        //             $(go.Placeholder)),
+        //         // the button to create a "next" node, at the top-right corner
+        //         $("Button",
+        //             {
+        //                 alignment: go.Spot.BottomRight,
+        //                 click: this.addReason
+        //             },  // this function is defined below
+        //             new go.Binding("visible", "", function (a) {
+        //                 return !a.diagram.isReadOnly;
+        //             }).ofObject(),
+        //             $(go.Shape, "TriangleDown", {desiredSize: new go.Size(10, 10)})
+        //         )
+        //     );
         var reasonTemplate =
             $(go.Panel, "TableRow",
                 $(go.TextBlock, "key",
@@ -569,7 +569,7 @@ class ScriptIndex extends Component {
             $(go.Node, "Auto",
                 that.nodeStyle(),
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-                {selectionAdornmentTemplate: UndesiredEventAdornment},
+                // {selectionAdornmentTemplate: UndesiredEventAdornment},
                 $(go.Shape, "RoundedRectangle",
                     {fill: "#CC5245", portId: "", stroke: "black", toEndSegmentLength: 150}),
                 $(go.Panel, "Vertical",
@@ -588,6 +588,15 @@ class ScriptIndex extends Component {
                         )
                     ),  // end Horizontal Panel
                     $(go.Panel, "Table",
+                        {
+                            contextMenu:     // define a context menu for each node
+                                $(go.Adornment, "Vertical",  // that has one button
+                                    $("ContextMenuButton",
+                                        $(go.TextBlock, "添加设置参数"),
+                                        {click: this.addReason})
+                                    // more ContextMenuButtons would go here
+                                )  // end Adornment
+                        },
                         {
                             defaultRowSeparatorStroke: "gray",
                             defaultColumnSeparatorStroke: "gray"
