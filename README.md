@@ -5,9 +5,9 @@ $ npm install
 $ npm start
 ```
 
-##流程图JSON字段
+## 流程图JSON字段
 
-###nodeDataArray：图形节点
+### nodeDataArray：图形节点
 
   key:唯一标识
   
@@ -69,7 +69,7 @@ $ npm start
 表示‘错误输出’这个图形在key为123456的分组之中
 
 
-###linkDataArray：图形连线
+### linkDataArray：图形连线
 
 from:线的起点，指向nodeDataArray中对象的key
 
