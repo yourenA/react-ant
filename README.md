@@ -13,7 +13,7 @@ $ npm start
   
   loc：位置
 
-* 分组category：ofGroups (绿色矩形)
+* 分组category：OfGroups (绿色矩形)
 
     title:分组名称(可编辑)
     
@@ -33,9 +33,11 @@ $ npm start
     text:条件描述(可编辑)
     
 
-* 循环语句 category:for(紫色菱形)
+* 循环分组category：ForGroups (蓝色矩形)
 
-    text:循环次数描述(可编辑)
+    title:循环分组名称(可编辑)
+    
+    times:循环次数(可编辑)
     
 
 * 错误输出 category:errOut(红色椭圆形)
@@ -51,6 +53,7 @@ $ npm start
 * 设置参数 category:set(棕色矩形)
 
     text:描述(固定)
+    
     params:参数(可编辑) 右击添加 格式:```[{key:xxx,value:xxx},{key:xxx,value:xxx},{key:xxx},{value:xxx},{}]```，其中key或value可以单独出现或只显示一个空对象{}，这种时候需要将其排除
 
 
@@ -77,8 +80,11 @@ from:线的起点，指向nodeDataArray中对象的key
 
 to:线的终点，指向nodeDataArray中对象的key
 
-linkText:线描述，表示条件成立与否。在“*条件语句*”或“*循环语句*”连线编辑后会出现这个字段，当没有编辑不会出现这个字段
+专属于“*条件语句*”或“*循环语句*”字段
 
+condition:线描述，表示条件成立与否。在“*条件语句*”或“*循环语句*”连线编辑后会出现这个字段，当没有编辑不会出现这个字段
+
+visible:当连线的起点为“*条件语句*”或“*循环语句*”的时候会出现visible:true
 
 
 

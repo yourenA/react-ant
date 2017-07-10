@@ -186,6 +186,8 @@ class DrawScriptDetail extends Component {
             class: "go.GraphLinksModel",
             copiesArrays: true,
             copiesArrayObjects: true,
+            linkFromPortIdProperty: "fromPort",
+            linkToPortIdProperty: "toPort",
             nodeDataArray: resultNodeJson,
             linkDataArray: resultLinkJson
         };

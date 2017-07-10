@@ -123,8 +123,9 @@ class ScriptIndex extends Component {
         const lightText = 'whitesmoke';
         let formulaArr = [
             {title: "分组", isGroup: true, category: "OfGroups"},
+            {title: "循环分组", isGroup: true, category: "ForGroups",times:1},
             {text: "条件语句", category: "if", figure: "Diamond"},
-            {text: "循环语句", category: "for", figure: "Diamond"},
+            // {text: "循环语句", category: "for", figure: "Diamond"},
             {text: "错误输出", category: "errOut"},
             {category: "end", text: "结束"},
             {category: "comment", text: "备注"},
@@ -616,18 +617,7 @@ class ScriptIndex extends Component {
 
         myDiagram.groupTemplateMap.add("OfGroups",
             $(go.Group, "Auto",
-
-                [
-                    new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-                    {
-                        mouseEnter: function (e, obj) {
-                            that.showPorts(obj.part, true);
-                        },
-                        mouseLeave: function (e, obj) {
-                            that.showPorts(obj.part, false);
-                        }
-                    }
-                ],
+                that.nodeStyle(),
                 {
                     background: "#FFFFFF",
                     isSubGraphExpanded: false,
@@ -671,6 +661,75 @@ class ScriptIndex extends Component {
                                 font: titleFont,
                             },
                             new go.Binding("text", "title").makeTwoWay())
+                    ),  // end Horizontal Panel
+                    $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
+                        {padding: 10},
+                        new go.Binding("padding", "isSubGraphExpanded",
+                            function (exp) {
+                                return exp ? 10 : 0;
+                            }).ofObject())
+                ),  // end Vertical Panel
+
+                // three named ports, one on each side except the bottom, all input only:
+                that.makePort("T", go.Spot.Top, false, true),
+                that.makePort("L", go.Spot.Left, true, true),
+                that.makePort("R", go.Spot.Right, true, true),
+                that.makePort("B", go.Spot.Bottom, true, false)
+            ))
+        ;  // end Group and call to add to template Map
+
+        myDiagram.groupTemplateMap.add("ForGroups",
+            $(go.Group, "Auto",
+
+                that.nodeStyle(),
+                {
+                    background: "#FFFFFF",
+                    isSubGraphExpanded: false,
+                    handlesDragDropForMembers: false,  //设为false不可以直接往group里面添加
+                },
+                new go.Binding("background", "isHighlighted", function (h) {
+                    return h ? "#FFCCCC" : "#FFFFFF";
+                }).ofObject(),
+                $(go.Shape, "RoundedRectangle",
+                    {fill: null, stroke: "black", strokeWidth: 1}),
+                $(go.Panel, "Vertical",  // title above Placeholder
+                    $(go.Panel, "Horizontal",  // button next to TextBlock
+                        {stretch: go.GraphObject.Horizontal, background: "#00A9C9", minSize: new go.Size(150, 40)},
+                        {
+                            contextMenu:     // define a context menu for each node
+                                $(go.Adornment, "Vertical",  // that has one button
+                                    $("ContextMenuButton",
+                                        $(go.TextBlock, "查看详细"),
+                                        {click: this.showDetail})
+                                )  // end Adornment
+                        },
+                        $("SubGraphExpanderButton",
+                            {alignment: go.Spot.Center, margin: 5}),
+                        $(go.TextBlock,
+                            {
+                                alignment: go.Spot.Center,
+                                editable: true,
+                                font: titleFont,
+                                stroke: lightText,
+                            },
+                            new go.Binding("text", "title").makeTwoWay()),
+                        $(go.TextBlock,"循环次数:",
+                            {
+                                margin:new go.Margin(0, 0, 0, 10),
+                                alignment: go.Spot.Right,
+                                editable: false,
+                                font: "9pt Verdana, sans-serif",
+                                stroke: lightText,
+                            }),
+                        $(go.TextBlock,
+                            {
+                                margin:new go.Margin(0, 10, 0, 0),
+                                alignment: go.Spot.Right,
+                                editable: true,
+                                font: titleFont,
+                                stroke: lightText,
+                            },
+                            new go.Binding("text", "times").makeTwoWay()),
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
                         {padding: 10},
@@ -733,7 +792,7 @@ class ScriptIndex extends Component {
                 $(go.Shape,  // the arrowhead
                     {toArrow: "standard", stroke: null, fill: "gray"}),
                 $(go.Panel, "Auto",  //是否显示线的描述文字 the link label, normally not visible
-                    {visible: true, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
+                    {visible: false, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
                     new go.Binding("visible", "visible").makeTwoWay(),
                     $(go.Shape, "RoundedRectangle",  // the label shape
                         {fill: "#F8F8F8", stroke: null}),
@@ -743,8 +802,10 @@ class ScriptIndex extends Component {
                             font: "10pt helvetica, arial, sans-serif",
                             stroke: "#333333",
                             editable: true,
+                            textEditor: window.TextEditorSelectBox,
+                            choices: ['YES', 'NO']
                         },
-                        new go.Binding("text", "linkText").makeTwoWay())
+                        new go.Binding("text", "condition").makeTwoWay())
                 )
             );
 
@@ -774,6 +835,8 @@ class ScriptIndex extends Component {
             class: "go.GraphLinksModel",
             copiesArrays: true,
             copiesArrayObjects: true,
+            linkFromPortIdProperty: "fromPort",
+            linkToPortIdProperty: "toPort",
             nodeDataArray: [ ],
             linkDataArray: []
         };
@@ -815,22 +878,22 @@ class ScriptIndex extends Component {
             if (this.props.location.pathname === '/scriptManage/newScript') {
                 this.props.history.push({
                     pathname: `/scriptDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title, newScript: true}
+                    state: {groupNmae: nodedata.title, newScript: true,category:nodedata.category}
                 })
             } else {
-                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title}})
+                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,category:nodedata.category}})
             }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
             if (this.props.location.pathname === '/segmentManage/newSegment') {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title, newSegment: true}
+                    state: {groupNmae: nodedata.title, newSegment: true,category:nodedata.category}
                 })
             } else {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title}
+                    state: {groupNmae: nodedata.title,category:nodedata.category}
                 })
             }
 
@@ -921,7 +984,8 @@ class ScriptIndex extends Component {
                     </div>
                     <div className="drawScript-content">
                         {(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?
-                            <div className="detail-header">
+
+                            <div className="detail-header" style={{background:this.props.location.state.category==='ForGroups'?'#00A9C9':'#98FB98'}}>
                                 {this.props.location.state.groupNmae}
                             </div>
                             : null}

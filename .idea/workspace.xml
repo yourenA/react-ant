@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +33,8 @@
       <file leaf-file-name="drawScript.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+            <state relative-caret-position="864">
+              <caret line="47" column="20" selection-start-line="47" selection-start-column="20" selection-end-line="48" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -38,11 +43,11 @@
       <file leaf-file-name="drawScriptDetail.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2079">
-              <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#1647#2183#0" expanded="false" />
-                <element signature="e#9744#9800#0" expanded="false" />
+                <element signature="e#9836#9892#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -51,8 +56,21 @@
       <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="511">
-              <caret line="547" column="17" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="17" />
+            <state relative-caret-position="108">
+              <caret line="125" column="18" selection-start-line="125" selection-start-column="13" selection-end-line="125" selection-end-column="18" />
+              <folding>
+                <element signature="e#14945#14984#0" expanded="false" />
+                <element signature="e#17803#17881#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="drawScript.less" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.less">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -62,8 +80,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="621">
-                <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
+              <first_editor relative-caret-position="648">
+                <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -114,7 +132,6 @@
         <option value="$PROJECT_DIR$/src/container/catagoryManage/addOrEditNmae.js" />
         <option value="$PROJECT_DIR$/src/common/message.json" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
         <option value="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" />
         <option value="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/index.less" />
@@ -132,9 +149,10 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/pm2.json" />
         <option value="$PROJECT_DIR$/src/App.less" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.less" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
@@ -424,12 +442,12 @@
       <workItem from="1499396870474" duration="669000" />
       <workItem from="1499399085403" duration="806000" />
       <workItem from="1499400396761" duration="18713000" />
-      <workItem from="1499650818416" duration="7711000" />
+      <workItem from="1499650818416" duration="14180000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439903000" />
+    <option name="totallyTimeSpent" value="446372000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -449,18 +467,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.50211865" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -583,13 +601,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="623">
           <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="743">
-          <caret line="158" column="39" selection-start-line="158" selection-start-column="39" selection-end-line="158" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -780,53 +791,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.less">
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+        <state relative-caret-position="-1350">
+          <caret line="128" column="43" selection-start-line="128" selection-start-column="43" selection-end-line="128" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1890">
-          <caret line="83" column="23" selection-start-line="83" selection-start-column="23" selection-end-line="83" selection-end-column="23" />
+        <state relative-caret-position="2">
+          <caret line="34" column="61" selection-start-line="34" selection-start-column="61" selection-end-line="34" selection-end-column="61" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="511">
-          <caret line="547" column="17" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="17" />
+        <state relative-caret-position="864">
+          <caret line="47" column="20" selection-start-line="47" selection-start-column="20" selection-end-line="48" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2079">
-          <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#1647#2183#0" expanded="false" />
-            <element signature="e#9744#9800#0" expanded="false" />
+            <element signature="e#9836#9892#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="125" column="18" selection-start-line="125" selection-start-column="13" selection-end-line="125" selection-end-column="18" />
+          <folding>
+            <element signature="e#14945#14984#0" expanded="false" />
+            <element signature="e#17803#17881#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="621">
-            <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
+          <first_editor relative-caret-position="648">
+            <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
             <folding />
           </first_editor>
           <second_editor />

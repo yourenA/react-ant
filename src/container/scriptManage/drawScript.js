@@ -45,6 +45,8 @@ class DrawScript extends Component {
             }else{
                 this.refs.ScriptIndex.load(JSON.stringify({
                     class: "go.GraphLinksModel",
+                    linkFromPortIdProperty: "fromPort",
+                    linkToPortIdProperty: "toPort",
                     copiesArrays: true,
                     copiesArrayObjects: true,
                     nodeDataArray: [ {category: "start",key:uuidv4(), text: "开始", loc:"0 0"},{category: "end",key:uuidv4(), text: "结束", loc:"0 400"}],

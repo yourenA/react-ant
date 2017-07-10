@@ -125,6 +125,8 @@ class DrawScriptDetail extends Component {
         //重新生成json的时候需要添加copiesArrays: true,copiesArrayObjects: true,不然数据就会相互影响
         let segmentTempJson = {
             class: "go.GraphLinksModel",
+            linkFromPortIdProperty: "fromPort",
+            linkToPortIdProperty: "toPort",
             copiesArrays: true,
             copiesArrayObjects: true,
             nodeDataArray: resultNodeJson,
