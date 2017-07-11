@@ -1,4 +1,5 @@
 import {SET_SCRIPT_LOADED_FALSE,SET_SEGMENT_LOADED_FALSE,DEL_EDIT_RECORD,DEL_SEGMENT_EDIT_RECORD,FETCH_DRAW_SCRIPT_SUCCESS,
+    DEL_ALL_SCRIPT_SUCCESS,
     FETCH_DRAW_SEGMENT_SUCCESS,FETCH_HARDWARE_VERSIONS_SUCCESS,FETCH_PRODUCTS_SUCCESS,
     FETCH_TEST_TYPE_SUCCESS,FETCH_SEGMENTS_SUCCESS,FETCH_BATCHES_SUCCESS,FETCH_PERMISSIONS_SUCCESS,FETCH_GROUP_SUCCESS,
     FETCH_MANUFACTURE_SUCCESS,FETCH_TEST_STAND_SUCCESS,FETCH_ALL_SCRIPT_SUCCESS} from '../actions/fetchTestConf';
@@ -69,6 +70,11 @@ export default function (state = initState, action) {
             return {
                 ...state,
                 script: action.script
+            };
+        case DEL_ALL_SCRIPT_SUCCESS:
+            return {
+                ...state,
+                script: []
             };
         case FETCH_PRODUCTS_SUCCESS:
             return {

@@ -18,6 +18,16 @@ exports.formItemLayout={
         sm: {span: 18},
     }
 };
+exports.producLayout={
+    labelCol: {
+        xs: {span: 9},
+        sm: {span: 9},
+    },
+    wrapperCol: {
+        xs: {span: 15},
+        sm: {span: 15},
+    }
+};
 exports.addSeriaNumLayout={
     labelCol: {
         xs: {span: 8},

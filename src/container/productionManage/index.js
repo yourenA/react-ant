@@ -2,7 +2,10 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Tooltip, Badge} from 'antd';
+import {
+    Link
+} from 'react-router-dom';
+import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Tooltip, Badge,Select} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
 import configJson from './../../common/config.json';
@@ -11,9 +14,7 @@ import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import AddOrEditName from './addOrEditNmae';
-import EditName from './editNmae';
-import AddSeriaNum from './addSeriaNum';
+const Option = Select.Option;
 const _ = require('lodash');
 class ProductionManage extends Component {
     constructor(props) {
@@ -26,9 +27,7 @@ class ProductionManage extends Component {
             selectType: '',
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
-            editModal: false,
-            addModal: false,
-            addSerialNumModal: false,
+            statModal: false,
             editRecord: {},
             editId: '',
             selectedRowKeys: []
@@ -70,44 +69,44 @@ class ProductionManage extends Component {
         })
     }
 
-    addData = (addSerialNum)=> {
-        console.log("addSerialNum", addSerialNum)
-        const that = this;
-        const {page, q}=this.state;
-        const addName = this.refs.AddName.getFieldsValue();
-        console.log('addName', addName)
-        const sendData = {
-            hardware_version_id: addName.hardware_version_id ? addName.hardware_version_id.key : '',
-            default_test_script_id: addName.default_test_script_id ? addName.default_test_script_id.key : '',
-            company_id: addName.company_id ? addName.company_id.key : '',
-            product_id: addName.product_id ? addName.product_id.key : '',
-            description: addName.description
-        }
-        axios({
-            url: `${configJson.prefix}/batches`,
-            method: 'post',
-            data: sendData,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`add batches success`]);
-                that.setState({
-                    addModal: false,
-                })
-                that.fetchHwData(page, q);
-                if (addSerialNum) {
-                    that.setState({
-                        addSerialNumModal: true,
-                        editRecord: response.data,
-                        editId: response.data.id
-                    })
-                }
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-    }
+    // addData = (addSerialNum)=> {
+    //     console.log("addSerialNum", addSerialNum)
+    //     const that = this;
+    //     const {page, q}=this.state;
+    //     const addName = this.refs.AddName.getFieldsValue();
+    //     console.log('addName', addName)
+    //     const sendData = {
+    //         hardware_version_id: addName.hardware_version_id ? addName.hardware_version_id.key : '',
+    //         default_test_script_id: addName.default_test_script_id ? addName.default_test_script_id.key : '',
+    //         company_id: addName.company_id ? addName.company_id.key : '',
+    //         product_id: addName.product_id ? addName.product_id.key : '',
+    //         description: addName.description
+    //     }
+    //     axios({
+    //         url: `${configJson.prefix}/batches`,
+    //         method: 'post',
+    //         data: sendData,
+    //         headers: getHeader()
+    //     })
+    //         .then(function (response) {
+    //             console.log(response.data);
+    //             message.success(messageJson[`add batches success`]);
+    //             that.setState({
+    //                 addModal: false,
+    //             })
+    //             that.fetchHwData(page, q);
+    //             if (addSerialNum) {
+    //                 that.setState({
+    //                     addSerialNumModal: true,
+    //                     editRecord: response.data,
+    //                     editId: response.data.id
+    //                 })
+    //             }
+    //         }).catch(function (error) {
+    //         console.log('获取出错', error);
+    //         converErrorCodeToMsg(error)
+    //     })
+    // }
     addSerialNum = ()=> {
         const addSerialNum = this.refs.addSerialNum.getFieldsValue();
         const sendData = {
@@ -203,25 +202,33 @@ class ProductionManage extends Component {
     onPageChange = (page) => {
         this.onChangeSearch(page, this.state.q);
     };
-    confirm = (id)=> {
-        console.log('确认', id);
+    editStatus = ()=> {
+        console.log('确认', this.state.editId);
         const that = this;
         const {page, q}=this.state;
         axios({
-            url: `${configJson.prefix}/batches/${id}/status`,
+            url: `${configJson.prefix}/batches/${this.state.editId}/status`,
             method: 'patch',
+            data:{
+                status:parseInt(this.state.status)
+            },
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response.data);
-                message.success(messageJson[`confirm batches success`]);
+                message.success(messageJson[`edit status success`]);
                 that.fetchHwData(page, q);
+                that.setState({statModal:false})
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-
+    handleChangeStatus=(value)=>{
+        this.setState({
+            status:value.key
+        })
+    }
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -257,11 +264,7 @@ class ProductionManage extends Component {
             title: '硬件版本',
             dataIndex: 'hardware_version',
             key: 'hardware_version',
-        }, {
-            title: '生产数量',
-            dataIndex: 'production_quantity',
-            key: 'production_quantity',
-        }, {
+        },  {
             title: '脚本名称',
             dataIndex: 'default_test_script_name',
             key: 'default_test_script_name',
@@ -276,10 +279,6 @@ class ProductionManage extends Component {
                     </Tooltip>
                 )
             }
-        }, {
-            title: '确认时间',
-            dataIndex: 'confirmed_at',
-            key: 'confirmed_at',
         }, {
             title: '状态',
             dataIndex: 'status',
@@ -303,24 +302,24 @@ class ProductionManage extends Component {
             fixed: 'right',
             render: (text, record, index) => {
                 return (
-                    record.status === -1 ?
                         <div key={index}>
+                            <Button onClick={()=> {
+                                this.setState({status:record.status,statModal:true,editId: record.id, editRecord: record})
+                            }}>
+                                状态
+                            </Button><span className="ant-divider"/>
+                            <Button  type="primary">
+                                <Link
+                                    to={{
+                                        pathname:`${this.props.match.url}/${record.id}`,
+                                        state: { newBatch: false,editId: record.id }
+                                    }}
+                                >编辑</Link>
+                            </Button><span className="ant-divider"/>
                             <Button type="primary" onClick={()=> {
                                 this.setState({editId: record.id, addSerialNumModal: true, editRecord: record})
                             }}>
-                                添加序列号</Button> <span className="ant-divider"/>
-                            <Popconfirm placement="topRight" title={ `确定要确认吗?`}
-                                        onConfirm={this.confirm.bind(this, record.id)}>
-                                <Button type='primary'>确认
-                                </Button>
-                            </Popconfirm>
-
-                            <span className="ant-divider"/>
-                            <Button onClick={()=> {
-                                this.setState({editId: record.id, editModal: true, editRecord: record})
-                            }}>
-                                编辑
-                            </Button>
+                                产品序列号</Button>
                             <span className="ant-divider"/>
                             <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                         onConfirm={this.delData.bind(this, record.id)}>
@@ -328,7 +327,6 @@ class ProductionManage extends Component {
                                 </button>
                             </Popconfirm>
                         </div>
-                        : null
                 )
             }
         }];
@@ -343,10 +341,15 @@ class ProductionManage extends Component {
                             <SearchWrap
                                 onChangeSearch={this.onChangeSearch}
                                 type={this.props.match.url} {...this.props} {...this.state} />
-                            <span className="ant-divider"/><Button type="primary" icon="plus" onClick={()=> {
-                            this.setState({addModal: true})
-                        }}>
-                            添加生产批次</Button>
+                            <span className="ant-divider"/>
+                            <Button  type="primary">
+                                <Link
+                                    to={{
+                                        pathname:`${this.props.match.url}/newBatch`,
+                                        state: { newBatch: true,editRecord:null}
+                                    }}
+                                >添加生产批次</Link>
+                            </Button>
                         </div>
                         <Table bordered className="main-table"
                                scroll={{x: 1500}}
@@ -359,65 +362,32 @@ class ProductionManage extends Component {
                     </div>
 
                     <Modal
-                        key={ Date.parse(new Date()) + 1}
-                        visible={this.state.editModal}
-                        title={`编辑`}
+                        visible={this.state.statModal}
+                        title={`状态`}
                         onCancel={()=> {
-                            this.setState({editModal: false})
+                            this.setState({statModal: false})
                         }}
                         footer={[
                             <Button key="back" type="ghost" size="large"
                                     onClick={()=> {
-                                        this.setState({editModal: false})
+                                        this.setState({statModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                            <Button key="submit" type="primary" size="large" onClick={this.editStatus}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <EditName {...this.props}
-                                  ref="EditName"
-                                  editRecord={this.state.editRecord}/>
-                    </Modal>
-                    <Modal
-                        visible={this.state.addModal}
-                        title={`添加`}
-                        onCancel={()=> {
-                            this.setState({addModal: false})
-                        }}
-                        footer={[
-                            <Button key="back" type="ghost" size="large"
-                                    onClick={()=> {
-                                        this.setState({addModal: false})
-                                    }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={()=>this.addData()}>
-                                保存
-                            </Button>,
-                            <Button key="submitAndNext" type="primary" size="large" onClick={()=>this.addData(true)}>
-                                保存,下一步>>>
-                            </Button>,
-                        ]}
-                    >
-                        <AddOrEditName  {...this.props} ref="AddName"/>
-                    </Modal>
-                    <Modal
-                        key={ Date.parse(new Date()) + 2}
-                        visible={this.state.addSerialNumModal}
-                        title={`添加${this.state.editRecord ? this.state.editRecord.code : ''}产品序列号`}
-                        onCancel={()=> {
-                            this.setState({addSerialNumModal: false})
-                        }}
-                        footer={[
-                            <Button key="back" type="ghost" size="large"
-                                    onClick={()=> {
-                                        this.setState({addSerialNumModal: false})
-                                    }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.addSerialNum}>
-                                保存
-                            </Button>,
-                        ]}
-                    >
-                        <AddSeriaNum  {...this.props} ref="addSerialNum"/>
+                        请选择批次状态：<Select
+                                        onChange={this.handleChangeStatus}
+                                        defaultValue={{key:(this.state.editRecord.status? this.state.editRecord.status.toString() :''),label:this.state.editRecord.status_explain}} labelInValue={true} allowClear={true} style={{width:'70%'}}>
+                            { [{key:-1,label:'未激活'},{key:1,label:'已激活'},{key:2,label:'已完成'},{key:3,label:'再修改'}].map((item, key) => {
+                                    return (
+                                        <Option key={item.key}
+                                                value={item.key.toString()}>{item.label}</Option>
+                                    )
+
+                            }) }
+                        </Select>
                     </Modal>
                 </div>
             </div>

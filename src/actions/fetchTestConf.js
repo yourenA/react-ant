@@ -7,6 +7,7 @@ import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_ALL_SCRIPT_SUCCESS = 'FETCH_ALL_SCRIPT_SUCCESS';
+export const DEL_ALL_SCRIPT_SUCCESS = 'DEL_ALL_SCRIPT_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
@@ -114,13 +115,14 @@ export function fetchAllTestType() {
             });
     }
 }
-export function fetchAllScript(hardware_version_id) {
+export function fetchAllScript(hardware_version_id, test_type_id) {
     return dispatch => {
         axios({
             url: `${configJson.prefix}/test_scripts`,
             method: 'get',
             params: {
-                hardware_version_id:hardware_version_id||'',
+                hardware_version_id: hardware_version_id || '',
+                test_type_id: test_type_id || '',
                 return: 'all'
             },
             headers: getHeader()
@@ -135,6 +137,15 @@ export function fetchAllScript(hardware_version_id) {
             .catch(function (error) {
                 console.log('获取出错', error)
             });
+    }
+}
+
+export function delAllScript() {
+    return dispatch => {
+        dispatch({
+            type: DEL_ALL_SCRIPT_SUCCESS,
+        });
+
     }
 }
 
@@ -166,7 +177,7 @@ export function fetchAllHardwareVersions(product_id) {
             url: `${configJson.prefix}/hardware_versions`,
             method: 'get',
             params: {
-                product_id:product_id||'',
+                product_id: product_id || '',
                 return: 'all'
             },
             headers: getHeader()

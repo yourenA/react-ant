@@ -11,6 +11,7 @@ import Home from './container/home';
 import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ProductionManage from './container/productionManage/index';
+import AddOrEditBatch from './container/productionManage/addOrEditBatch';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
 import SegmentManage from './container/scriptManage/segmentManage';
@@ -185,9 +186,14 @@ class App extends Component {
                             <HardwareTesting {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route path="/productionManagement" render={(props) => {
+                    <Route  exact path="/productionManagement" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
                             <ProductionManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
+                    <Route path="/productionManagement/:id" render={(props) => {
+                        return (login.login && testPermission('production_management') ) ?
+                            <AddOrEditBatch {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route path="/login" component={Login}/>
