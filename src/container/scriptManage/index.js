@@ -185,7 +185,7 @@ class ScriptManage extends Component {
                         </Button>
                         <span className="ant-divider"/>
                         <Button onClick={()=>{this.setState({editRecord:record,editModal:true})}}>
-                            修改名称
+                            修改属性
                         </Button>
                         <span className="ant-divider"/>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}

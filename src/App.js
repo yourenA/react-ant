@@ -12,6 +12,7 @@ import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ProductionManage from './container/productionManage/index';
 import AddOrEditBatch from './container/productionManage/addOrEditBatch';
+import SerialNumber from './container/productionManage/serialNumber';
 import ScriptManage from './container/scriptManage/index';
 import DrawScript from './container/scriptManage/drawScript';
 import SegmentManage from './container/scriptManage/segmentManage';
@@ -48,9 +49,6 @@ class App extends Component {
         }
     }
 
-    componentDidMount() {
-    }
-
     componentWillMount() {
         if (window.location.pathname.indexOf('systemManage') >= 0) {
             this.setState({
@@ -75,16 +73,14 @@ class App extends Component {
                 this.props.signout();
             }
         }
-
     }
-
     render() {
         const login = this.props.loginState;
         return (
             <Router>
                 <div>
                     <div className="layout">
-                        <Header className="layout-header">
+                        <Header className="layout-header" style={{minWidth:'1000px'}}>
                             <div className="logo"/>
                             <Menu
                                 onClick={this.handleClick}
@@ -191,11 +187,18 @@ class App extends Component {
                             <ProductionManage {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route path="/productionManagement/:id" render={(props) => {
+                    <Route  exact  path="/productionManagement/:id" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
                             <AddOrEditBatch {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
+                    <Route  path="/productionManagement/:id/serialNumbers" render={(props) => {
+                        return (login.login && testPermission('production_management') ) ?
+                            <SerialNumber {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
+
+
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route exact

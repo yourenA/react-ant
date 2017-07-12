@@ -5,10 +5,12 @@ import {getHeader} from './../common/common.js';
 import configJson from './../common/config.json';
 import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
+export const DEL_TEST_TYPE_SUCCESS = 'DEL_TEST_TYPE_SUCCESS';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_ALL_SCRIPT_SUCCESS = 'FETCH_ALL_SCRIPT_SUCCESS';
 export const DEL_ALL_SCRIPT_SUCCESS = 'DEL_ALL_SCRIPT_SUCCESS';
 export const FETCH_HARDWARE_VERSIONS_SUCCESS = 'FETCH_HARDWARE_VERSIONS_SUCCESS';
+export const DEL_HARDWARE_VERSIONS_SUCCESS = 'DEL_HARDWARE_VERSIONS_SUCCESS';
 export const FETCH_SEGMENTS_SUCCESS = 'FETCH_SEGMENTS_SUCCESS';
 export const FETCH_DRAW_SCRIPT_SUCCESS = 'FETCH_DRAW_SCRIPT_SUCCESS';
 export const FETCH_DRAW_SEGMENT_SUCCESS = 'FETCH_DRAW_SEGMENT_SUCCESS';
@@ -115,6 +117,14 @@ export function fetchAllTestType() {
             });
     }
 }
+export function delTestTypet() {
+    return dispatch => {
+        dispatch({
+            type: DEL_TEST_TYPE_SUCCESS,
+        });
+
+    }
+}
 export function fetchAllScript(hardware_version_id, test_type_id) {
     return dispatch => {
         axios({
@@ -191,6 +201,15 @@ export function fetchAllHardwareVersions(product_id) {
             .catch(function (error) {
                 console.log('获取出错', error)
             });
+    }
+}
+
+export function delAllHardwareVersions() {
+    return dispatch => {
+        dispatch({
+            type: DEL_HARDWARE_VERSIONS_SUCCESS,
+        });
+
     }
 }
 

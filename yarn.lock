@@ -2206,6 +2206,10 @@ draft-js@^0.10.0, draft-js@~0.10.0:
     immutable "~3.7.4"
     object-assign "^4.1.0"
 
+dropzone@^4.3.0:
+  version "4.3.0"
+  resolved "http://registry.npm.taobao.org/dropzone/download/dropzone-4.3.0.tgz#48b0b8f2ad092872e4b535b672a7c3f1a1d67c91"
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "http://registry.npm.taobao.org/duplexer/download/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
@@ -2655,7 +2659,7 @@ express, express@^4.13.3:
     utils-merge "1.0.0"
     vary "~1.1.1"
 
-extend@~3.0.0:
+extend@^3.0.0, extend@~3.0.0:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/extend/download/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
 
@@ -5687,6 +5691,13 @@ react-dom@^15.5.4:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "~15.5.7"
+
+react-dropzone-component:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/react-dropzone-component/download/react-dropzone-component-2.0.0.tgz#35cd011f525c9ca620fcb647e79725eeaa1b5a58"
+  dependencies:
+    dropzone "^4.3.0"
+    extend "^3.0.0"
 
 react-error-overlay@^1.0.7:
   version "1.0.7"

@@ -69,112 +69,6 @@ class ProductionManage extends Component {
         })
     }
 
-    // addData = (addSerialNum)=> {
-    //     console.log("addSerialNum", addSerialNum)
-    //     const that = this;
-    //     const {page, q}=this.state;
-    //     const addName = this.refs.AddName.getFieldsValue();
-    //     console.log('addName', addName)
-    //     const sendData = {
-    //         hardware_version_id: addName.hardware_version_id ? addName.hardware_version_id.key : '',
-    //         default_test_script_id: addName.default_test_script_id ? addName.default_test_script_id.key : '',
-    //         company_id: addName.company_id ? addName.company_id.key : '',
-    //         product_id: addName.product_id ? addName.product_id.key : '',
-    //         description: addName.description
-    //     }
-    //     axios({
-    //         url: `${configJson.prefix}/batches`,
-    //         method: 'post',
-    //         data: sendData,
-    //         headers: getHeader()
-    //     })
-    //         .then(function (response) {
-    //             console.log(response.data);
-    //             message.success(messageJson[`add batches success`]);
-    //             that.setState({
-    //                 addModal: false,
-    //             })
-    //             that.fetchHwData(page, q);
-    //             if (addSerialNum) {
-    //                 that.setState({
-    //                     addSerialNumModal: true,
-    //                     editRecord: response.data,
-    //                     editId: response.data.id
-    //                 })
-    //             }
-    //         }).catch(function (error) {
-    //         console.log('获取出错', error);
-    //         converErrorCodeToMsg(error)
-    //     })
-    // }
-    addSerialNum = ()=> {
-        const addSerialNum = this.refs.addSerialNum.getFieldsValue();
-        const sendData = {
-            batch_id: this.state.editId,
-            production_quantity: parseInt(addSerialNum.production_quantity),
-            generation_method: addSerialNum.generation_method
-        }
-        const that = this;
-        axios({
-            url: `${configJson.prefix}/product_serial_numbers`,
-            method: 'post',
-            data: sendData,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`add product_serial_numbers success`]);
-                that.setState({
-                    addSerialNumModal: false,
-                })
-                const changeIndex=_.findIndex(that.state.data, function(o) { return o.id == that.state.editId; });
-                if(changeIndex>=0){
-                    if(addSerialNum.generation_method==='new'){
-                        that.state.data[changeIndex].production_quantity=sendData.production_quantity;
-                    }else if(addSerialNum.generation_method==='append'){
-                        that.state.data[changeIndex].production_quantity=that.state.data[changeIndex].production_quantity+sendData.production_quantity;
-                    }
-                    that.setState({
-                        data:that.state.data
-                    })
-                }
-
-
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-    }
-    editData = ()=> {
-        const editName = this.refs.EditName.getFieldsValue();
-        const that = this;
-        const {page, q}=this.state;
-        const sendData = {
-            hardware_version_id: editName.hardware_version_id ? editName.hardware_version_id.key : '',
-            default_test_script_id: editName.default_test_script_id ? editName.default_test_script_id.key : '',
-            company_id: editName.company_id ? editName.company_id.key : '',
-            product_id: editName.product_id ? editName.product_id.key : '',
-            description: editName.description
-        }
-        console.log('sendData', sendData)
-        axios({
-            url: `${configJson.prefix}/batches/${this.state.editId}`,
-            method: 'put',
-            data: sendData,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`edit batches success`]);
-                that.setState({
-                    editModal: false
-                });
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-    }
     delData = (id)=> {
         console.log('id', id);
         const that = this;
@@ -210,7 +104,7 @@ class ProductionManage extends Component {
             url: `${configJson.prefix}/batches/${this.state.editId}/status`,
             method: 'patch',
             data:{
-                status:parseInt(this.state.status)
+                status:parseInt(this.state.statusValue.key)
             },
             headers: getHeader()
         })
@@ -226,7 +120,7 @@ class ProductionManage extends Component {
     }
     handleChangeStatus=(value)=>{
         this.setState({
-            status:value.key
+            statusValue:{key:value.key,label:value.label}
         })
     }
     render() {
@@ -264,11 +158,7 @@ class ProductionManage extends Component {
             title: '硬件版本',
             dataIndex: 'hardware_version',
             key: 'hardware_version',
-        },  {
-            title: '脚本名称',
-            dataIndex: 'default_test_script_name',
-            key: 'default_test_script_name',
-        }, {
+        },   {
             title: '描述说明',
             dataIndex: 'description',
             key: 'description',
@@ -286,7 +176,15 @@ class ProductionManage extends Component {
             render: (text, record, index)=> {
                 if (text === 1) {
                     return (
+                        <p><Badge status="processing"/>{record.status_explain}</p>
+                    )
+                }else if(text === 2){
+                    return (
                         <p><Badge status="success"/>{record.status_explain}</p>
+                    )
+                }else if(text === 3){
+                    return (
+                        <p><Badge status="warning"/>{record.status_explain}</p>
                     )
                 } else {
                     return (
@@ -298,13 +196,13 @@ class ProductionManage extends Component {
         }, {
             title: '操作',
             key: 'action',
-            width: 330,
+            width: 320,
             fixed: 'right',
             render: (text, record, index) => {
                 return (
                         <div key={index}>
                             <Button onClick={()=> {
-                                this.setState({status:record.status,statModal:true,editId: record.id, editRecord: record})
+                                this.setState({statusValue:{key:record.status.toString(),label:record.statusValue},statModal:true,editId: record.id, editRecord: record})
                             }}>
                                 状态
                             </Button><span className="ant-divider"/>
@@ -316,10 +214,14 @@ class ProductionManage extends Component {
                                     }}
                                 >编辑</Link>
                             </Button><span className="ant-divider"/>
-                            <Button type="primary" onClick={()=> {
-                                this.setState({editId: record.id, addSerialNumModal: true, editRecord: record})
-                            }}>
-                                产品序列号</Button>
+                            <Button type="primary" >
+                                <Link
+                                    to={{
+                                        pathname:`${this.props.match.url}/${record.id}/serialNumbers`,
+                                        state: {batchId: record.id,editRecord:record }
+                                    }}
+                                >产品序列号</Link>
+                                </Button>
                             <span className="ant-divider"/>
                             <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                         onConfirm={this.delData.bind(this, record.id)}>
@@ -352,7 +254,6 @@ class ProductionManage extends Component {
                             </Button>
                         </div>
                         <Table bordered className="main-table"
-                               scroll={{x: 1500}}
                                loading={this.state.loading}
                                rowKey="id" columns={columns}
                                dataSource={data} pagination={false}/>
@@ -379,7 +280,7 @@ class ProductionManage extends Component {
                     >
                         请选择批次状态：<Select
                                         onChange={this.handleChangeStatus}
-                                        defaultValue={{key:(this.state.editRecord.status? this.state.editRecord.status.toString() :''),label:this.state.editRecord.status_explain}} labelInValue={true} allowClear={true} style={{width:'70%'}}>
+                        value={this.state.statusValue} labelInValue={true}  style={{width:'70%'}}>
                             { [{key:-1,label:'未激活'},{key:1,label:'已激活'},{key:2,label:'已完成'},{key:3,label:'再修改'}].map((item, key) => {
                                     return (
                                         <Option key={item.key}

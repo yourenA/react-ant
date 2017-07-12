@@ -18,6 +18,7 @@
     "morgan": "^1.8.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-dropzone-component": "^2.0.0",
     "react-hot-loader": "3.0.0-beta.7",
     "react-masonry-component": "^5.0.7",
     "react-redux": "^5.0.5",

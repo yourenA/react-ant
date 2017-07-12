@@ -25,6 +25,8 @@ class AddOrEditBatch extends React.Component {
 
     componentDidMount() {
         this.props.delAllScript();
+        this.props.delTestTypet();
+        this.props.delAllHardwareVersions();
         console.log('componentDidMount');
         this.props.fetchAllManufacture();
         this.props.fetchAllProducts();

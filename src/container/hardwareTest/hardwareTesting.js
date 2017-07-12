@@ -2,14 +2,14 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Icon, Input, Button, Tree,Modal,Select} from 'antd';
+import {Breadcrumb, Icon, Input, Button,Modal,Select,Steps} from 'antd';
 
 import './hardwareTesting.less'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-const TreeNode = Tree.TreeNode;
 const Option = Select.Option;
+const Step = Steps.Step;
 class HardwareTesting extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +30,14 @@ class HardwareTesting extends Component {
             startTestModal:false
         };
     }
-
+    componentDidMount() {
+        console.log('this.props',this.props);
+        if(this.props.location.state.testAllType){
+            console.log('测试全部')
+        }else{
+            console.log(`只测试${this.props.location.state.testTypeId}`)
+        }
+    }
     onSelect = (selectedKeys, info) => {
         console.log('selected', selectedKeys, info);
     }
@@ -120,21 +127,23 @@ class HardwareTesting extends Component {
 
                         <div className="testing-content">
                             <div className="testing-content-sidebar">
-                                <Tree
-                                    showLine
-                                    onSelect={this.onSelect}
-                                >
-                                    <TreeNode title="测试电源" key="0-0">
-                                        <TreeNode title="PA0 读取IG低电平状态" key="0-0-0"/>
-                                        <TreeNode title="leaf" key="0-0-1"/>
-                                        <TreeNode title="leaf" key="0-0-2"/>
-                                    </TreeNode>
-                                    <TreeNode title="功能测试" key="0-1">
-                                        <TreeNode title="PA0 读取IG低电平状态PA0 读取IG低电平状态" key="0-1-0"/>
-                                        <TreeNode title="leaf" key="0-1-1"/>
-                                        <TreeNode title="leaf" key="0-1-2"/>
-                                    </TreeNode>
-                                </Tree>
+
+                                {
+                                    this.props.location.state.testAllType?
+                                        <div>
+                                            <h4 className="sidebar-title">测试工序流程状态</h4>
+                                            <Steps direction="vertical" current={0}>
+                                                {
+                                                    this.props.location.state.testRecord.test_types.data.map((item,index)=>{
+                                                        return(
+                                                            <Step key={index} title={item.name} />
+                                                        )
+                                                    })
+                                                }
+                                            </Steps>
+                                        </div>
+                                        :null
+                                }
                             </div>
                             <div className="testing-content-data"></div>
                         </div>

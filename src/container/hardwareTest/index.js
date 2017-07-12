@@ -104,6 +104,13 @@ class HardwareTest extends Component {
                                                 <span
                                                     title={this.state.data.product_name}>产品名称 : {this.state.data.product_name}</span>
                                             </div>
+                                            <div className="testing-config-item">
+                                                <Button type='primary'>
+                                                    <Link to={{
+                                                        pathname:`${this.props.match.url}/testAll`,
+                                                        state: {testAllType:true,testRecord:this.state.data }
+                                                    }}>按工序流程测试 >></Link></Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +126,10 @@ class HardwareTest extends Component {
                                     return(
                                         <div key={index}>
                                             <Button size="large" type="primary" style={{width:'100%'}}>
-                                                <Link to={`${this.props.match.url}/${item.id}`}>{item.name}</Link>
+                                                <Link to={{
+                                                    pathname:`${this.props.match.url}/${item.id}`,
+                                                    state: {testAllType:false,testTypeId:item.id,testRecord:this.state.data }
+                                                }}>{item.name}</Link>
                                             </Button>
                                         </div>
                                     )

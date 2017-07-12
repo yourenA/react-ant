@@ -2,58 +2,47 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input,Radio} from 'antd';
-import {addSeriaNumLayout} from './../../common/common'
+import { Form, Radio, Input} from 'antd';
+import {formItemLayout} from './../../common/common'
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-class AddSeriaNum extends React.Component {
+class AddSeriaNumForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     }
 
     componentDidMount() {
     }
 
-
     render() {
-        const {getFieldDecorator} = this.props.form;
-        const radioStyle = {
-            display: 'block',
-            height: '30px',
-            lineHeight: '30px',
-        };
+        const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
-                <div>
-                    <FormItem
-                        label={'产品序列号生成数量'}
-                        {...addSeriaNumLayout}>
-                        {getFieldDecorator('production_quantity', {
-                            initialValue: 0,
-                            rules: [{required: true, message: `请输入产品序列号生成数量`}],
-                        })(
-                            <Input type="number" />
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...addSeriaNumLayout}
-                    >
-                        {getFieldDecorator('generation_method',{
-                            initialValue: 'new',
-                        })(
-                            <RadioGroup>
-                                <Radio style={radioStyle}  value="new">全新生成 <span className="radio-text">如果之前已生成过，则会清空之前的所有序列号</span></Radio>
-                                <Radio style={radioStyle}  value="append">增量生成 <span className="radio-text">如果之前已生成过，则会在后面继续增加新的序列号</span></Radio>
-                            </RadioGroup>
-                        )}
-                    </FormItem>
-                </div>
+                <FormItem
+                    label={'序列号'}
+                    {...formItemLayout}>
+                    {getFieldDecorator('serial_number', {
+                        initialValue: '',
+                        rules: [{required: true, message: `请输入制造厂名称`}],
+                    })(
+                        <Input  />
+                    )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
+                    label="是否正式数据"
+                >
+                    {getFieldDecorator('is_permanent',{ initialValue:'-1',})(
+                        <RadioGroup>
+                            <Radio value="-1">临时数据</Radio>
+                            <Radio value="1">正式数据</Radio>
+                        </RadioGroup>
+                    )}
+                </FormItem>
             </Form>
         );
     }
 }
-
-const WrappedForm = Form.create()(AddSeriaNum);
-export default WrappedForm;
+const AddSeriaNum = Form.create()(AddSeriaNumForm);
+export default AddSeriaNum;
