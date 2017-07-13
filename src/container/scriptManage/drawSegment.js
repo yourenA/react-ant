@@ -75,10 +75,10 @@ class AddProgramSegment extends Component {
             message.error('最外层只能有一个分组节点')
         }else{
             delPointsInLink(content.linkDataArray)
-            const newScript=this.props.location.state.newSegment
-            const url=newScript ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`
-            const method=newScript ?`post`:`put`;
-            const meg=newScript ?messageJson[`add segment success`]:messageJson[`edit segment success`];
+            const newSegment=this.props.location.state.newSegment
+            const url=newSegment ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`
+            const method=newSegment ?`post`:`put`;
+            const meg=newSegment ?messageJson[`add segment success`]:messageJson[`edit segment success`];
             axios({
                 url: `${configJson.prefix}${url}`,
                 method: method,
@@ -91,6 +91,10 @@ class AddProgramSegment extends Component {
                 .then(function (response) {
                     console.log(response);
                     message.success(meg);
+                    newSegment
+                        ? setTimeout(function () {
+                        that.props.history.replace({pathname:`/segmentManage`})
+                    },1000):null;
                     that.setState({
                         saveModal:false
                     })
@@ -142,7 +146,7 @@ class AddProgramSegment extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex" isNew={this.props.location.state.newSegment} {...this.props} json={this.props.fetchTestConf.segmentJson}/>
+                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  fromNew={this.props.location.state.newSegment?true:false}  isNew={this.props.location.state.newSegment} {...this.props} json={this.props.fetchTestConf.segmentJson}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

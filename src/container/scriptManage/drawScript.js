@@ -91,7 +91,7 @@ class DrawScript extends Component {
                 message.success(msg);
                 newScript
                     ? setTimeout(function () {
-                    that.props.history.replace({pathname:`/scriptManage/${response.data.id}`,state: { newScript: false , scriptJson:JSON.parse(response.data.content),editRecord:response.data}})
+                    that.props.history.replace({pathname:`/scriptManage`})
                 },1000)
                     :that.props.fetchDrawScript(that.props.match.params.id);
 

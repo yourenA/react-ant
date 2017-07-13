@@ -48,9 +48,6 @@ class FetchSegments extends Component {
 
             }
             for (let i = 0, len1 = keyUuidArr.length; i < len1; i++) {
-                // if( originHadJson.nodeDataArray[i].group){
-                //     originHadJson.nodeDataArray[i].group=keyUuidArr[i].uuid
-                // }
                 if(originHadJson.nodeDataArray[i].isGroup===true && !originHadJson.nodeDataArray[i].group){
                     const parseLoc = originHadJson.nodeDataArray[i].loc.split(' ');
                     const externalX=scrollAndBounds.left+scrollAndBounds.scrollLeft+100;
@@ -94,8 +91,6 @@ class FetchSegments extends Component {
                 }
             }
 
-            // const originGrapJson = JSON.parse(myDiagram.model.toJson());//获取图里面的数据
-            // const addGrapJson = originHadJson;//需要添加的数据
             for (let h = 0, len = originHadJson.nodeDataArray.length; h < len; h++) {
                 myDiagram.model.addNodeData(originHadJson.nodeDataArray[h]);
             }
@@ -104,15 +99,12 @@ class FetchSegments extends Component {
             }
         }
 
-        // originGrapJson.nodeDataArray = originGrapJson.nodeDataArray.concat(addGrapJson.nodeDataArray);
-        // originGrapJson.linkDataArray = originGrapJson.linkDataArray.concat(addGrapJson.linkDataArray);
-        // myDiagram.model = go.Model.fromJson(originGrapJson);
 
     }
     render() {
         return (
             <div className="inline-block">
-                <span>选择代码段: </span>
+                <span>选择代码段 : </span>
                 <Select   className="search-select"
                           showSearch
                           onChange={this.onChangeSegment}
@@ -124,7 +116,7 @@ class FetchSegments extends Component {
                         )
                     }) }
                 </Select>
-                <Button type='primary' onClick={this.addGraphical}>添加</Button>
+                <Button type='primary' onClick={this.addGraphical} style={{marginLeft:'10px'}}>添加</Button>
             </div>
 
         );

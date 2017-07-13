@@ -178,6 +178,10 @@ class DrawScriptDetail extends Component {
                 .then(function (response) {
                     console.log(response);
                     message.success(meg);
+                    newSegment
+                        ? setTimeout(function () {
+                        that.props.history.replace({pathname:`/segmentManage`})
+                    },1000):null;
                     that.setState({
                         saveModal:false
                     })
@@ -218,7 +222,7 @@ class DrawScriptDetail extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex  saveTempScript={this.saveTempScript}  ref="ScriptIndex"  {...this.props} isNew={true} />
+                    <ScriptIndex  saveTempScript={this.saveTempScript}  ref="ScriptIndex"  {...this.props} isNew={true}  fromNew={this.state.editRecord?false:true}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

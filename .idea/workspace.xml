@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptInfo.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/message.json" afterPath="$PROJECT_DIR$/src/common/message.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" afterPath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js" afterPath="$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" afterPath="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,8 +33,35 @@
       <file leaf-file-name="drawScript.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="764">
-              <caret line="147" column="159" selection-start-line="147" selection-start-column="159" selection-end-line="147" selection-end-column="159" />
+            <state relative-caret-position="710">
+              <caret line="95" column="35" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
+              <folding>
+                <element signature="e#50#89#0" expanded="true" />
+                <marker date="1499935601447" expanded="true" signature="5063:5313" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5115:5313" ph="..." />
+                <marker date="1499935601447" expanded="false" signature="5160:5169" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5506:6697" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5594:6310" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5650:5857" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5732:5826" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="5913:6283" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="6007:6252" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="6424:6691" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="6674:6691" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="6721:6892" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="7217:7387" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="7488:7553" ph="..." />
+                <marker date="1499935601447" expanded="true" signature="7746:8087" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="drawSegment.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegment.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="594">
+              <caret line="93" column="20" selection-start-line="93" selection-start-column="20" selection-end-line="96" selection-end-column="33" />
               <folding>
                 <element signature="e#50#89#0" expanded="true" />
               </folding>
@@ -50,8 +72,35 @@
       <file leaf-file-name="drawScriptDetail.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="756">
-              <caret line="250" column="159" selection-start-line="250" selection-start-column="159" selection-end-line="250" selection-end-column="159" />
+            <state relative-caret-position="567">
+              <caret line="150" column="72" selection-start-line="150" selection-start-column="72" selection-end-line="150" selection-end-column="72" />
+              <folding>
+                <element signature="e#50#89#0" expanded="true" />
+                <marker date="1499935601470" expanded="true" signature="10032:10258" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="10084:10258" ph="..." />
+                <marker date="1499935601470" expanded="false" signature="10129:10138" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="10731:11907" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="10819:11574" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="10875:11121" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="10970:11090" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="11177:11547" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="11271:11516" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="11688:11901" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="11850:11884" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="11931:12102" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="12427:12597" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="12698:12763" ph="..." />
+                <marker date="1499935601470" expanded="true" signature="12942:13289" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="drawSegmentDetail.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1134">
+              <caret line="224" column="123" selection-start-line="224" selection-start-column="123" selection-end-line="224" selection-end-column="123" />
               <folding>
                 <element signature="e#50#89#0" expanded="true" />
               </folding>
@@ -59,11 +108,45 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="search.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/search.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="searchSegment.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/searchSegment.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="567">
+              <caret line="22" column="38" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="38" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fetchSegments.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="203">
+              <caret line="106" column="28" selection-start-line="106" selection-start-column="28" selection-end-line="106" selection-end-column="28" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="scriptIndex.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="822" column="13" selection-start-line="822" selection-start-column="13" selection-end-line="822" selection-end-column="13" />
+            <state relative-caret-position="351">
+              <caret line="819" column="59" selection-start-line="819" selection-start-column="59" selection-end-line="819" selection-end-column="59" />
               <folding>
                 <element signature="e#13634#13673#0" expanded="false" />
                 <element signature="e#16492#16570#0" expanded="false" />
@@ -87,7 +170,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/container/scriptManage/segmentManage.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
         <option value="$PROJECT_DIR$/src/container/login.js" />
         <option value="$PROJECT_DIR$/src/container/productionManage/search.js" />
@@ -96,7 +178,6 @@
         <option value="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/manufacture/addOrEditNmae.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
         <option value="$PROJECT_DIR$/src/container/catagoryManage/index.js" />
         <option value="$PROJECT_DIR$/src/container/catagoryManage/addOrEditNmae.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
@@ -131,13 +212,15 @@
         <option value="$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js" />
         <option value="$PROJECT_DIR$/src/common/message.json" />
         <option value="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
         <option value="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.less" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptInfo.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/searchSegment.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
       </list>
     </option>
   </component>
@@ -548,12 +631,12 @@
       <workItem from="1499650818416" duration="25832000" />
       <workItem from="1499737350042" duration="26488000" />
       <workItem from="1499823738134" duration="26252000" />
-      <workItem from="1499910563110" duration="18392000" />
+      <workItem from="1499910563110" duration="19886000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="529156000" />
+    <option name="totallyTimeSpent" value="530650000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -605,7 +688,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/build/static/js/main.86c25da0.js" />
     <entry file="file://$PROJECT_DIR$/node_modules/morgan/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -898,26 +980,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/search.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-648">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-648">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/mask.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
@@ -950,16 +1012,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="126" column="34" selection-start-line="126" selection-start-column="34" selection-end-line="126" selection-end-column="34" />
-          <folding>
-            <element signature="e#50#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptInfo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -970,43 +1022,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js">
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="202" column="29" selection-start-line="202" selection-start-column="29" selection-end-line="202" selection-end-column="29" />
+        <state relative-caret-position="351">
+          <caret line="819" column="59" selection-start-line="819" selection-start-column="59" selection-end-line="819" selection-end-column="59" />
           <folding>
-            <element signature="e#50#89#0" expanded="true" />
+            <element signature="e#13634#13673#0" expanded="false" />
+            <element signature="e#16492#16570#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="147" column="159" selection-start-line="147" selection-start-column="159" selection-end-line="147" selection-end-column="159" />
+        <state relative-caret-position="710">
+          <caret line="95" column="35" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
           <folding>
             <element signature="e#50#89#0" expanded="true" />
+            <marker date="1499935601447" expanded="true" signature="5063:5313" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5115:5313" ph="..." />
+            <marker date="1499935601447" expanded="false" signature="5160:5169" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5506:6697" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5594:6310" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5650:5857" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5732:5826" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="5913:6283" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="6007:6252" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="6424:6691" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="6674:6691" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="6721:6892" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="7217:7387" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="7488:7553" ph="..." />
+            <marker date="1499935601447" expanded="true" signature="7746:8087" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="250" column="159" selection-start-line="250" selection-start-column="159" selection-end-line="250" selection-end-column="159" />
+        <state relative-caret-position="567">
+          <caret line="150" column="72" selection-start-line="150" selection-start-column="72" selection-end-line="150" selection-end-column="72" />
+          <folding>
+            <element signature="e#50#89#0" expanded="true" />
+            <marker date="1499935601470" expanded="true" signature="10032:10258" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="10084:10258" ph="..." />
+            <marker date="1499935601470" expanded="false" signature="10129:10138" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="10731:11907" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="10819:11574" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="10875:11121" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="10970:11090" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="11177:11547" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="11271:11516" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="11688:11901" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="11850:11884" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="11931:12102" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="12427:12597" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="12698:12763" ph="..." />
+            <marker date="1499935601470" expanded="true" signature="12942:13289" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="93" column="20" selection-start-line="93" selection-start-column="20" selection-end-line="96" selection-end-column="33" />
           <folding>
             <element signature="e#50#89#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js">
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="822" column="13" selection-start-line="822" selection-start-column="13" selection-end-line="822" selection-end-column="13" />
+        <state relative-caret-position="1134">
+          <caret line="224" column="123" selection-start-line="224" selection-start-column="123" selection-end-line="224" selection-end-column="123" />
           <folding>
-            <element signature="e#13634#13673#0" expanded="false" />
-            <element signature="e#16492#16570#0" expanded="false" />
+            <element signature="e#50#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/search.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/searchSegment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="22" column="38" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="38" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="106" column="28" selection-start-line="106" selection-start-column="28" selection-end-line="106" selection-end-column="28" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
