@@ -127,6 +127,10 @@ class ScriptIndex extends Component {
             {title: "条件语句", category: "if", figure: "Diamond"},
             // {text: "循环语句", category: "for", figure: "Diamond"},
             {title: "错误输出", category: "errOut"},
+            {category: "start", title: "开始", loc: "80 75",belong:'OfGroups'},
+            {category: "start", title: "开始", loc: "80 75",belong:'ForGroups'},
+            {category: "end", title: "结束", loc: "80 475",belong:'OfGroups'},
+            {category: "end", title: "结束", loc: "80 475",belong:'ForGroups'},
             {category: "end", title: "结束"},
             {category: "comment", title: "备注"},
             {category: "set", params: [{}], title: '设置参数'},
@@ -150,16 +154,23 @@ class ScriptIndex extends Component {
                     {key: 'error2', value: 'error2Value2'}
                 ],
             }];
-
+        let OfGroupsId='';
+        let ForGroupsId='';
         for (let i = 0, len = formulaArr.length; i < len; i++) {
             let uuidIn = uuidv4();
             formulaArr[i].key = uuidIn;
-            // if(formulaArr[i].category==='OfGroups'){
-            //     groupId=uuidIn
-            // }
-            // if(formulaArr[i].category==='start'){
-            //     formulaArr[i].group=groupId
-            // }
+            if(formulaArr[i].category==='OfGroups'){
+                OfGroupsId=uuidIn
+            }
+            if(formulaArr[i].category==='ForGroups'){
+                ForGroupsId=uuidIn
+            }
+            if(formulaArr[i].belong==='OfGroups'){
+                formulaArr[i].group=OfGroupsId
+            }
+            if(formulaArr[i].belong==='ForGroups'){
+                formulaArr[i].group=ForGroupsId
+            }
         }
 
         myDiagram =
@@ -176,14 +187,14 @@ class ScriptIndex extends Component {
         myDiagram.model.copiesArrays = true;//设置这个使用itemArr数据才不会互相影响
         myDiagram.model.copiesArrayObjects = true;//设置这个使用itemArr数据才不会互相影响
         myDiagram.addDiagramListener("Modified", function (e) {
-            var button = document.getElementById("SaveButton");
-            if (button) button.disabled = !myDiagram.isModified;//当图标不修改时，保存按钮不可用
-            var idx = document.title.indexOf("*");//改变页面的标题
-            if (myDiagram.isModified) {
-                if (idx < 0) document.title += "*";
-            } else {
-                if (idx >= 0) document.title = document.title.substr(0, idx);
-            }
+            // var button = document.getElementById("SaveButton");
+            // if (button) button.disabled = !myDiagram.isModified;//当图标不修改时，保存按钮不可用
+            // var idx = document.title.indexOf("*");//改变页面的标题
+            // if (myDiagram.isModified) {
+            //     if (idx < 0) document.title += "*";
+            // } else {
+            //     if (idx >= 0) document.title = document.title.substr(0, idx);
+            // }
         });
 
         myDiagram.nodeTemplateMap.add("if",
@@ -815,13 +826,12 @@ class ScriptIndex extends Component {
             nodeDataArray: [ ],
             linkDataArray: []
         };
-        console.log('this.props.fromNew',this.props.fromNew)
-        if(this.props.fromNew){
-            if(!sessionStorage.getItem(`${nodedata.key}`)){
-                detailJon.nodeDataArray.push({category: "start",key:uuidv4(), text: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
-                detailJon.nodeDataArray.push({category: "end",key:uuidv4(), text: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
-            }
-        }
+        // console.log('this.props.fromNew',this.props.fromNew)
+        // if(this.props.fromNew && !sessionStorage.getItem(`${nodedata.key}`)){
+        //         detailJon.nodeDataArray.push({category: "start",key:uuidv4(), title: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
+        //         detailJon.nodeDataArray.push({category: "end",key:uuidv4(), title: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
+        // }
+        // if(!this.props.fromNew )
 
         let keyInGroup = []
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {

@@ -50,7 +50,8 @@ class DrawScript extends Component {
                     linkToPortIdProperty: "toPort",
                     copiesArrays: true,
                     copiesArrayObjects: true,
-                    nodeDataArray: [ {category: "start",key:uuidv4(), text: "开始", loc:"0 0"},{category: "end",key:uuidv4(), text: "结束", loc:"0 400"}],
+                    // nodeDataArray: [ {category: "start",key:uuidv4(), title: "开始", loc:"0 0"},{category: "end",key:uuidv4(), title: "结束", loc:"0 400"}],
+                    nodeDataArray: [],
                     linkDataArray: []
                 }))
             }
