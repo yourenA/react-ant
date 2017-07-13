@@ -11,6 +11,7 @@ import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/com
 import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'
 import {bindActionCreators} from 'redux';
+import ScriptInfo from './scriptInfo';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 
@@ -123,6 +124,7 @@ class AddProgramSegment extends Component {
                     <Breadcrumb.Item>{this.props.location.state.newSegment ? '新建脚本段' : '编辑脚本段'}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
+                    <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn">

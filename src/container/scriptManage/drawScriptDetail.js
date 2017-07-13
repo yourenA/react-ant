@@ -14,6 +14,7 @@ import messageJson from './../../common/message.json';
 import AddOrEditName from './addOrEditNmae';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
+import ScriptInfo from './scriptInfo';
 const _ = require('lodash');
 const {Content,} = Layout;
 
@@ -198,7 +199,7 @@ class DrawScriptDetail extends Component {
         }
         if(canBack){
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
-            this.props.history.goBack()
+            this.props.history.goBack({manual:true})
         }
         if(step){
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
@@ -214,8 +215,8 @@ class DrawScriptDetail extends Component {
     }
 
     render() {
+        // console.log('this.props',this.props)
         const breadcrumbArr=JSON.parse(sessionStorage.getItem('breadcrumbArr'))||[];
-        console.log("breadcrumbArr",breadcrumbArr)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
@@ -229,6 +230,7 @@ class DrawScriptDetail extends Component {
                     })}
                 </Breadcrumb>
                 <div className="content-container">
+                    <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
@@ -246,7 +248,7 @@ class DrawScriptDetail extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true}
+                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true} fromNew={this.state.editRecord?false:true}
                                 />
                 </div>
                 <Modal

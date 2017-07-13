@@ -53,6 +53,7 @@
   "edit batches success":"修改批次成功",
   "del batches success":"删除批次成功",
   "del product_serial_numbers success":"删除序列号成功",
+  "clear product_serial_numbers success":"清空序列号成功",
   "edit status success":"修改状态成功",
   "merge serial numbers success":"合并临时序列号成功"
 }

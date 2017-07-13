@@ -13,6 +13,7 @@ import axios from 'axios';
 import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
+import ScriptInfo from './scriptInfo';
 const _ = require('lodash');
 const {Content,} = Layout;
 
@@ -199,6 +200,7 @@ class DrawScriptDetail extends Component {
                     <Breadcrumb.Item>修改脚本段"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
+                    <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>

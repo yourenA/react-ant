@@ -14,6 +14,7 @@ import messageJson from './../../common/message.json';
 import AddOrEditName from './addOrEditNmae';
 import ScriptIndex from './scriptIndex.js'
 import FetchSegments from './fetchSegments'
+import ScriptInfo from './scriptInfo';
 import uuidv4 from 'uuid/v4';
 const {Content,} = Layout;
 
@@ -126,6 +127,7 @@ class DrawScript extends Component {
                     <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑脚本'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
+                    <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn">
@@ -143,7 +145,7 @@ class DrawScript extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex" {...this.props} isNew={this.props.location.state.newScript} json={this.props.fetchTestConf.scriptJson}/>
+                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex" {...this.props} fromNew={this.props.location.state.newScript?true:false} isNew={this.props.location.state.newScript} json={this.props.fetchTestConf.scriptJson}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

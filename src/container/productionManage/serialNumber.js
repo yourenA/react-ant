@@ -11,9 +11,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import MergeSerialNumber from './mergeSeriaNum'
-import AddSeriaNum from './addSeriaNum'
+import SeriaNum from './addSeriaNum'
 import Dropzone from './../../component/dropzone'
-const _ = require('lodash');
 class SerialNumber extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +28,8 @@ class SerialNumber extends Component {
             tempMeta: {pagination: {total: 0, per_page: 0}},
             importSerialNumModal: false,
             addModal: false,
-            mergeModal:false,
+            mergeModal: false,
+            clearModal: false,
             editRecord: {},
             editId: '',
             selectedRowKeys: []
@@ -95,32 +95,32 @@ class SerialNumber extends Component {
     importSerialNum = ()=> {
         this.refs.Dropzone.callbackFile();
     }
-    addSerialNum = ()=> {
-        const addSeriaNum = this.refs.AddSeriaNum.getFieldsValue();
-        console.log(addSeriaNum);
+    addOrClearSerialNum = (type)=> {
+        const seriaNum = type === 'add' ? this.refs.AddSeriaNum.getFieldsValue() : this.refs.ClearSeriaNum.getFieldsValue();
+        console.log(seriaNum);
+        const method = type === 'add' ? 'post' : 'delete';
+        const msg = type === 'add' ? `add product_serial_numbers success` : `clear product_serial_numbers success`;
         const that = this;
         axios({
             url: `${configJson.prefix}/product_serial_numbers`,
-            method: 'post',
-            data:{
-                batch_id:this.props.location.state.batchId,
-                ...addSeriaNum
+            method: method,
+            data: {
+                batch_id: this.props.location.state.batchId,
+                ...seriaNum
             },
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response.data);
-                message.success(messageJson[`add product_serial_numbers success`]);
+                message.success(messageJson[msg]);
                 that.setState({
-                    addModal:false
+                    addModal: false,
+                    clearModal: false
                 })
-                if(addSeriaNum.is_permanent==='1'){
-                    const {page}=that.state;
-                    that.onChangeSearch(page)
-                }else if(addSeriaNum.is_permanent==='-1'){
-                    const {tempPage}=that.state;
-                    that.onTempChangeSearch(tempPage)
-                }
+                const page = type === 'add' ? that.state.page : 1;
+                that.onChangeSearch(page)
+                const tempPage = type === 'add' ? that.state.tempPage : 1;
+                that.onTempChangeSearch(tempPage)
 
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -151,7 +151,7 @@ class SerialNumber extends Component {
             importSerialNumModal: false
         })
     }
-    delData = (id,type)=> {
+    delData = (id, type)=> {
         const that = this;
         axios({
             url: `${configJson.prefix}/product_serial_numbers/${id}`,
@@ -161,10 +161,10 @@ class SerialNumber extends Component {
             .then(function (response) {
                 console.log(response.data);
                 message.success(messageJson[`del product_serial_numbers success`]);
-                if(type===1){
+                if (type === 1) {
                     const {page}=that.state;
                     that.onChangeSearch(page)
-                }else if(type===-1){
+                } else if (type === -1) {
                     const {tempPage}=that.state;
                     that.onTempChangeSearch(tempPage)
                 }
@@ -174,15 +174,15 @@ class SerialNumber extends Component {
         })
     }
     mergeData = ()=> {
-        const mergeType=this.refs.mergeSerialNum.callBackRadio();
-        console.log("mergeType",mergeType)
+        const mergeType = this.refs.mergeSerialNum.callBackRadio();
+        console.log("mergeType", mergeType)
         const that = this;
         axios({
             url: `${configJson.prefix}/product_serial_numbers/batch`,
             method: 'put',
             data: {
                 batch_id: this.props.location.state.batchId,
-                import_method:mergeType
+                import_method: mergeType
             },
             headers: getHeader()
         })
@@ -190,7 +190,7 @@ class SerialNumber extends Component {
                 console.log(response.data);
                 message.success(messageJson[`merge serial numbers success`]);
                 that.setState({
-                    mergeModal:false
+                    mergeModal: false
                 })
                 that.onChangeSearch(1)
                 that.onTempChangeSearch(1)
@@ -209,7 +209,6 @@ class SerialNumber extends Component {
             key: 'id',
             width: '45px',
             className: 'table-index',
-            fixed: 'left',
             render: (text, record, index) => {
                 return (
                     <span>
@@ -223,26 +222,25 @@ class SerialNumber extends Component {
             key: 'serial_number',
         }, {
             title: '当前工序',
-            dataIndex: 'company_name',
-            key: 'company_name',
+            dataIndex: 'stage',
+            key: 'stage',
         }, {
             title: '工作进度',
-            dataIndex: 'product_code',
-            key: 'product_code',
+            dataIndex: 'status',
+            key: 'status',
         }, {
             title: '执行情况',
-            dataIndex: 'hardware_version',
-            key: 'hardware_version',
+            dataIndex: 'status_explain',
+            key: 'status_explain',
         }, {
             title: '操作',
             key: 'action',
             width: 70,
-            fixed: 'right',
             render: (text, record, index) => {
                 return (
                     <div key={index}>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
-                                    onConfirm={this.delData.bind(this, record.id,1)}>
+                                    onConfirm={this.delData.bind(this, record.id, 1)}>
                             <button className="ant-btn ant-btn-danger">删除
                             </button>
                         </Popconfirm>
@@ -256,10 +254,13 @@ class SerialNumber extends Component {
             key: 'id',
             width: '45px',
             className: 'table-index',
-            fixed: 'left',
             render: (text, record, index) => {
+                let repeatClassName=''
+                if(record.is_repeat===1){
+                    document.querySelectorAll('.tempSerialTable tr')[index+1].style.backgroundColor='#ecbcbc'
+                }
                 return (
-                    <span>
+                    <span className={repeatClassName}>
                             {index + 1}
                         </span>
                 )
@@ -269,27 +270,14 @@ class SerialNumber extends Component {
             dataIndex: 'serial_number',
             key: 'serial_number',
         }, {
-            title: '当前工序',
-            dataIndex: 'company_name',
-            key: 'company_name',
-        }, {
-            title: '工作进度',
-            dataIndex: 'product_code',
-            key: 'product_code',
-        }, {
-            title: '执行情况',
-            dataIndex: 'hardware_version',
-            key: 'hardware_version',
-        }, {
             title: '操作',
             key: 'action',
             width: 70,
-            fixed: 'right',
             render: (text, record, index) => {
                 return (
                     <div key={index}>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
-                                    onConfirm={this.delData.bind(this, record.id,-1)}>
+                                    onConfirm={this.delData.bind(this, record.id, -1)}>
                             <button className="ant-btn ant-btn-danger">删除
                             </button>
                         </Popconfirm>
@@ -308,7 +296,7 @@ class SerialNumber extends Component {
                         <Row gutter={16}>
                             <Col span={12}>
                                 <div className="operate-box">
-                                    <Button  onClick={()=> {
+                                    <Button onClick={()=> {
                                         this.props.history.goBack()
                                     }}>
                                         取消
@@ -321,9 +309,16 @@ class SerialNumber extends Component {
                                     }}>
                                         添加序列号
                                     </Button>
-
+                                    <span className="ant-divider"/>
+                                    <Button icon="delete" type="danger" onClick={()=> {
+                                        this.setState({
+                                            clearModal: true
+                                        })
+                                    }}>
+                                        清空序列号
+                                    </Button>
                                 </div>
-                                <Card title="序列号" >
+                                <Card title="序列号">
                                     <Table bordered className="main-table"
                                            loading={this.state.loading}
                                            rowKey="id" columns={columns}
@@ -343,20 +338,27 @@ class SerialNumber extends Component {
                                         从文件中导入
                                     </Button>
                                     <span className="ant-divider"/>
-                                        <Button type="primary" onClick={()=>{
-                                            this.setState({
-                                                mergeModal:true
-                                            })
-                                        }}>
-                                            保存序列号
-                                        </Button>
+                                    <Button type="primary" onClick={()=> {
+                                        this.setState({
+                                            mergeModal: true
+                                        })
+                                    }}>
+                                        保存序列号
+                                    </Button>
                                 </div>
                                 <Card title="临时序列号">
                                     <Table
-                                        bordered className="main-table"
+                                        bordered className="main-table tempSerialTable"
                                         loading={this.state.tempLoading}
                                         rowKey="id" columns={tempColumns}
-                                        dataSource={tempData} pagination={false}/>
+                                        dataSource={tempData} pagination={false}
+                                        footer={() =>
+                                            <p>
+                                                <span style={{marginRight: '10px'}}>总数:{tempMeta.total_quantity}</span>
+                                                <span
+                                                    style={{marginRight: '10px'}}>不重复:{tempMeta.no_repeat_quantity}</span>
+                                                <span>重复:{tempMeta.repeat_quantity}</span>
+                                            </p>}/>
                                     <Pagination total={tempMeta.pagination.total} current={tempPage}
                                                 pageSize={tempMeta.pagination.per_page}
                                                 style={{marginTop: '10px'}} onChange={this.onTempPageChange}/>
@@ -383,7 +385,10 @@ class SerialNumber extends Component {
                             </Button>,
                         ]}
                     >
-                        <Dropzone ref="Dropzone" batchId={this.props.location.state.batchId}  setImportModalFalse={this.setImportModalFalse} onTempChangeSearch={this.onTempChangeSearch} postUrl={`${configJson.prefix}/product_serial_numbers/batch`}
+                        <Dropzone ref="Dropzone" batchId={this.props.location.state.batchId}
+                                  setImportModalFalse={this.setImportModalFalse}
+                                  onTempChangeSearch={this.onTempChangeSearch}
+                                  postUrl={`${configJson.prefix}/product_serial_numbers/batch`}
                                   paramName="file"/>
                     </Modal>
                     <Modal
@@ -398,17 +403,38 @@ class SerialNumber extends Component {
                                     onClick={()=> {
                                         this.setState({addModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.addSerialNum}>
+                            <Button key="submit" type="primary" size="large"
+                                    onClick={()=>this.addOrClearSerialNum('add')}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <AddSeriaNum ref="AddSeriaNum"/>
+                        <SeriaNum ref="AddSeriaNum"/>
                     </Modal>
                     <Modal
                         key={ Date.parse(new Date()) + 2}
+                        visible={this.state.clearModal}
+                        title={`清空序列号`}
+                        onCancel={()=> {
+                            this.setState({clearModal: false})
+                        }}
+                        footer={[
+                            <Button key="back" type="ghost" size="large"
+                                    onClick={()=> {
+                                        this.setState({clearModal: false})
+                                    }}>取消</Button>,
+                            <Button key="submit" type="primary" size="large"
+                                    onClick={()=>this.addOrClearSerialNum('clear')}>
+                                保存
+                            </Button>,
+                        ]}
+                    >
+                        <SeriaNum ref="ClearSeriaNum" type="clear"/>
+                    </Modal>
+                    <Modal
+                        key={ Date.parse(new Date()) + 3}
                         visible={this.state.mergeModal}
-                        title={`合并序列号`}
+                        title={`保存序列号`}
                         onCancel={()=> {
                             this.setState({mergeModal: false})
                         }}
@@ -423,7 +449,7 @@ class SerialNumber extends Component {
                         ]}
                     >
                         <MergeSerialNumber ref="mergeSerialNum"
-                                            batchId={this.props.location.state.batchId}
+                                           batchId={this.props.location.state.batchId}
                         />
                     </Modal>
                 </div>

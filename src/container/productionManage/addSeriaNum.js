@@ -19,16 +19,20 @@ class AddSeriaNumForm extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
-                <FormItem
-                    label={'序列号'}
-                    {...formItemLayout}>
-                    {getFieldDecorator('serial_number', {
-                        initialValue: '',
-                        rules: [{required: true, message: `请输入制造厂名称`}],
-                    })(
-                        <Input  />
-                    )}
-                </FormItem>
+                {
+                    this.props.type!=='clear'?
+                        <FormItem
+                            label={'序列号'}
+                            {...formItemLayout}>
+                            {getFieldDecorator('serial_number', {
+                                initialValue: '',
+                                rules: [{required: true, message: `请输入序列号`}],
+                            })(
+                                <Input  />
+                            )}
+                        </FormItem>:null
+                }
+
                 <FormItem
                     {...formItemLayout}
                     label="是否正式数据"

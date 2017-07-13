@@ -124,12 +124,12 @@ class ScriptIndex extends Component {
         let formulaArr = [
             {title: "分组", isGroup: true, category: "OfGroups"},
             {title: "循环分组", isGroup: true, category: "ForGroups",times:1},
-            {text: "条件语句", category: "if", figure: "Diamond"},
+            {title: "条件语句", category: "if", figure: "Diamond"},
             // {text: "循环语句", category: "for", figure: "Diamond"},
-            {text: "错误输出", category: "errOut"},
-            {category: "end", text: "结束"},
-            {category: "comment", text: "备注"},
-            {category: "set", params: [{}], text: '设置参数'},
+            {title: "错误输出", category: "errOut"},
+            {category: "end", title: "结束"},
+            {category: "comment", title: "备注"},
+            {category: "set", params: [{}], title: '设置参数'},
             {
                 category: "item",
                 title: "语句",
@@ -186,31 +186,6 @@ class ScriptIndex extends Component {
             }
         });
 
-        myDiagram.nodeTemplateMap.add("node",  // the default category
-            $(go.Node, "Spot", that.nodeStyle(),//节点最外层根据loc属性定位
-                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-                $(go.Panel, "Auto",//节点第二层定义Panel
-                    $(go.Shape, "Rectangle",//节点第三层定义Shape,
-                        {fill: "#00A9C9", stroke: null},
-                        new go.Binding("figure", "figure")),//Shape绑定figure
-                    $(go.TextBlock,//节点第三层定义TextBlock
-                        {
-                            font: "bold 11pt Helvetica, Arial, sans-serif",
-                            stroke: 'whitesmoke',
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: true//是否可以编辑，默认是false
-                        },
-                        new go.Binding("text").makeTwoWay())//TextBlock绑定text属性
-                ),
-                // four named ports, one on each side:
-                that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
-                that.makePort("L", go.Spot.Left, true, true),
-                that.makePort("R", go.Spot.Right, true, true),
-                that.makePort("B", go.Spot.Bottom, true, false)
-            ));
-
         myDiagram.nodeTemplateMap.add("if",
             $(go.Node, "Spot", that.nodeStyle(),//节点最外层根据loc属性定位
                 // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
@@ -226,7 +201,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: true//是否可以编辑，默认是false
                         },
-                        new go.Binding("text").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -249,7 +224,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: true//是否可以编辑，默认是false
                         },
-                        new go.Binding("text").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -272,7 +247,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: false,//是否可以编辑，默认是false
                         },
-                        new go.Binding("text").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -290,7 +265,7 @@ class ScriptIndex extends Component {
                         {minSize: new go.Size(40, 40), fill: "#79C900", stroke: null}),
                     $(go.TextBlock, "Start",
                         {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text"))
+                        new go.Binding("text","title"))
                 ),
                 // three named ports, one on each side except the top, all output only:
                 that.makePort("L", go.Spot.Left, true, false),
@@ -306,7 +281,7 @@ class ScriptIndex extends Component {
                         {minSize: new go.Size(40, 40), fill: "#000", stroke: null}),
                     $(go.TextBlock, "End",
                         {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text"))
+                        new go.Binding("text","title"))
                 ),
                 // three named ports, one on each side except the bottom, all input only:
                 that.makePort("T", go.Spot.Top, false, true),
@@ -325,7 +300,7 @@ class ScriptIndex extends Component {
                         font: titleFont,
                         stroke: '#454545'
                     },
-                    new go.Binding("text").makeTwoWay())
+                    new go.Binding("text","title").makeTwoWay())
                 // no ports, because no links are allowed to connect with a comment
             ));
 
@@ -585,7 +560,7 @@ class ScriptIndex extends Component {
                                 margin: new go.Margin(10, 10, 10, 0),
                                 font: titleFont,
                             },
-                            new go.Binding("text", "text").makeTwoWay()
+                            new go.Binding("text", "title").makeTwoWay()
                         )
                     ),  // end Horizontal Panel
                     $(go.Panel, "Table",
@@ -840,10 +815,14 @@ class ScriptIndex extends Component {
             nodeDataArray: [ ],
             linkDataArray: []
         };
-        if(!sessionStorage.getItem(`${nodedata.key}`)){
-            detailJon.nodeDataArray.push({category: "start",key:uuidv4(), text: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
-            detailJon.nodeDataArray.push({category: "end",key:uuidv4(), text: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
+        console.log('this.props.fromNew',this.props.fromNew)
+        if(this.props.fromNew){
+            if(!sessionStorage.getItem(`${nodedata.key}`)){
+                detailJon.nodeDataArray.push({category: "start",key:uuidv4(), text: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
+                detailJon.nodeDataArray.push({category: "end",key:uuidv4(), text: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
+            }
         }
+
         let keyInGroup = []
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
             // if (originJson.nodeDataArray[i].key === nodedata.key) {
