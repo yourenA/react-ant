@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,8 +41,8 @@
       <file leaf-file-name="drawScript.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="621">
-              <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
+            <state relative-caret-position="729">
+              <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
               <folding>
                 <element signature="e#50#89#0" expanded="true" />
               </folding>
@@ -116,8 +114,8 @@
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/searchSegment.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
-        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+        <option value="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
       </list>
     </option>
   </component>
@@ -528,12 +526,12 @@
       <workItem from="1499650818416" duration="25832000" />
       <workItem from="1499737350042" duration="26488000" />
       <workItem from="1499823738134" duration="26252000" />
-      <workItem from="1499910563110" duration="24638000" />
+      <workItem from="1499910563110" duration="24976000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="535402000" />
+    <option name="totallyTimeSpent" value="535740000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1008,8 +1006,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/scriptManage/drawScript.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
+        <state relative-caret-position="729">
+          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
           <folding>
             <element signature="e#50#89#0" expanded="true" />
           </folding>
