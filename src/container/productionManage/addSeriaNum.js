@@ -35,8 +35,8 @@ class AddSeriaNumForm extends React.Component {
                 >
                     {getFieldDecorator('is_permanent',{ initialValue:'-1',})(
                         <RadioGroup>
-                            <Radio value="-1">临时数据</Radio>
                             <Radio value="1">正式数据</Radio>
+                            <Radio value="-1">临时数据</Radio>
                         </RadioGroup>
                     )}
                 </FormItem>

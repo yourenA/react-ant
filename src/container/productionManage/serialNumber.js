@@ -181,13 +181,17 @@ class SerialNumber extends Component {
             url: `${configJson.prefix}/product_serial_numbers/batch`,
             method: 'put',
             data: {
-                batch_id: this.props.location.state.batchId
+                batch_id: this.props.location.state.batchId,
+                import_method:mergeType
             },
             headers: getHeader()
         })
             .then(function (response) {
                 console.log(response.data);
                 message.success(messageJson[`merge serial numbers success`]);
+                that.setState({
+                    mergeModal:false
+                })
                 that.onChangeSearch(1)
                 that.onTempChangeSearch(1)
             }).catch(function (error) {
@@ -379,7 +383,7 @@ class SerialNumber extends Component {
                             </Button>,
                         ]}
                     >
-                        <Dropzone ref="Dropzone" batchId={this.props.location.state.batchId}  setImportModalFalse={this.setImportModalFalse} fetchTempData={this.fetchTempData} postUrl={`${configJson.prefix}/product_serial_numbers/batch`}
+                        <Dropzone ref="Dropzone" batchId={this.props.location.state.batchId}  setImportModalFalse={this.setImportModalFalse} onTempChangeSearch={this.onTempChangeSearch} postUrl={`${configJson.prefix}/product_serial_numbers/batch`}
                                   paramName="file"/>
                     </Modal>
                     <Modal

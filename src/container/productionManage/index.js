@@ -15,7 +15,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 const Option = Select.Option;
-const _ = require('lodash');
 class ProductionManage extends Component {
     constructor(props) {
         super(props);

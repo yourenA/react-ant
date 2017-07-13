@@ -25,7 +25,7 @@ class Dropzone extends React.Component {
             message.success('导入成功');
             that.props.setImportModalFalse()
             setTimeout(function () {
-                that.props.fetchTempData();
+                that.props.onTempChangeSearch(1);
 
             },500)
         }

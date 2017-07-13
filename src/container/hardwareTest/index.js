@@ -120,7 +120,7 @@ class HardwareTest extends Component {
                         <div className="choseTest-container">
                             <div className="choseTest">
                                 <div className="choseTest-header">
-                                    测试类型（点击下面名称进入测试）
+                                    测试类型（自由测试模式）
                                 </div>
                                 {this.state.data.test_types?this.state.data.test_types.data.map((item,index)=>{
                                     return(
@@ -128,7 +128,7 @@ class HardwareTest extends Component {
                                             <Button size="large" type="primary" style={{width:'100%'}}>
                                                 <Link to={{
                                                     pathname:`${this.props.match.url}/${item.id}`,
-                                                    state: {testAllType:false,testTypeId:item.id,testRecord:this.state.data }
+                                                    state: {testAllType:false,testTypeId:item.id,testTypeName:item.name,testScriptId:item.default_test_script_id,testRecord:this.state.data }
                                                 }}>{item.name}</Link>
                                             </Button>
                                         </div>
