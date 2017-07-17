@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps,Progress,message} from 'antd';
+import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps,Progress,message,Table} from 'antd';
 import configJson from './../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import axios from 'axios'
@@ -24,7 +24,10 @@ class HardwareTesting extends Component {
             hardware_version: '',
             company_name: '',
             test_type_name: '',
-            test_stand: '',
+            test_stand: {
+                key:localStorage.getItem('test_stand')?JSON.parse(localStorage.getItem('test_stand')).key:'',
+                label:localStorage.getItem('test_stand')?JSON.parse(localStorage.getItem('test_stand')).label:''
+            },
             product_code: '',
             adapter: '',
             product_sn: '',
@@ -34,12 +37,12 @@ class HardwareTesting extends Component {
             startTestModal: false,
             startTest:false,
             maskDisplay:'none',
-            percent:0
+            percent:0,
+            testInfo:[]
         };
     }
 
     componentDidMount() {
-        console.log('this.props', this.props);
         const testRecord=this.props.location.state.testRecord;
         if (this.props.location.state.testAllType) {
             console.log('测试全部')
@@ -47,7 +50,20 @@ class HardwareTesting extends Component {
             console.log(`只测试${this.props.location.state.testTypeId}`)
             this.fetchHwTestingData(testRecord.batch_id,this.props.location.state.testScriptId)
         }
-
+        this.props.fetchAllTestStand()
+        const data = [];
+        for (let i = 0; i < 100; i++) {
+            data.push({
+                key: i,
+                name: `Edward King ${i}`,
+                age: 32,
+                address: `London, Park Lane no. ${i}`,
+                info: `Info ${i}`
+            });
+        }
+        this.setState({
+            testInfo:data
+        })
     }
     fetchHwTestingData=(batch_id,test_script_id)=>{
         const that = this;
@@ -124,8 +140,36 @@ class HardwareTesting extends Component {
             inputDisabled: !this.state.inputDisabled
         })
     }
+    changeStand=(e)=>{
+        this.setState({
+            test_stand:{key:e.key,label:e.label},
 
+        },function () {
+            localStorage.setItem('test_stand',JSON.stringify(this.state.test_stand))
+        })
+    }
+    saveStand=()=>{
+        this.setState({
+            standModal:false
+        })
+    }
     render() {
+        const columns = [{
+            title: '设备',
+            dataIndex: 'name',
+            width: '25%',
+        }, {
+            title: '类别',
+            dataIndex: 'age',
+            width:  '25%',
+        }, {
+            title: '描述',
+            dataIndex: 'address',
+            width:  '25%',
+        }, {
+            title: '执行报告',
+            dataIndex: 'info',
+        }];
         return (
             <div>
                 <div className="content">
@@ -161,7 +205,7 @@ class HardwareTesting extends Component {
                                         <span title={this.state.test_type_name}>测试类型 : {this.state.test_type_name}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_stand}>测试架 : {this.state.test_stand}</span>
+                                        <span title={this.state.test_stand.label}>测试架 : {this.state.test_stand.label}</span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
                                                 standModal: true
@@ -221,11 +265,12 @@ class HardwareTesting extends Component {
                                     }
                                 </div>
                             </div>
-                            <div className="testing-content-data"></div>
+                            <div className="testing-content-data">
+                                <Table bordered={true} columns={columns} dataSource={this.state.testInfo} pagination={false} scroll={{ y: 457 }}/>
+                            </div>
                         </div>
                     </div>
                     <Modal
-                        key={ Date.parse(new Date())}
                         visible={this.state.standModal}
                         title="测试架"
                         onCancel={()=> {
@@ -236,13 +281,13 @@ class HardwareTesting extends Component {
                                     onClick={()=> {
                                         this.setState({standModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                            <Button key="submit" type="primary" size="large" onClick={this.saveStand}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <Select allowClear={true} dropdownMatchSelectWidth={false} style={{width: '100%'}}
-                                onChange={this.onChangeStand}
+                        <Select allowClear={true} labelInValue={true} dropdownMatchSelectWidth={false} style={{width: '100%'}}
+                                value={this.state.test_stand} onChange={this.changeStand}
                                 showSearch
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >

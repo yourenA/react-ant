@@ -6,9 +6,12 @@ import {Icon} from 'antd'
 class SystemJournal extends React.Component {
     constructor(props) {
         super(props);
+        this.timer=null;
+        this.scrollTopTimer=null;
+        this.scrollBottomTimer=null;
         this.state = {
             systemJournalInfo: [],
-            systemJournalModal:this.props.systemJournalModal
+            systemJournalModal: this.props.systemJournalModal
         };
     }
 
@@ -22,41 +25,76 @@ class SystemJournal extends React.Component {
                     dateTime: new Date().toLocaleString()
                 })
             });
-        }, 5000)
+        }, 3000)
     }
-    scrollToTop=()=>{
+    scrollToTop = ()=> {
         const systemJournalContent = document.querySelector('.systemJournal-info');
-        systemJournalContent.scrollTop = 0;
+        const that=this;
+        if(this.scrollTopTimer){
+            clearInterval(this.scrollTopTimer);
+        }
+        if(this.scrollBottomTimer){
+            clearInterval(this.scrollBottomTimer);
+        }
+        this.scrollTopTimer = setInterval(function () {
+            const backTop = systemJournalContent.scrollTop;
+            var speedTop = backTop / 10;
+            systemJournalContent.scrollTop=(backTop - speedTop);
+            if (backTop == 0) {
+                console.log('到达顶部')
+                clearInterval( that.scrollTopTimer);
+            }
+        }, 30);
     }
-    scrollToBottom=()=>{
+    scrollToBottom = ()=> {
         const systemJournalContent = document.querySelector('.systemJournal-info');
-        systemJournalContent.scrollTop = systemJournalContent.scrollHeight;
+        // systemJournalContent.scrollTop = systemJournalContent.scrollHeight;
+        const that=this;
+        if(this.scrollTopTimer){
+            clearInterval(this.scrollTopTimer);
+        }
+        if(this.scrollBottomTimer){
+            clearInterval(this.scrollBottomTimer);
+        }
+        let speedBottom=1
+        this.scrollBottomTimer = setInterval(function () {
+            const backBottom = systemJournalContent.scrollTop;
+            speedBottom = parseInt((systemJournalContent.scrollHeight-backBottom)/8);
+            systemJournalContent.scrollTop=(systemJournalContent.scrollTop+speedBottom);
+            if (backBottom == systemJournalContent.scrollHeight-systemJournalContent.offsetHeight) {
+                console.log('到达底部')
+                speedBottom=1
+                clearInterval( that.scrollBottomTimer);
+            }
+        }, 30);
     }
+
     componentWillUnmount() {
-        console.log('componentWillUnmount')
         clearInterval(this.timer);
     }
 
     componentWillReceiveProps(nextProps) {
     }
-    hideSystemJournal=()=>{
+
+    hideSystemJournal = ()=> {
         this.setState({
-            systemJournalModal:false
+            systemJournalModal: false
         })
     }
-    setSystemJournalModalTrue=()=>{
+    setSystemJournalModalTrue = ()=> {
         this.setState({
-            systemJournalModal:true
+            systemJournalModal: true
         })
     }
+
     render() {
-        const systemJournalStyle=this.state.systemJournalModal?null:{display:'none'};
+        const systemJournalStyle = this.state.systemJournalModal ? null : {display: 'none'};
         return (
-            <div className="systemJournal" style={systemJournalStyle} >
+            <div className="systemJournal" style={systemJournalStyle}>
                 <div className="systemJournal-mask" onClick={this.hideSystemJournal}>
 
                 </div>
-                <div className="systemJournal-content" >
+                <div className="systemJournal-content">
                     <div className="systemJournal-header">
                         系统日志
                     </div>
@@ -66,12 +104,14 @@ class SystemJournal extends React.Component {
                                 <Icon type="caret-up" className="scroll-icon" onClick={this.scrollToTop}/>
                             </div>
                             <div>
-                                <Icon type="caret-down" className="scroll-icon"  onClick={this.scrollToBottom}/>
+                                <Icon type="caret-down" className="scroll-icon" onClick={this.scrollToBottom}/>
                             </div>
                         </div>
+                        <p ><span >时间: item.dateTime </span><span>item.info</span></p>
+                        <p ><span >时间: item.dateTime </span><span>item.info</span></p>
                         {this.state.systemJournalInfo.map((item, index)=> {
                             return (
-                                    <p key={index}><span >时间: {item.dateTime } </span><span>{item.info}</span></p>
+                                <p key={index}><span >时间: {item.dateTime } </span><span>{item.info}</span></p>
                             )
                         })}
                     </div>

@@ -30,6 +30,12 @@ class DrawScriptDetail extends Component {
     }
 
     componentDidMount() {
+        window.addEventListener('load', function() {
+            console.log("load")
+        });
+        window.addEventListener('popstate', function(ev){
+            console.log("popstate")
+        });
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
@@ -81,7 +87,8 @@ class DrawScriptDetail extends Component {
             this.refs.ScriptIndex.init();
             // console.log("this.state",this.state)
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
-            const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
+            //加了||使后退不会出错
+            const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`))||JSON.parse(sessionStorage.getItem(this.props.match.params.id));
 
             const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
             console.log('nextPropsIdJson',nextPropsIdJson)
@@ -162,7 +169,7 @@ class DrawScriptDetail extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    saveTempScript = (canBack,returnJson,step)=> {
+    saveTempScript = (canBack,returnJson)=> {
         const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));//总的数据
         const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));//获取页面进入前的数据
         let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());//修改后的数据
@@ -199,11 +206,7 @@ class DrawScriptDetail extends Component {
         }
         if(canBack){
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
-            this.props.history.goBack({manual:true})
-        }
-        if(step){
-            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
-            this.props.history.go(-step)
+            this.props.history.goBack()
         }
     }
     turnStepBack=(step)=>{

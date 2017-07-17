@@ -68,6 +68,7 @@ class AddOrEditBatch extends React.Component {
         this.setState({
             targetTestTypeKeys: [],
         });
+        this.props.delAllScript()
         this.props.fetchAllHardwareVersions(e.key)
     }
     changeHardwareVersion = (e)=> {
@@ -85,6 +86,7 @@ class AddOrEditBatch extends React.Component {
             this.props.delAllScript();
             for(let i=0,len=moveKeys.length;i<len;i++){
                 if(this.state[moveKeys[i]]){
+                    console.log('先前存在')
                     this.setState({
                         [moveKeys[i]]:null
                     },function () {
@@ -258,7 +260,7 @@ class AddOrEditBatch extends React.Component {
                                 <RadioGroup onChange={this.onChange} >
                                 {this.props.fetchTestConf.script.map((item,index)=>{
                                         if(this.state[this.state.nowGetScript]===item.id){
-
+                                            console.log('已经选择')
                                             return(
                                                 <Radio key={index} checked={true} style={radioStyle} value={item.id}>{item.name}</Radio>
                                             )

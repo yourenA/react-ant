@@ -105,7 +105,7 @@ class HardwareTest extends Component {
                                                     title={this.state.data.product_name}>产品名称 : {this.state.data.product_name}</span>
                                             </div>
                                             <div className="testing-config-item">
-                                                <Button type='primary'>
+                                                <Button type='primary' disabled={this.state.data.batch_id?false:true}>
                                                     <Link to={{
                                                         pathname:`${this.props.match.url}/testAll`,
                                                         state: {testAllType:true,testRecord:this.state.data }

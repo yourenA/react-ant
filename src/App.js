@@ -21,6 +21,7 @@ import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
 import DrawSegment from './container/scriptManage/drawSegment';
 import CatagoryManage from './container/catagoryManage/index';
 import SystemManage from './container/systemManage/index';
+import UserConfig from './container/userConfig/index';
 import Login from './container/login';
 import Register from './container/register';
 import SystemJournalModal from './component/systemJournalModal'
@@ -151,6 +152,8 @@ class App extends Component {
                                                                         to="/systemManage/groupManage">系统管理</NavLink></Menu.Item>: null}
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
+                                        <Menu.Item key="/userConfig"><NavLink activeClassName="nav-selected"
+                                                                              to="/userConfig/userInfo">用户设置</NavLink></Menu.Item>
                                         <Menu.Item key="/changeUser"><NavLink activeClassName="nav-selected"
                                                                               to="/login">切换账号</NavLink></Menu.Item>
                                         <Menu.Item key="/signout">退出</Menu.Item>
@@ -243,6 +246,12 @@ class App extends Component {
                         path="/systemManage" render={(props) => {
                         return login.login ?
                             <SystemManage {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
+                    <Route
+                        path="/userConfig" render={(props) => {
+                        return login.login ?
+                            <UserConfig {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route

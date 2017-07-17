@@ -3,7 +3,7 @@
  */
 import {message} from 'antd';
 import messageJson from './../common/message.json';
-import {removeLoginStorage,getHeader} from './../common/common.js';
+import {removeLoginStorage, getHeader} from './../common/common.js';
 import configJson from './../common/config.json';
 import axios from 'axios';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -21,8 +21,8 @@ export function checkLogin() {
             dispatch({
                 type: LOGIN_SUCCESS,
                 username: username,
-                token:token,
-                permissions:JSON.parse(permissions)
+                token: token,
+                permissions: JSON.parse(permissions)
             });
             return true
         } else {
@@ -30,35 +30,36 @@ export function checkLogin() {
         }
     }
 }
-export function login(user,from,history) {
+export function login(user, from, history) {
     return dispatch => {
-        axios.post(`${configJson.prefix}/login`,  {
-            username:user.username,
-            password:user.password
+        axios.post(`${configJson.prefix}/login`, {
+            username: user.username,
+            password: user.password
         })
             .then(function (response) {
                 console.log(response);
-                localStorage.setItem('username',user.username);
-                localStorage.setItem('userrole',response.data.role_name);
-                    localStorage.setItem('usertoken',response.data.token);
-                    localStorage.setItem('permissions',JSON.stringify(response.data.permissions.data));
+                localStorage.setItem('userData', JSON.stringify(response.data));
+                localStorage.setItem('username', user.username);
+                localStorage.setItem('userrole', response.data.role_name);
+                localStorage.setItem('usertoken', response.data.token);
+                localStorage.setItem('permissions', JSON.stringify(response.data.permissions.data));
                 message.success(messageJson['sign in success']);
                 dispatch({
                     type: LOGIN_SUCCESS,
                     username: user.username,
-                    token:response.data.token,
-                    permissions:response.data.permissions.data
+                    token: response.data.token,
+                    permissions: response.data.permissions.data
                 });
                 window.location.replace('/')
             })
             .catch(function (error) {
-                if(error.toString()==='Error: Network Error'){
-                    message.error(messageJson['network error'],3);
+                if (error.toString() === 'Error: Network Error') {
+                    message.error(messageJson['network error'], 3);
                     return false
                 }
-                else if(error.response.status === 403){
+                else if (error.response.status === 403) {
                     message.error(messageJson['sign in fail']);
-                }else{
+                } else {
                     message.error(messageJson['unknown error']);
                 }
             });
@@ -71,7 +72,7 @@ export function signout() {
         axios({
             url: `${configJson.prefix}/logout`,
             method: 'post',
-            headers:getHeader()
+            headers: getHeader()
         })
             .then(function (response) {
                 removeLoginStorage();
