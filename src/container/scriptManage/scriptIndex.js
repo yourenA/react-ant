@@ -123,53 +123,58 @@ class ScriptIndex extends Component {
         const lightText = 'whitesmoke';
         let formulaArr = [
             {title: "分组", isGroup: true, category: "OfGroups"},
-            {title: "循环分组", isGroup: true, category: "ForGroups",times:1},
+            {title: "循环分组", isGroup: true, category: "ForGroups", times: 1},
             {title: "条件语句", category: "if", figure: "Diamond"},
             // {text: "循环语句", category: "for", figure: "Diamond"},
             {title: "错误输出", category: "errOut"},
-            {category: "start", title: "开始", loc: "80 75",belong:'OfGroups'},
-            {category: "start", title: "开始", loc: "80 75",belong:'ForGroups'},
-            {category: "end", title: "结束", loc: "80 475",belong:'OfGroups'},
-            {category: "end", title: "结束", loc: "80 475",belong:'ForGroups'},
+            {category: "start", title: "开始", loc: "80 75", belong: 'OfGroups'},
+            {category: "start", title: "开始", loc: "80 75", belong: 'ForGroups'},
+            {category: "end", title: "结束", loc: "80 475", belong: 'OfGroups'},
+            {category: "end", title: "结束", loc: "80 475", belong: 'ForGroups'},
             {category: "end", title: "结束"},
             {category: "comment", title: "备注"},
             {category: "set", params: [{}], title: '设置参数'},
             {
                 category: "item",
-                title: "语句",
+                title: "方法标题",
+                identity:'方法名称',
                 params: [
                     {}
                 ],
                 errors: [{}],
+                deviation: 0
             },
             {
                 category: "item",
-                title: "语句example",
+                title: "测试3.3v 上电延迟",
+                identity:'test_ele_delay_on_3_3v',
                 params: [
-                    {key: 'key1', value: 'value1'},
-                    {key: 'key2', value: 'value2'}
+                    {key: 'id', value: '0'},
+                    {key: 'max', value: '3300'},
+                    {key: 'mini', value: '0'}
                 ],
                 errors: [
-                    {key: 'error1', value: 'error1Value1'},
-                    {key: 'error2', value: 'error2Value2'}
+                    {key: '404', value: 'URL地址无法访问'},
+                    {key: '500', value: '服务器错误'}
                 ],
+                deviation: 5
             }];
-        let OfGroupsId='';
-        let ForGroupsId='';
+        let OfGroupsId = '';
+        let ForGroupsId = '';
         for (let i = 0, len = formulaArr.length; i < len; i++) {
             let uuidIn = uuidv4();
             formulaArr[i].key = uuidIn;
-            if(formulaArr[i].category==='OfGroups'){
-                OfGroupsId=uuidIn
+            if (formulaArr[i].category === 'OfGroups') {
+                OfGroupsId = uuidIn
             }
-            if(formulaArr[i].category==='ForGroups'){
-                ForGroupsId=uuidIn
+            if (formulaArr[i].category === 'ForGroups') {
+                ForGroupsId = uuidIn
             }
-            if(formulaArr[i].belong==='OfGroups'){
-                formulaArr[i].group=OfGroupsId
+            if (formulaArr[i].belong === 'OfGroups') {
+                formulaArr[i].group = OfGroupsId
             }
-            if(formulaArr[i].belong==='ForGroups'){
-                formulaArr[i].group=ForGroupsId
+            if (formulaArr[i].belong === 'ForGroups') {
+                formulaArr[i].group = ForGroupsId
             }
         }
 
@@ -212,7 +217,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: true//是否可以编辑，默认是false
                         },
-                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -235,7 +240,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: true//是否可以编辑，默认是false
                         },
-                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -258,7 +263,7 @@ class ScriptIndex extends Component {
                             wrap: go.TextBlock.WrapFit,
                             editable: false,//是否可以编辑，默认是false
                         },
-                        new go.Binding("text","title").makeTwoWay())//TextBlock绑定text属性
+                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -276,7 +281,7 @@ class ScriptIndex extends Component {
                         {minSize: new go.Size(40, 40), fill: "#79C900", stroke: null}),
                     $(go.TextBlock, "Start",
                         {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text","title"))
+                        new go.Binding("text", "title"))
                 ),
                 // three named ports, one on each side except the top, all output only:
                 that.makePort("L", go.Spot.Left, true, false),
@@ -292,7 +297,7 @@ class ScriptIndex extends Component {
                         {minSize: new go.Size(40, 40), fill: "#000", stroke: null}),
                     $(go.TextBlock, "End",
                         {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text","title"))
+                        new go.Binding("text", "title"))
                 ),
                 // three named ports, one on each side except the bottom, all input only:
                 that.makePort("T", go.Spot.Top, false, true),
@@ -311,7 +316,7 @@ class ScriptIndex extends Component {
                         font: titleFont,
                         stroke: '#454545'
                     },
-                    new go.Binding("text","title").makeTwoWay())
+                    new go.Binding("text", "title").makeTwoWay())
                 // no ports, because no links are allowed to connect with a comment
             ));
 
@@ -365,7 +370,7 @@ class ScriptIndex extends Component {
                         //不能在myDiagram初始化的时候定义 "textEditingTool.defaultTextEditor": window.TextEditorSelectBox,这样会使所有的编辑框变为下拉
                         //textEditor只针对当前的编辑框，要在这里设置choices
                         textEditor: window.TextEditorSelectBox,
-                        choices: ['Alpha', 'Beta', 'Gamma', 'Theta']
+                        choices: ['400', '401', '404', '500']
                     },
                     new go.Binding("text", "key").makeTwoWay()
                 ),
@@ -433,7 +438,6 @@ class ScriptIndex extends Component {
 //
 // // Set the HTMLInfo:
 //         myDiagram.toolManager.textEditingTool.defaultTextEditor = customEditor;
-        console.log(" myDiagram.toolManager.textEditingTool.name", myDiagram.toolManager.textEditingTool.selectsTextOnActivate)
         myDiagram.nodeTemplateMap.add("item",
             $(go.Node, "Auto",
                 // define the node's outer shape
@@ -469,8 +473,28 @@ class ScriptIndex extends Component {
                             stretch: go.GraphObject.Horizontal,  // take up whole available width
                             defaultAlignment: go.Spot.Center,  // thus no need to specify alignment on each element
                         },
+                        $(go.Panel, "Table",
+                            {
+                                stretch: go.GraphObject.Horizontal,  // take up whole available width
+                                background: "#00A9C9",
+                                defaultRowSeparatorStroke: "gray",
+                                defaultColumnSeparatorStroke: "gray"
+                            },
+                            $(go.TextBlock, "方法名称",
+                                { row: 0, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                            $(go.TextBlock,
+                                { row: 0, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                new go.Binding("text", "identity").makeTwoWay(),
+                            ),
+                            $(go.TextBlock, "结果允许误差",
+                                { row: 1, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                            $(go.TextBlock,
+                                { row: 1, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                new go.Binding("text", "deviation").makeTwoWay(),
+                            ),
+                        ),
                         $(go.TextBlock, "参数",
-                            {font: " 10pt sans-serif", alignment: go.Spot.Left,},
+                            {margin: new go.Margin(10, 0, 0, 0),font: " 10pt sans-serif", alignment: go.Spot.Left,},
                         ),
                         $(go.Panel, "Table",
                             {
@@ -512,11 +536,12 @@ class ScriptIndex extends Component {
                             },
                             {
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
-                                background: "#00DDBB",  // to distinguish from the node's body
+                                background: "#00A9C9",  // to distinguish from the node's body
                                 itemTemplate: errorTemplate  // the Panel created for each item in Panel.itemArray
                             },
                             new go.Binding("itemArray", "errors").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
-                        ))  // end action list Vertical Panel
+                        ),
+                        )  // end action list Vertical Panel
                 ),  // end optional Vertical Panel
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
                 that.makePort("L", go.Spot.Left, true, true),
@@ -524,23 +549,6 @@ class ScriptIndex extends Component {
                 that.makePort("B", go.Spot.Bottom, true, false)
             ));
 
-        // var UndesiredEventAdornment =
-        //     $(go.Adornment, "Spot",
-        //         $(go.Panel, "Auto",
-        //             $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
-        //             $(go.Placeholder)),
-        //         // the button to create a "next" node, at the top-right corner
-        //         $("Button",
-        //             {
-        //                 alignment: go.Spot.BottomRight,
-        //                 click: this.addReason
-        //             },  // this function is defined below
-        //             new go.Binding("visible", "", function (a) {
-        //                 return !a.diagram.isReadOnly;
-        //             }).ofObject(),
-        //             $(go.Shape, "TriangleDown", {desiredSize: new go.Size(10, 10)})
-        //         )
-        //     );
         var reasonTemplate =
             $(go.Panel, "TableRow",
                 $(go.TextBlock, "key",
@@ -699,9 +707,9 @@ class ScriptIndex extends Component {
                                 stroke: lightText,
                             },
                             new go.Binding("text", "title").makeTwoWay()),
-                        $(go.TextBlock,"循环次数:",
+                        $(go.TextBlock, "循环次数:",
                             {
-                                margin:new go.Margin(0, 0, 0, 10),
+                                margin: new go.Margin(0, 0, 0, 10),
                                 alignment: go.Spot.Right,
                                 editable: false,
                                 font: "9pt Verdana, sans-serif",
@@ -709,7 +717,7 @@ class ScriptIndex extends Component {
                             }),
                         $(go.TextBlock,
                             {
-                                margin:new go.Margin(0, 10, 0, 0),
+                                margin: new go.Margin(0, 10, 0, 0),
                                 alignment: go.Spot.Right,
                                 editable: true,
                                 font: titleFont,
@@ -816,14 +824,14 @@ class ScriptIndex extends Component {
         var nodedata = contextmenu.data;
         // compute the next color for the node
         let originJson = JSON.parse(this.callbackJson());
-        console.log("nodedata",nodedata)
+        console.log("nodedata", nodedata)
         let detailJon = {
             class: "go.GraphLinksModel",
             copiesArrays: true,
             copiesArrayObjects: true,
             linkFromPortIdProperty: "fromPort",
             linkToPortIdProperty: "toPort",
-            nodeDataArray: [ ],
+            nodeDataArray: [],
             linkDataArray: []
         };
         // console.log('this.props.fromNew',this.props.fromNew)
@@ -867,22 +875,25 @@ class ScriptIndex extends Component {
             if (this.props.location.pathname === '/scriptManage/newScript') {
                 this.props.history.push({
                     pathname: `/scriptDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title, newScript: true,category:nodedata.category}
+                    state: {groupNmae: nodedata.title, newScript: true, category: nodedata.category}
                 })
             } else {
-                this.props.history.push({pathname: `/scriptDetail/${nodedata.key}`, state: {groupNmae: nodedata.title,category:nodedata.category}})
+                this.props.history.push({
+                    pathname: `/scriptDetail/${nodedata.key}`,
+                    state: {groupNmae: nodedata.title, category: nodedata.category}
+                })
             }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
             if (this.props.location.pathname === '/segmentManage/newSegment') {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title, newSegment: true,category:nodedata.category}
+                    state: {groupNmae: nodedata.title, newSegment: true, category: nodedata.category}
                 })
             } else {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
-                    state: {groupNmae: nodedata.title,category:nodedata.category}
+                    state: {groupNmae: nodedata.title, category: nodedata.category}
                 })
             }
 
@@ -962,7 +973,24 @@ class ScriptIndex extends Component {
         const {scrollTop, scrollLeft}=this.state
         return {top, left, scrollTop, scrollLeft}
     }
-
+    addPalatte=()=>{
+        const myPaletteModel=JSON.parse(myPalette.model.toJson()).nodeDataArray;
+        myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(
+            {
+                category: "item",
+                title: "语句",
+                params: [
+                    {key: 'key1', value: 'value1'},
+                    {key: 'key2', value: 'value2'}
+                ],
+                errors: [
+                    {key: 'error1', value: 'error1Value1'},
+                    {key: 'error2', value: 'error2Value2'}
+                ],
+                deviation: 0
+            }
+        ));
+    }
     render() {
         return (
             <div>
@@ -974,7 +1002,8 @@ class ScriptIndex extends Component {
                     <div className="drawScript-content">
                         {(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?
 
-                            <div className="detail-header" style={{background:this.props.location.state.category==='ForGroups'?'#00A9C9':'#98FB98'}}>
+                            <div className="detail-header"
+                                 style={{background: this.props.location.state.category === 'ForGroups' ? '#00A9C9' : '#98FB98'}}>
                                 {this.props.location.state.groupNmae}
                             </div>
                             : null}
@@ -990,7 +1019,8 @@ class ScriptIndex extends Component {
                 </div>
 
                 <div>
-                    <Button id="getCenter" onClick={this.getCenter}>获取画布中心</Button>
+                    <Button id="getCenter" onClick={this.addPalatte}>添加左侧语句</Button>
+                    {/*<Button id="getCenter" onClick={this.getCenter}>获取画布中心</Button>*/}
                     <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
                     <Button onClick={this.loadTextArea}>将JSON转为图表</Button>
                 </div>

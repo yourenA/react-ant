@@ -45,7 +45,7 @@ class EditPassword extends Component {
             <Layout style={{padding: '0 24px 24px'}}>
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item>用户设置</Breadcrumb.Item>
-                    <Breadcrumb.Item>用户信息</Breadcrumb.Item>
+                    <Breadcrumb.Item>修改密码</Breadcrumb.Item>
                 </Breadcrumb>
                 <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 280}}>
                     <Form onSubmit={this.handleSubmit} style={{width:'400px'}}>

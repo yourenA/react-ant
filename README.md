@@ -59,14 +59,18 @@ $ npm start
 
 * 语句 category:item(黄色矩形)
 
-    title:语句标题(可编辑)
+    title:方法标题(可编辑)
+    
+    identity:方法名称(方法唯一标识,可编辑)
+    
+    deviation:结果允许误差(可编辑)
     
     params:参数(可编辑) 右击添加  格式:同“设置参数”中的params
     
     errors:错误参数(可编辑) 右击添加  格式:同“设置参数”中的params
     
 
->nodeDataArray每个对象中的group:value表示当前图形在哪一个分组下，value值为分组的key值。如：
+>nodeDataArray每个对象中的**group:value**表示当前图形在哪一个分组下，value值为分组的key值。如：
 ```
 {"title":"分组", "isGroup":true, "category":"OfGroups", "key":"123456", "loc":"-114 -429"}
 {"text":"错误输出", "category":"errOut", "key":"xxxxxx", "loc":"-295 -423", "group":"123456"}

@@ -10,7 +10,7 @@ class Home extends React.Component {
         return (
             <Content className="content">
                 <div className="content-container">
-                    <h2>Home</h2>
+                    <h2>欢迎使用 PCB自动化测试 系统</h2>
                 </div>
             </Content>
         )
