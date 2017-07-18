@@ -63,7 +63,11 @@ $ npm start
     
     identity:方法名称(方法唯一标识,可编辑)
     
-    deviation:结果允许误差(可编辑)
+    <del>deviation:结果允许误差(可编辑)</del>
+    
+    upper_limit:结果上限(可编辑)
+    
+    lower_limit:结果下限(可编辑)
     
     params:参数(可编辑) 右击添加  格式:同“设置参数”中的params
     
