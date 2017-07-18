@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Button} from 'antd'
+import {Button,message} from 'antd'
 import './drawScript.less';
 import uuidv4 from 'uuid/v4';
 
@@ -26,7 +26,7 @@ class ScriptIndex extends Component {
     }
 
     showLinkLabel = (e)=> {
-        console.log('e.subject.fromNode.data', e.subject.fromNode.data)
+        // console.log('e.subject.fromNode.data', e.subject.fromNode.data)
         var label = e.subject.findObject("LABEL");// name: "LABEL"
         if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond" /*|| e.subject.fromNode.data.category === 'item'*/ );
         //如果figure=Diamond则线的文字可以编辑
@@ -96,26 +96,52 @@ class ScriptIndex extends Component {
             ? grp.addMembers(grp.diagram.selection, true)
             : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
     }
+    renderDelButton=(name)=>{
+        return(
+            $("Button",
+                {
+                    column: 3,
+                    margin: new go.Margin(0, 1, 0, 0),
+                    click: function(e, obj) {
+                        const n  = obj.part;//myDiagram.selection.first()//获取选中的节点
+                        if (n === null) return;
+                        const itempanel = obj.panel;
+                        const d = n.data;
+                        if(d[name].length===1){
+                            message.error('参数个数至少为一个');
+                            return false
+                        }
+                        myDiagram.startTransaction("removeFromTable");
+                        // remove second item of list, at index #1
+                        myDiagram.model.removeArrayItem(d[name], itempanel.row);
+                        myDiagram.commitTransaction("removeFromTable");
+                    }
+                },
+                $(go.Shape, "ThinX",
+                    { desiredSize: new go.Size(8, 8) })
+            )
+        )
+    }
     addReason = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
-        myDiagram.model.addArrayItem(arr, {});
+        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
     }
     addFormulaParam = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
-        myDiagram.model.addArrayItem(arr, {});
+        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
     }
     addErrorParam = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.errors;
-        myDiagram.model.addArrayItem(arr, {});
+        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
     }
     init = (cb, cbArg)=> {
         const that = this;
@@ -133,16 +159,17 @@ class ScriptIndex extends Component {
             {category: "end", title: "结束", loc: "80 475", belong: 'ForGroups'},
             {category: "end", title: "结束"},
             {category: "comment", title: "备注"},
-            {category: "set", params: [{}], title: '设置参数'},
+            {category: "set", params: [{key:'key',value:'value'}], title: '设置参数'},
             {
                 category: "item",
                 title: "方法标题",
                 identity:'方法名称',
                 params: [
-                    {}
+                    {key:'key',value:'value'}
                 ],
-                errors: [{}],
-                deviation: 0
+                errors: [{key:'key',value:'value'}],
+                upper_limit: 0,
+                lower_limit: 0
             },
             {
                 category: "item",
@@ -157,7 +184,8 @@ class ScriptIndex extends Component {
                     {key: '404', value: 'URL地址无法访问'},
                     {key: '500', value: '服务器错误'}
                 ],
-                deviation: 5
+                upper_limit: 120,
+                lower_limit: 100
             }];
         let OfGroupsId = '';
         let ForGroupsId = '';
@@ -356,7 +384,8 @@ class ScriptIndex extends Component {
                 $(go.TextBlock, "value",
                     {column: 1, margin: 5, font: " 10pt sans-serif", editable: true,},
                     new go.Binding("text", "value").makeTwoWay()
-                )
+                ),
+                this.renderDelButton('params')
             );
         var errorTemplate =
             $(go.Panel, "TableRow",
@@ -377,7 +406,8 @@ class ScriptIndex extends Component {
                 $(go.TextBlock, "ErrorValue",
                     {column: 1, margin: 5, font: " 10pt sans-serif", editable: true,},
                     new go.Binding("text", "value").makeTwoWay()
-                )
+                ),
+                this.renderDelButton('errors')
             );
 //         // Create an HTMLInfo and dynamically create some HTML to show/hide
 //         var customEditor = new go.HTMLInfo();
@@ -441,31 +471,31 @@ class ScriptIndex extends Component {
         myDiagram.nodeTemplateMap.add("item",
             $(go.Node, "Auto",
                 // define the node's outer shape
+
                 that.nodeStyle(),//加了nodeStyle左边左边操作框才会对齐
                 // {selectionAdornmentTemplate: UndesiredEventAdornmentFormula},
                 $(go.Shape, "RoundedRectangle",
                     {
-                        fill: '#FFDD33',
+                        fill: '#FFDD33',portId: "", toEndSegmentLength: 150
                     }),
 
                 $(go.Panel, "Vertical",
-                    {stretch: go.GraphObject.Horizontal, background: "#FFDD33"},
                     // headered by a label and a PanelExpanderButton inside a Table
                     $(go.Panel, "Horizontal",  // button next to TextBlock
                         {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
                         $("PanelExpanderButton", "COLLAPSIBLE",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
-                            {alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
+                            {column: 0, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
                         ),
                         $(go.TextBlock,
                             {
+                                column: 1,
                                 editable: true,
                                 margin: new go.Margin(10, 10, 10, 0),
                                 font: titleFont,
                             },
                             new go.Binding("text", "title").makeTwoWay()
                         )
-                    ),  // end Horizontal Panel
-                    // with the list data bound in the Vertical Panel
+                    ),
                     $(go.Panel, "Vertical",
                         {
                             name: "COLLAPSIBLE",  //定义下拉菜单COLLAPSIBLE identify to the PanelExpanderButton
@@ -475,7 +505,7 @@ class ScriptIndex extends Component {
                         },
                         $(go.Panel, "Table",
                             {
-                                stretch: go.GraphObject.Horizontal,  // take up whole available width
+                                minSize: new go.Size(150, NaN),
                                 background: "#00A9C9",
                                 defaultRowSeparatorStroke: "gray",
                                 defaultColumnSeparatorStroke: "gray"
@@ -486,11 +516,17 @@ class ScriptIndex extends Component {
                                 { row: 0, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
                                 new go.Binding("text", "identity").makeTwoWay(),
                             ),
-                            $(go.TextBlock, "结果允许误差",
+                            $(go.TextBlock, "结果下限",
                                 { row: 1, column: 0,margin: 5, font: " 10pt sans-serif" }),
                             $(go.TextBlock,
                                 { row: 1, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
-                                new go.Binding("text", "deviation").makeTwoWay(),
+                                new go.Binding("text", "lower_limit").makeTwoWay(),
+                            ),
+                            $(go.TextBlock, "结果上限",
+                                { row: 2, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                            $(go.TextBlock,
+                                { row: 2, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                new go.Binding("text", "upper_limit").makeTwoWay(),
                             ),
                         ),
                         $(go.TextBlock, "参数",
@@ -507,12 +543,12 @@ class ScriptIndex extends Component {
                                     )  // end Adornment
                             },
                             {
+                                stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 defaultRowSeparatorStroke: "gray",
                                 defaultColumnSeparatorStroke: "gray"
                             },
                             {
                                 background: "#00A9C9",  // to distinguish from the node's body
-                                stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 itemTemplate: actionTemplate  // the Panel created for each item in Panel.itemArray
                             },
                             new go.Binding("itemArray", "params").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
@@ -531,11 +567,11 @@ class ScriptIndex extends Component {
                                     )  // end Adornment
                             },
                             {
+                                stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 defaultRowSeparatorStroke: "gray",
                                 defaultColumnSeparatorStroke: "gray"
                             },
                             {
-                                stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 background: "#00A9C9",  // to distinguish from the node's body
                                 itemTemplate: errorTemplate  // the Panel created for each item in Panel.itemArray
                             },
@@ -558,12 +594,13 @@ class ScriptIndex extends Component {
                 $(go.TextBlock, "value",
                     {column: 1, margin: 5, font: " 11pt sans-serif", editable: true,},
                     new go.Binding("text", "value").makeTwoWay()
-                )
+                ),
+                this.renderDelButton('params')
             );
+
         myDiagram.nodeTemplateMap.add("set",
             $(go.Node, "Auto",
                 that.nodeStyle(),
-                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
                 // {selectionAdornmentTemplate: UndesiredEventAdornment},
                 $(go.Shape, "RoundedRectangle",
                     {fill: "#CC5245", portId: "", stroke: "black", toEndSegmentLength: 150}),
@@ -978,16 +1015,18 @@ class ScriptIndex extends Component {
         myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(
             {
                 category: "item",
-                title: "语句",
+                title: "测试3.3v 负载阈值",
+                identity:'test_load_threshold_on_3_3v',
                 params: [
-                    {key: 'key1', value: 'value1'},
-                    {key: 'key2', value: 'value2'}
+                    {key: 'id', value: '0'},
+                    {key: 'max', value: '1750'},
+                    {key: 'mini', value: '1350'}
                 ],
                 errors: [
-                    {key: 'error1', value: 'error1Value1'},
-                    {key: 'error2', value: 'error2Value2'}
+                    {key: '404', value: 'URL地址无法访问'},
+                    {key: '500', value: '服务器错误'}
                 ],
-                deviation: 0
+                deviation: 5
             }
         ));
     }
