@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps,Progress,message,Table} from 'antd';
+import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps, Progress, message, Table} from 'antd';
 import configJson from './../../common/config.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import axios from 'axios'
@@ -14,10 +14,12 @@ import HighZIndexMask from './../../component/mask'
 const Option = Select.Option;
 const Step = Steps.Step;
 const confirm = Modal.confirm;
+// const WebSocket = require('ws');
 class HardwareTesting extends Component {
     constructor(props) {
         super(props);
-        this.timer=null;
+        this.timer = null;
+        this.ws=null;
         this.state = {
             test_script_name: '',
             product_name: '',
@@ -25,8 +27,8 @@ class HardwareTesting extends Component {
             company_name: '',
             test_type_name: '',
             test_stand: {
-                key:localStorage.getItem('test_stand')?JSON.parse(localStorage.getItem('test_stand')).key:'',
-                label:localStorage.getItem('test_stand')?JSON.parse(localStorage.getItem('test_stand')).label:''
+                key: localStorage.getItem('test_stand') ? JSON.parse(localStorage.getItem('test_stand')).key : '',
+                label: localStorage.getItem('test_stand') ? JSON.parse(localStorage.getItem('test_stand')).label : ''
             },
             product_code: '',
             adapter: '',
@@ -35,20 +37,21 @@ class HardwareTesting extends Component {
             standModal: false,
             adapterModal: false,
             startTestModal: false,
-            startTest:false,
-            maskDisplay:'none',
-            percent:0,
-            testInfo:[]
+            startTest: false,
+            maskDisplay: 'none',
+            percent: 0,
+            wsMessage:[],
+            testInfo: []
         };
     }
 
     componentDidMount() {
-        const testRecord=this.props.location.state.testRecord;
+        const testRecord = this.props.location.state.testRecord;
         if (this.props.location.state.testAllType) {
             console.log('测试全部')
         } else {
             console.log(`只测试${this.props.location.state.testTypeId}`)
-            this.fetchHwTestingData(testRecord.batch_id,this.props.location.state.testScriptId)
+            this.fetchHwTestingData(testRecord.batch_id, this.props.location.state.testScriptId)
         }
         this.props.fetchAllTestStand()
         const data = [];
@@ -62,13 +65,18 @@ class HardwareTesting extends Component {
             });
         }
         this.setState({
-            testInfo:data
+            testInfo: data
         })
     }
-    fetchHwTestingData=(batch_id,test_script_id)=>{
+    componentWillUnmount(){
+        if(this.ws){
+            this.ws.close()
+        }
+    }
+    fetchHwTestingData = (batch_id, test_script_id)=> {
         const that = this;
         let params = {
-            batch_id,test_script_id
+            batch_id, test_script_id
         };
         axios({
             url: `${configJson.prefix}/hardware_test_scripts/detail`,
@@ -78,7 +86,7 @@ class HardwareTesting extends Component {
         })
             .then(function (response) {
                 console.log(response.data);
-                const receiveData=response.data
+                const receiveData = response.data
                 that.setState({
                     ...receiveData
                 })
@@ -91,18 +99,19 @@ class HardwareTesting extends Component {
         console.log('selected', selectedKeys, info);
     }
     startTesting = ()=> {
-        if(this.state.startTest){
-            const that=this;
+        if (this.state.startTest) {
+            const that = this;
             confirm({
                 title: '确定要停止测试吗？',
                 content: 'Some descriptions',
                 onOk() {
                     that.setState({
-                        startTest:false,
-                        maskDisplay:'none',
-                        percent:0
-                    })
-                    clearInterval(that.timer)
+                        startTest: false,
+                        maskDisplay: 'none',
+                        percent: 0
+                    });
+                    that.ws.close()
+                    // clearInterval(that.timer)
                 },
                 onCancel() {
                     console.log('Cancel');
@@ -110,49 +119,101 @@ class HardwareTesting extends Component {
             });
 
 
-        }else{
+        } else {
             this.setState({
                 startTestModal: true
             })
         }
 
     }
-    confirmTesting=()=>{
-        const serialNumbers=this.refs.serialNumbers.refs.input.value;
-        this.setState({
-            startTestModal:false,
-            maskDisplay:'block',
-            startTest:!this.state.startTest
-        });
+    confirmTesting = ()=> {
+        const serialNumbers = this.refs.serialNumbers.refs.input.value;
+        const that = this;
+        const params = {
+            serial_number: serialNumbers,
+            test_script_id: this.state.test_script_id
+        }
+        axios({
+            url: `${configJson.prefix}/hardware_test`,
+            method: 'post',
+            params: params,
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response.data);
+                message.success('开始测试')
+                that.setState({
+                    channel: response.data.channel,
+                    startTestModal: false,
+                    maskDisplay: 'block',
+                    startTest: !that.state.startTest
+                }, function () {
+                    that.openWS()
+                });
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
+        /*this.timer=setInterval(function () {
+         let percent = that.state.percent + 10;
+         that.setState({ percent });
+         if (percent === 100) {
+         clearInterval(that.timer);
+         message.success('测试完成')
+         }
+         },1000);*/
+        console.log('正式开始测试', serialNumbers)
+    }
+    openWS = ()=> {
         const that=this;
-        this.timer=setInterval(function () {
-            let percent = that.state.percent + 10;
-            that.setState({ percent });
-            if (percent === 100) {
-                clearInterval(that.timer);
-                message.success('测试完成')
+        this.ws = new WebSocket(`ws://api.stand.test.com:9502/?channel=${this.state.channel}`);//url地址类似与get请求
+        this.ws.onopen = function () {
+            console.log('onopen')
+        };
+        this.ws.onmessage = function (evt) {
+            const {wsMessage}={...that.state}
+            if(JSON.parse(evt.data).percent){
+                that.setState({
+                    percent:JSON.parse(evt.data).percent,
+                    wsMessage:wsMessage.concat(JSON.parse(evt.data).message)
+                })
+                if(JSON.parse(evt.data).percent===100){
+                    message.success('测试完成')
+                    that.setState({
+                        startTest: false,
+                        maskDisplay: 'none',
+                        percent: 0
+                    });
+                    that.ws.close()
+                }
             }
-        },1000);
-        console.log('正式开始测试',serialNumbers)
+        };
+        this.ws.onclose = function (evt) {
+            console.log('WebSocketClosed!');
+        };
+        this.ws.onerror = function (evt) {
+            console.log('WebSocketError!');
+        };
     }
     toggleInput = ()=> {
         this.setState({
             inputDisabled: !this.state.inputDisabled
         })
     }
-    changeStand=(e)=>{
+    changeStand = (e)=> {
         this.setState({
-            test_stand:{key:e.key,label:e.label},
+            test_stand: {key: e.key, label: e.label},
 
-        },function () {
-            localStorage.setItem('test_stand',JSON.stringify(this.state.test_stand))
+        }, function () {
+            localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
         })
     }
-    saveStand=()=>{
+    saveStand = ()=> {
         this.setState({
-            standModal:false
+            standModal: false
         })
     }
+
     render() {
         const columns = [{
             title: '设备',
@@ -161,11 +222,11 @@ class HardwareTesting extends Component {
         }, {
             title: '类别',
             dataIndex: 'age',
-            width:  '25%',
+            width: '25%',
         }, {
             title: '描述',
             dataIndex: 'address',
-            width:  '25%',
+            width: '25%',
         }, {
             title: '执行报告',
             dataIndex: 'info',
@@ -177,7 +238,7 @@ class HardwareTesting extends Component {
                         <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={()=> {
                             this.props.history.goBack()
                         }}>硬件测试</Breadcrumb.Item>
-                        <Breadcrumb.Item>{this.state.test_type_name?`测试:${this.state.test_type_name}` : `按工序流程测试`}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.state.test_type_name ? `测试:${this.state.test_type_name}` : `按工序流程测试`}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="testing-header">
@@ -189,7 +250,8 @@ class HardwareTesting extends Component {
                                     </div>
 
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_type_name}>产品批次 : {this.state.test_type_name}</span>
+                                        <span
+                                            title={this.state.test_type_name}>产品批次 : {this.state.test_type_name}</span>
                                     </div>
                                     <div className="testing-config-item">
                                         <span
@@ -202,10 +264,12 @@ class HardwareTesting extends Component {
                                         <span title={this.state.company_name}>生产商 : {this.state.company_name}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_type_name}>测试类型 : {this.state.test_type_name}</span>
+                                        <span
+                                            title={this.state.test_type_name}>测试类型 : {this.state.test_type_name}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_stand.label}>测试架 : {this.state.test_stand.label}</span>
+                                        <span
+                                            title={this.state.test_stand.label}>测试架 : {this.state.test_stand.label}</span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
                                                 standModal: true
@@ -235,9 +299,10 @@ class HardwareTesting extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="testing-start" style={{zIndex:this.state.startTest?1000:''}}>
-                                <div className="testing-start-btn" onClick={this.startTesting} style={{backgroundColor:this.state.startTest?'red':''}}>
-                                    {this.state.startTest?"结束测试":"开始测试"}
+                            <div className="testing-start" style={{zIndex: this.state.startTest ? 1000 : ''}}>
+                                <div className="testing-start-btn" onClick={this.startTesting}
+                                     style={{backgroundColor: this.state.startTest ? 'red' : ''}}>
+                                    {this.state.startTest ? "结束测试" : "开始测试"}
                                 </div>
                             </div>
                         </div>
@@ -260,13 +325,19 @@ class HardwareTesting extends Component {
                                             </Steps>
                                             :
                                             <Steps direction="vertical" current={0}>
-                                                <Step  title={ this.props.location.state.testTypeName}/>
+                                                <Step title={ this.props.location.state.testTypeName}/>
                                             </Steps>
                                     }
                                 </div>
                             </div>
                             <div className="testing-content-data">
-                                <Table bordered={true} columns={columns} dataSource={this.state.testInfo} pagination={false} scroll={{ y: 457 }}/>
+                                {/*<Table bordered={true} columns={columns} dataSource={this.state.testInfo}
+                                       pagination={false} scroll={{y: 457}}/>*/}
+                                {this.state.wsMessage.map((item,index)=>{
+                                    return(
+                                        <p key={index}>{item}</p>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
@@ -286,7 +357,8 @@ class HardwareTesting extends Component {
                             </Button>,
                         ]}
                     >
-                        <Select allowClear={true} labelInValue={true} dropdownMatchSelectWidth={false} style={{width: '100%'}}
+                        <Select allowClear={true} labelInValue={true} dropdownMatchSelectWidth={false}
+                                style={{width: '100%'}}
                                 value={this.state.test_stand} onChange={this.changeStand}
                                 showSearch
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -348,7 +420,8 @@ class HardwareTesting extends Component {
                     </Modal>
                 </div>
                 <HighZIndexMask display={this.state.maskDisplay}/>
-                <Progress type="circle"  width={180} percent={this.state.percent} className="hardware-progress" style={{display:this.state.startTest?'block':'none'}}/>
+                <Progress type="circle" width={180} percent={this.state.percent} className="hardware-progress"
+                          style={{display: this.state.startTest ? 'block' : 'none'}}/>
             </div>
         )
     }

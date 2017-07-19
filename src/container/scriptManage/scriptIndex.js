@@ -2,11 +2,12 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Button,message} from 'antd'
+import {Button, message} from 'antd'
 import './drawScript.less';
 import uuidv4 from 'uuid/v4';
-
-
+import axios from 'axios'
+import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import configJson from './../../common/config.json';
 var $ = window.$;
 var go = window.go;
 var myDiagram = null;
@@ -16,15 +17,59 @@ class ScriptIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scrollTop: 0,
-            scrollLeft: 0
+            testFuncData: []
         };
     }
 
     componentDidMount() {
-        // this.init();
+        // this.getTestFunctions()
     }
 
+    getTestFunctions = ()=> {
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/test_functions`,
+            method: 'get',
+            params: {
+                return: 'all'
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response);
+                let testFuncData = [];
+                for (let i = 0, len = response.data.data.length; i < len; i++) {
+                    let funcItem = response.data.data[i];
+                    let addData = {
+                        key: uuidv4(),
+                        category: "item",
+                        title: funcItem.display_name,
+                        identity: funcItem.action,
+                        params: [],
+                        errors: [{key: 'key', value: 'value'}],
+                        upper_limit: 0,
+                        lower_limit: 0,
+                    }
+                    for (let j = 0, len2 = funcItem.parameters.length; j < len2; j++) {
+                        let paramItem = funcItem.parameters[j];
+                        addData.params.push({
+                            key: paramItem.name,
+                            value: paramItem.default_value,
+                            is_output_parameter: paramItem.is_output_parameter === 1
+                        })
+                    }
+                    testFuncData.push(addData)
+                }
+                that.setState({
+                    testFuncData:testFuncData
+                })
+                const myPaletteModel = JSON.parse(myPalette.model.toJson()).nodeDataArray;
+                myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(testFuncData))
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
+    }
     showLinkLabel = (e)=> {
         // console.log('e.subject.fromNode.data', e.subject.fromNode.data)
         var label = e.subject.findObject("LABEL");// name: "LABEL"
@@ -96,18 +141,18 @@ class ScriptIndex extends Component {
             ? grp.addMembers(grp.diagram.selection, true)
             : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
     }
-    renderDelButton=(name)=>{
-        return(
+    renderDelButton = (name)=> {
+        return (
             $("Button",
                 {
                     column: 3,
                     margin: new go.Margin(0, 1, 0, 0),
-                    click: function(e, obj) {
-                        const n  = obj.part;//myDiagram.selection.first()//获取选中的节点
+                    click: function (e, obj) {
+                        const n = obj.part;//myDiagram.selection.first()//获取选中的节点
                         if (n === null) return;
                         const itempanel = obj.panel;
                         const d = n.data;
-                        if(d[name].length===1){
+                        if (d[name].length === 1) {
                             message.error('参数个数至少为一个');
                             return false
                         }
@@ -118,7 +163,7 @@ class ScriptIndex extends Component {
                     }
                 },
                 $(go.Shape, "ThinX",
-                    { desiredSize: new go.Size(8, 8) })
+                    {desiredSize: new go.Size(8, 8)})
             )
         )
     }
@@ -127,23 +172,23 @@ class ScriptIndex extends Component {
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
-        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
+        myDiagram.model.addArrayItem(arr, {key: 'key', value: 'value'});
     }
     addFormulaParam = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.params;
-        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
+        myDiagram.model.addArrayItem(arr, {key: 'key', value: 'value'});
     }
     addErrorParam = (e, obj)=> {
         var adorn = obj.part;
         if (adorn === null) return;
         e.handled = true;
         var arr = adorn.adornedPart.data.errors;
-        myDiagram.model.addArrayItem(arr, {key:'key',value:'value'});
+        myDiagram.model.addArrayItem(arr, {key: 'key', value: 'value'});
     }
-    init = (cb, cbArg)=> {
+    init=(cb, cbArg)=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
@@ -151,7 +196,6 @@ class ScriptIndex extends Component {
             {title: "分组", isGroup: true, category: "OfGroups"},
             {title: "循环分组", isGroup: true, category: "ForGroups", times: 1},
             {title: "条件语句", category: "if", figure: "Diamond"},
-            // {text: "循环语句", category: "for", figure: "Diamond"},
             {title: "错误输出", category: "errOut"},
             {category: "start", title: "开始", loc: "80 75", belong: 'OfGroups'},
             {category: "start", title: "开始", loc: "80 75", belong: 'ForGroups'},
@@ -159,34 +203,23 @@ class ScriptIndex extends Component {
             {category: "end", title: "结束", loc: "80 475", belong: 'ForGroups'},
             {category: "end", title: "结束"},
             {category: "comment", title: "备注"},
-            {category: "set", params: [{key:'key',value:'value'}], title: '设置参数'},
+            {category: "set", params: [{key: 'key', value: 'value'}], title: '设置参数'},
             {
                 category: "item",
                 title: "方法标题",
-                identity:'方法名称',
+                identity: '方法名称',
                 params: [
-                    {key:'key',value:'value'}
+                    {key: 'key', value: 'value', is_output_parameter: false}
                 ],
-                errors: [{key:'key',value:'value'}],
+                errors: [{key: 'key', value: 'value'}],
                 upper_limit: 0,
-                lower_limit: 0
-            },
-            {
-                category: "item",
-                title: "测试3.3v 上电延迟",
-                identity:'test_ele_delay_on_3_3v',
-                params: [
-                    {key: 'id', value: '0'},
-                    {key: 'max', value: '3300'},
-                    {key: 'mini', value: '0'}
-                ],
-                errors: [
-                    {key: '404', value: 'URL地址无法访问'},
-                    {key: '500', value: '服务器错误'}
-                ],
-                upper_limit: 120,
-                lower_limit: 100
+                lower_limit: 0,
+
             }];
+        if(this.state.testFuncData.length>0){
+            console.log('拼接原有的test_function')
+            formulaArr=formulaArr.concat(this.state.testFuncData)
+        }
         let OfGroupsId = '';
         let ForGroupsId = '';
         for (let i = 0, len = formulaArr.length; i < len; i++) {
@@ -377,12 +410,15 @@ class ScriptIndex extends Component {
         //     );
         var actionTemplate =
             $(go.Panel, "TableRow",
+                $("CheckBox", "is_output_parameter",
+                    {column: 0},
+                ),
                 $(go.TextBlock, "key",
-                    {column: 0, margin: 5, font: " 10pt sans-serif", editable: true},
+                    {column: 1, margin: 5, font: " 10pt sans-serif", editable: true},
                     new go.Binding("text", "key").makeTwoWay()
                 ),
                 $(go.TextBlock, "value",
-                    {column: 1, margin: 5, font: " 10pt sans-serif", editable: true,},
+                    {column: 2, margin: 5, font: " 10pt sans-serif", editable: true,},
                     new go.Binding("text", "value").makeTwoWay()
                 ),
                 this.renderDelButton('params')
@@ -476,7 +512,7 @@ class ScriptIndex extends Component {
                 // {selectionAdornmentTemplate: UndesiredEventAdornmentFormula},
                 $(go.Shape, "RoundedRectangle",
                     {
-                        fill: '#FFDD33',portId: "", toEndSegmentLength: 150
+                        fill: '#FFDD33', portId: "", toEndSegmentLength: 150
                     }),
 
                 $(go.Panel, "Vertical",
@@ -511,26 +547,44 @@ class ScriptIndex extends Component {
                                 defaultColumnSeparatorStroke: "gray"
                             },
                             $(go.TextBlock, "方法名称",
-                                { row: 0, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                                {row: 0, column: 0, margin: 5, font: " 10pt sans-serif"}),
                             $(go.TextBlock,
-                                { row: 0, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                {
+                                    row: 0,
+                                    column: 1,
+                                    margin: new go.Margin(0, 10, 0, 0),
+                                    font: " 10pt sans-serif",
+                                    editable: true,
+                                },
                                 new go.Binding("text", "identity").makeTwoWay(),
                             ),
                             $(go.TextBlock, "结果下限",
-                                { row: 1, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                                {row: 1, column: 0, margin: 5, font: " 10pt sans-serif"}),
                             $(go.TextBlock,
-                                { row: 1, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                {
+                                    row: 1,
+                                    column: 1,
+                                    margin: new go.Margin(0, 10, 0, 0),
+                                    font: " 10pt sans-serif",
+                                    editable: true,
+                                },
                                 new go.Binding("text", "lower_limit").makeTwoWay(),
                             ),
                             $(go.TextBlock, "结果上限",
-                                { row: 2, column: 0,margin: 5, font: " 10pt sans-serif" }),
+                                {row: 2, column: 0, margin: 5, font: " 10pt sans-serif"}),
                             $(go.TextBlock,
-                                { row: 2, column: 1, margin: new go.Margin(0, 10, 0, 0), font: " 10pt sans-serif", editable: true,},
+                                {
+                                    row: 2,
+                                    column: 1,
+                                    margin: new go.Margin(0, 10, 0, 0),
+                                    font: " 10pt sans-serif",
+                                    editable: true,
+                                },
                                 new go.Binding("text", "upper_limit").makeTwoWay(),
                             ),
                         ),
                         $(go.TextBlock, "参数",
-                            {margin: new go.Margin(10, 0, 0, 0),font: " 10pt sans-serif", alignment: go.Spot.Left,},
+                            {margin: new go.Margin(10, 0, 0, 0), font: " 10pt sans-serif", alignment: go.Spot.Left,},
                         ),
                         $(go.Panel, "Table",
                             {
@@ -542,6 +596,7 @@ class ScriptIndex extends Component {
                                         // more ContextMenuButtons would go here
                                     )  // end Adornment
                             },
+
                             {
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 defaultRowSeparatorStroke: "gray",
@@ -577,7 +632,7 @@ class ScriptIndex extends Component {
                             },
                             new go.Binding("itemArray", "errors").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
                         ),
-                        )  // end action list Vertical Panel
+                    )  // end action list Vertical Panel
                 ),  // end optional Vertical Panel
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
                 that.makePort("L", go.Spot.Left, true, true),
@@ -796,6 +851,10 @@ class ScriptIndex extends Component {
                      * */
                     model: new go.GraphLinksModel(formulaArr)
                 });
+        if(!this.state.testFuncData.length){
+            console.log('加载test_function')
+            this.getTestFunctions()
+        }
 
         myDiagram.linkTemplate =
             $(go.Link,  // the whole link panel
@@ -848,12 +907,12 @@ class ScriptIndex extends Component {
         if (!this.props.isNew) {
             that.load(that.props.json)
         }
-
         if (cb) {
             cb(cbArg)
         }
 
     }
+
     showDetail = (e, obj) => {
         // get the context menu that holds the button that was clicked
         var contextmenu = obj.part;
@@ -1010,13 +1069,13 @@ class ScriptIndex extends Component {
         const {scrollTop, scrollLeft}=this.state
         return {top, left, scrollTop, scrollLeft}
     }
-    addPalatte=()=>{
-        const myPaletteModel=JSON.parse(myPalette.model.toJson()).nodeDataArray;
+    addPalatte = ()=> {
+        const myPaletteModel = JSON.parse(myPalette.model.toJson()).nodeDataArray;
         myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(
             {
                 category: "item",
                 title: "测试3.3v 负载阈值",
-                identity:'test_load_threshold_on_3_3v',
+                identity: 'test_load_threshold_on_3_3v',
                 params: [
                     {key: 'id', value: '0'},
                     {key: 'max', value: '1750'},
@@ -1030,6 +1089,7 @@ class ScriptIndex extends Component {
             }
         ));
     }
+
     render() {
         return (
             <div>

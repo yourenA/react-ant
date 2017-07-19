@@ -1,5 +1,4 @@
 {
   "prefix":"http://api.stand.test.com",
-  "MqttServerHost":"http://mqtt.server.com",
-  "MqttServerPort":"8884"
+  "wsPort":"9502"
 }

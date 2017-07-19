@@ -31,10 +31,8 @@ class DrawScriptDetail extends Component {
 
     componentDidMount() {
         window.addEventListener('load', function() {
-            console.log("load")
         });
         window.addEventListener('popstate', function(ev){
-            console.log("popstate")
         });
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
