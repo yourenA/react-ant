@@ -10,13 +10,15 @@ class SystemJournal extends React.Component {
         this.scrollTopTimer=null;
         this.scrollBottomTimer=null;
         this.state = {
-            systemJournalInfo: [],
+            systemJournalInfo: [{
+                info: '无效Product Code: 00.000000',
+                dateTime: new Date().toLocaleString()
+            }],
             systemJournalModal: this.props.systemJournalModal
         };
     }
 
     componentDidMount = ()=> {
-        console.log('componentDidMount')
         const that = this;
         this.timer = setInterval(function () {
             that.setState({
@@ -25,7 +27,7 @@ class SystemJournal extends React.Component {
                     dateTime: new Date().toLocaleString()
                 })
             });
-        }, 3000)
+        }, 5000)
     }
     scrollToTop = ()=> {
         const systemJournalContent = document.querySelector('.systemJournal-info');
@@ -86,7 +88,11 @@ class SystemJournal extends React.Component {
             systemJournalModal: true
         })
     }
-
+    clearJournalData=()=>{
+        this.setState({
+            systemJournalInfo: [],
+            })
+    }
     render() {
         const systemJournalStyle = this.state.systemJournalModal ? null : {display: 'none'};
         return (
@@ -100,15 +106,16 @@ class SystemJournal extends React.Component {
                     </div>
                     <div className="systemJournal-info">
                         <div className="systemJournal-scroll">
-                            <div>
-                                <Icon type="caret-up" className="scroll-icon" onClick={this.scrollToTop}/>
+                            <div style={{marginBottom:'10px'}} >
+                                <Icon title="清空日志" type="delete" className="scroll-icon" onClick={this.clearJournalData}/>
                             </div>
                             <div>
-                                <Icon type="caret-down" className="scroll-icon" onClick={this.scrollToBottom}/>
+                                <Icon  title="返回顶部"  type="caret-up" className="scroll-icon" onClick={this.scrollToTop}/>
+                            </div>
+                            <div>
+                                <Icon   title="跳到底部"  type="caret-down" className="scroll-icon" onClick={this.scrollToBottom}/>
                             </div>
                         </div>
-                        <p ><span >时间: item.dateTime </span><span>item.info</span></p>
-                        <p ><span >时间: item.dateTime </span><span>item.info</span></p>
                         {this.state.systemJournalInfo.map((item, index)=> {
                             return (
                                 <p key={index}><span >时间: {item.dateTime } </span><span>{item.info}</span></p>

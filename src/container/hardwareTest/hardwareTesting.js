@@ -11,17 +11,16 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import HighZIndexMask from './../../component/mask'
+import ConfigForm from './configForm'
 const Option = Select.Option;
 const Step = Steps.Step;
 const confirm = Modal.confirm;
-// const WebSocket = require('ws');
 class HardwareTesting extends Component {
     constructor(props) {
         super(props);
         this.timer = null;
         this.ws=null;
         this.state = {
-            test_script_name: '',
             product_name: '',
             hardware_version: '',
             company_name: '',
@@ -30,10 +29,15 @@ class HardwareTesting extends Component {
                 key: localStorage.getItem('test_stand') ? JSON.parse(localStorage.getItem('test_stand')).key : '',
                 label: localStorage.getItem('test_stand') ? JSON.parse(localStorage.getItem('test_stand')).label : ''
             },
+            script: {
+                key: '',
+                label:  ''
+            },
             product_code: '',
             adapter: '',
             product_sn: '',
             inputDisabled: true,
+            scriptModal: false,
             standModal: false,
             adapterModal: false,
             startTestModal: false,
@@ -52,6 +56,7 @@ class HardwareTesting extends Component {
         } else {
             console.log(`只测试${this.props.location.state.testTypeId}`)
             this.fetchHwTestingData(testRecord.batch_id, this.props.location.state.testScriptId)
+
         }
         this.props.fetchAllTestStand()
         const data = [];
@@ -88,7 +93,10 @@ class HardwareTesting extends Component {
                 console.log(response.data);
                 const receiveData = response.data
                 that.setState({
+                    script:{key:receiveData.test_script_id,label:receiveData.test_script_name},
                     ...receiveData
+                },function () {
+                    that.props.fetchAllScript(this.state.hardware_version_id,this.state.test_type_id)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -131,7 +139,7 @@ class HardwareTesting extends Component {
         const that = this;
         const params = {
             serial_number: serialNumbers,
-            test_script_id: this.state.test_script_id
+            test_script_id: this.state.script.key
         }
         axios({
             url: `${configJson.prefix}/hardware_test`,
@@ -154,14 +162,6 @@ class HardwareTesting extends Component {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
-        /*this.timer=setInterval(function () {
-         let percent = that.state.percent + 10;
-         that.setState({ percent });
-         if (percent === 100) {
-         clearInterval(that.timer);
-         message.success('测试完成')
-         }
-         },1000);*/
         console.log('正式开始测试', serialNumbers)
     }
     openWS = ()=> {
@@ -177,15 +177,6 @@ class HardwareTesting extends Component {
                     percent:JSON.parse(evt.data).percent,
                     wsMessage:wsMessage.concat(JSON.parse(evt.data).message)
                 })
-                if(JSON.parse(evt.data).percent===100){
-                    message.success('测试完成')
-                    that.setState({
-                        startTest: false,
-                        maskDisplay: 'none',
-                        percent: 0
-                    });
-                    that.ws.close()
-                }
             }
         };
         this.ws.onclose = function (evt) {
@@ -200,17 +191,20 @@ class HardwareTesting extends Component {
             inputDisabled: !this.state.inputDisabled
         })
     }
-    changeStand = (e)=> {
+    changetScrip=()=>{
+        const scriptConfigForm = this.refs.scriptConfigForm.getFieldsValue();
         this.setState({
-            test_stand: {key: e.key, label: e.label},
-
-        }, function () {
-            localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
+            script:{key:scriptConfigForm.test_script.key,label:scriptConfigForm.test_script.label},
+            scriptModal:false
         })
     }
-    saveStand = ()=> {
+    changeTestStand = ()=> {
+        const testStandConfigForm = this.refs.testStandConfigForm.getFieldsValue();
         this.setState({
-            standModal: false
+            test_stand:{key:testStandConfigForm.test_stand.key,label:testStandConfigForm.test_stand.label},
+            standModal:false
+        }, function () {
+            localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
         })
     }
 
@@ -245,8 +239,13 @@ class HardwareTesting extends Component {
                             <div className="testing-config">
                                 <div className="testing-config-row">
                                     <div className="testing-config-item">
-                                        <span title={this.state.test_script_name}>测试脚本 : {this.state.test_script_name}
+                                        <span title={this.state.script.label}>测试脚本 : {this.state.script.label}
                                         </span>
+                                        <Button className='change' type='primary' onClick={()=> {
+                                            this.setState({
+                                                scriptModal: true
+                                            })
+                                        }}>更改</Button>
                                     </div>
 
                                     <div className="testing-config-item">
@@ -342,6 +341,26 @@ class HardwareTesting extends Component {
                         </div>
                     </div>
                     <Modal
+                        key={ Date.parse(new Date())}
+                        visible={this.state.scriptModal}
+                        title="测试脚本"
+                        onCancel={()=> {
+                            this.setState({scriptModal: false})
+                        }}
+                        footer={[
+                            <Button key="back" type="ghost" size="large"
+                                    onClick={()=> {
+                                        this.setState({scriptModal: false})
+                                    }}>取消</Button>,
+                            <Button key="submit" type="primary" size="large" onClick={this.changetScrip}>
+                                保存
+                            </Button>,
+                        ]}
+                    >
+                        <ConfigForm ref="scriptConfigForm" {...this.props} type="script" script={this.state.script}/>
+                    </Modal>
+                    <Modal
+                        key={ Date.parse(new Date())+1}
                         visible={this.state.standModal}
                         title="测试架"
                         onCancel={()=> {
@@ -352,26 +371,15 @@ class HardwareTesting extends Component {
                                     onClick={()=> {
                                         this.setState({standModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.saveStand}>
+                            <Button key="submit" type="primary" size="large" onClick={this.changeTestStand}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <Select allowClear={true} labelInValue={true} dropdownMatchSelectWidth={false}
-                                style={{width: '100%'}}
-                                value={this.state.test_stand} onChange={this.changeStand}
-                                showSearch
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            { this.props.fetchTestConf.test_stands.map((item, key) => {
-                                return (
-                                    <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
-                                )
-                            }) }
-                        </Select>
+                        <ConfigForm ref="testStandConfigForm"  {...this.props} type="test_stand" script={this.state.test_stand}/>
                     </Modal>
                     <Modal
-                        key={ Date.parse(new Date()) + 1}
+                        key={ Date.parse(new Date()) + 2}
                         visible={this.state.adapterModal}
                         title="适配器"
                         onCancel={()=> {
@@ -400,7 +408,7 @@ class HardwareTesting extends Component {
                         </Select>
                     </Modal>
                     <Modal
-                        key={ Date.parse(new Date()) + 2}
+                        key={ Date.parse(new Date()) + 3}
                         visible={this.state.startTestModal}
                         title="开始测试"
                         onCancel={()=> {

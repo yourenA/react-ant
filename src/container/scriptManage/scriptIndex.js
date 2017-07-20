@@ -381,40 +381,13 @@ class ScriptIndex extends Component {
                 // no ports, because no links are allowed to connect with a comment
             ));
 
-        // var UndesiredEventAdornmentFormula =
-        //     $(go.Adornment, "Spot",
-        //         $(go.Panel, "Auto",
-        //             $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
-        //             $(go.Placeholder)),
-        //         // the button to create a "next" node, at the top-right corner
-        //         $("Button",
-        //             {
-        //                 alignment:go.Spot.parse("1 0.2"),
-        //                 click: this.addFormulaParam
-        //             },  // this function is defined below
-        //             new go.Binding("visible", "", function (a) {
-        //                 return !a.diagram.isReadOnly;
-        //             }).ofObject(),
-        //             $(go.Shape, "TriangleDown", {desiredSize: new go.Size(7, 7)})
-        //         ),
-        //         $("Button",
-        //             {
-        //                 alignment:  go.Spot.BottomRight,
-        //                 click: this.addErrorParam
-        //             },  // this function is defined below
-        //             new go.Binding("visible", "", function (a) {
-        //                 return !a.diagram.isReadOnly;
-        //             }).ofObject(),
-        //             $(go.Shape, "TriangleDown", {desiredSize: new go.Size(7, 7)})
-        //         ),
-        //     );
         var actionTemplate =
             $(go.Panel, "TableRow",
                 $("CheckBox", "is_output_parameter",
                     {column: 0},
                 ),
                 $(go.TextBlock, "key",
-                    {column: 1, margin: 5, font: " 10pt sans-serif", editable: true},
+                    {  column: 1, margin: 5, font: " 10pt sans-serif", editable: true},
                     new go.Binding("text", "key").makeTwoWay()
                 ),
                 $(go.TextBlock, "value",
@@ -445,71 +418,11 @@ class ScriptIndex extends Component {
                 ),
                 this.renderDelButton('errors')
             );
-//         // Create an HTMLInfo and dynamically create some HTML to show/hide
-//         var customEditor = new go.HTMLInfo();
-//         var customSelectBox = document.createElement("select");
-//         customEditor.show = function (textBlock, diagram, tool) {
-//             if (!(textBlock instanceof go.TextBlock)) return;
-//
-//             // Populate the select box:
-//             customSelectBox.innerHTML = "";
-//
-//             // this sample assumes textBlock.choices is not null
-//             var list = textBlock.choices;
-//             if (!list)return
-//             for (var i = 0; i < list.length; i++) {
-//                 var op = document.createElement("option");
-//                 op.text = list[i];
-//                 op.value = list[i];
-//                 customSelectBox.add(op, null);
-//             }
-//             // After the list is populated, set the value:
-//             customSelectBox.value = textBlock.text;
-//             // Do a few different things when a user presses a key
-//             customSelectBox.addEventListener("keydown", function (e) {
-//                 var keynum = e.which;
-//                 if (keynum == 13) { // Accept on Enter
-//                     tool.acceptText(go.TextEditingTool.Enter);
-//                     return;
-//                 } else if (keynum == 9) { // Accept on Tab
-//                     tool.acceptText(go.TextEditingTool.Tab);
-//                     e.preventDefault();
-//                     return false;
-//                 } else if (keynum === 27) { // Cancel on Esc
-//                     tool.doCancel();
-//                     if (tool.diagram) tool.diagram.focus();
-//                 }
-//             }, false);
-//
-//             var loc = textBlock.getDocumentPoint(go.Spot.TopLeft);
-//             var pos = diagram.transformDocToView(loc);
-//             customSelectBox.style.left = pos.x + "px";
-//             customSelectBox.style.top = pos.y + "px";
-//             customSelectBox.style.position = 'absolute';
-//             customSelectBox.style.zIndex = 100; // place it in front of the Diagram
-//
-//             diagram.div.appendChild(customSelectBox);
-//         }
-//         customEditor.hide = function (diagram, tool) {
-//             console.log("tool",tool)
-//             if(customSelectBox.value){
-//                 diagram.div.removeChild(customSelectBox);
-//                 customSelectBox.value=null
-//             }
-//         }
-// // This is necessary for HTMLInfo instances that are used as text editors
-//         customEditor.valueFunction = function () {
-//             return customSelectBox.value;
-//         }
-//
-// // Set the HTMLInfo:
-//         myDiagram.toolManager.textEditingTool.defaultTextEditor = customEditor;
         myDiagram.nodeTemplateMap.add("item",
             $(go.Node, "Auto",
                 // define the node's outer shape
 
-                that.nodeStyle(),//加了nodeStyle左边左边操作框才会对齐
-                // {selectionAdornmentTemplate: UndesiredEventAdornmentFormula},
+                that.nodeStyle(),
                 $(go.Shape, "RoundedRectangle",
                     {
                         fill: '#FFDD33', portId: "", toEndSegmentLength: 150
@@ -596,7 +509,6 @@ class ScriptIndex extends Component {
                                         // more ContextMenuButtons would go here
                                     )  // end Adornment
                             },
-
                             {
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 defaultRowSeparatorStroke: "gray",
