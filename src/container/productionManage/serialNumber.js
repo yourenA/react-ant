@@ -257,7 +257,9 @@ class SerialNumber extends Component {
             render: (text, record, index) => {
                 let repeatClassName=''
                 if(record.is_repeat===1){
-                    document.querySelectorAll('.tempSerialTable tr')[index+1].style.backgroundColor='#ecbcbc'
+                    // if(document.querySelectorAll('.tempSerialTable tr')[index+1]){
+                    //     document.querySelectorAll('.tempSerialTable tr')[index+1].style.backgroundColor='#ecbcbc'
+                    // }
                 }
                 return (
                     <span className={repeatClassName}>
@@ -348,6 +350,13 @@ class SerialNumber extends Component {
                                 </div>
                                 <Card title="临时序列号">
                                     <Table
+                                        rowClassName={function (record, index) {
+                                            console.log('record',record)
+                                            console.log('index',index)
+                                            if(record.is_repeat===1){
+                                                return 'repeat'
+                                            }
+                                        }}
                                         bordered className="main-table tempSerialTable"
                                         loading={this.state.tempLoading}
                                         rowKey="id" columns={tempColumns}

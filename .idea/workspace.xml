@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" afterPath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.less" afterPath="$PROJECT_DIR$/src/App.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" afterPath="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,33 +26,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/index.js">
+      <file leaf-file-name="addSeriaNum.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-333">
-              <caret line="99" column="38" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="38" />
+            <state relative-caret-position="163">
+              <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/systemManage/groupManage/index.js">
+      <file leaf-file-name="serialNumber.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/container/productionManage/serialNumber.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
-              <caret line="135" column="32" selection-start-line="135" selection-start-column="32" selection-end-line="135" selection-end-column="32" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state relative-caret-position="443">
+              <caret line="358" column="42" selection-start-line="358" selection-start-column="42" selection-end-line="358" selection-end-column="42" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addOrEditNmae.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js">
+      <file leaf-file-name="index.less" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/index.less">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="52" column="79" selection-start-line="52" selection-start-column="79" selection-end-line="52" selection-end-column="79" />
+            <state relative-caret-position="293">
+              <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -93,12 +89,10 @@
         <option value="$PROJECT_DIR$/src/component/dropzone.js" />
         <option value="$PROJECT_DIR$/src/container/productionManage/index.js" />
         <option value="$PROJECT_DIR$/src/component/mask.js" />
-        <option value="$PROJECT_DIR$/src/App.less" />
         <option value="$PROJECT_DIR$/src/index.less" />
         <option value="$PROJECT_DIR$/src/container/productionManage/mergeSeriaNum.js" />
         <option value="$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js" />
         <option value="$PROJECT_DIR$/src/common/message.json" />
-        <option value="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegment.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/drawSegmentDetail.js" />
         <option value="$PROJECT_DIR$/src/container/scriptManage/searchSegment.js" />
@@ -126,6 +120,8 @@
         <option value="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
+        <option value="$PROJECT_DIR$/src/container/productionManage/serialNumber.js" />
+        <option value="$PROJECT_DIR$/src/App.less" />
       </list>
     </option>
   </component>
@@ -259,33 +255,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="systemManage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="container" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="systemManage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="groupManage" />
+              <option name="myItemId" value="productionManage" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -447,12 +417,12 @@
       <workItem from="1500255732116" duration="7713000" />
       <workItem from="1500341634769" duration="19939000" />
       <workItem from="1500428288903" duration="22433000" />
-      <workItem from="1500514302690" duration="7865000" />
+      <workItem from="1500514302690" duration="11465000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="611204000" />
+    <option name="totallyTimeSpent" value="614804000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -508,27 +478,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
           <caret line="37" column="60" selection-start-line="37" selection-start-column="60" selection-end-line="37" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/productionManage/serialNumber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="264" column="31" selection-start-line="264" selection-start-column="31" selection-end-line="264" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -864,16 +813,8 @@
         <state relative-caret-position="558">
           <caret line="314" column="55" selection-start-line="314" selection-start-column="55" selection-end-line="314" selection-end-column="55" />
           <folding>
-            <element signature="e#50#89#0" expanded="true" />
+            <element signature="e#50#89#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="58" column="1" selection-start-line="58" selection-start-column="1" selection-end-line="58" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -890,7 +831,7 @@
         <state relative-caret-position="945">
           <caret line="135" column="32" selection-start-line="135" selection-start-column="32" selection-end-line="135" selection-end-column="32" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -899,6 +840,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
           <caret line="52" column="79" selection-start-line="52" selection-start-column="79" selection-end-line="52" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/productionManage/addSeriaNum.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="667">
+          <caret line="213" column="3" selection-start-line="213" selection-start-column="3" selection-end-line="213" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/productionManage/serialNumber.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="358" column="42" selection-start-line="358" selection-start-column="42" selection-end-line="358" selection-end-column="42" />
           <folding />
         </state>
       </provider>
