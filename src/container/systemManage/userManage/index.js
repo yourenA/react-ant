@@ -97,6 +97,7 @@ class UserManage extends Component {
         const userrole=localStorage.getItem('userrole');
         let data= {
             name:editName.name,
+            status:editName.status.key
         }
         if(userrole==='系统管理员'){
             data.role_id=editName.role_id.key
@@ -197,6 +198,14 @@ class UserManage extends Component {
             title: '所属组',
             dataIndex: 'role_name',
             key: 'role_name'
+        }, {
+            title: '单位机构',
+            dataIndex: 'company_name',
+            key: 'company_name',
+        }, {
+            title: '状态',
+            dataIndex: 'status_explain',
+            key: 'status_explain'
         },{
             title: '操作',
             key: 'action',
@@ -229,11 +238,6 @@ class UserManage extends Component {
                 )
             }
         }];
-        columns.splice(1,0,{
-            title: '厂商名称',
-            dataIndex: 'company_name',
-            key: 'company_name'
-        })
         return (
             <Layout style={{padding: '0 24px 24px'}}>
                     <Breadcrumb className="breadcrumb">
@@ -260,7 +264,7 @@ class UserManage extends Component {
                     <Modal
                         key={ Date.parse(new Date())}
                         visible={this.state.addModal}
-                        title="查看脚本"
+                        title="添加用户"
                         onCancel={()=> {
                             this.setState({addModal: false})
                         }}

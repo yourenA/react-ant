@@ -132,6 +132,24 @@ class Manufacture extends Component {
                 )
             }
         }];
+        localStorage.getItem('userrole') === '系统管理员'?
+            columns.splice(2,0,{
+                title: '是否系统用户',
+                dataIndex: 'is_system_user',
+                key: 'is_system_user',
+                className:'center-col',
+                width:'100px',
+                render: (text, record, index) => {
+                    return(
+                        <span>
+                        {text===1?'是':'否'}
+                    </span>
+                    )
+                }
+            })
+            :null;
+
+
         return (
             <Layout style={{padding: '0 24px 24px'}}>
 

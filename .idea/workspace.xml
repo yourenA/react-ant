@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/hardwareTest/configForm.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/systemJournalModal.js" afterPath="$PROJECT_DIR$/src/component/systemJournalModal.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" afterPath="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/index.js" afterPath="$PROJECT_DIR$/src/container/hardwareTest/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/scriptIndex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,23 +28,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="hardwareTesting.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="144" column="39" selection-start-line="144" selection-start-column="39" selection-end-line="144" selection-end-column="39" />
+            <state relative-caret-position="-333">
+              <caret line="99" column="38" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/container/systemManage/groupManage/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="945">
+              <caret line="135" column="32" selection-start-line="135" selection-start-column="32" selection-end-line="135" selection-end-column="32" />
               <folding>
-                <element signature="e#50#89#0" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="configForm.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/hardwareTest/configForm.js">
+      <file leaf-file-name="addOrEditNmae.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="38" column="54" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="54" />
+            <state relative-caret-position="244">
+              <caret line="52" column="79" selection-start-line="52" selection-start-column="79" selection-end-line="52" selection-end-column="79" />
               <folding />
             </state>
           </provider>
@@ -67,9 +75,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/container/catagoryManage/addOrEditNmae.js" />
-        <option value="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
-        <option value="$PROJECT_DIR$/src/container/systemManage/index.less" />
         <option value="$PROJECT_DIR$/src/container/systemManage/systemConfig/index.js" />
         <option value="$PROJECT_DIR$/src/container/systemManage/index.js" />
         <option value="$PROJECT_DIR$/build/index.html" />
@@ -118,6 +123,9 @@
         <option value="$PROJECT_DIR$/src/container/hardwareTest/index.js" />
         <option value="$PROJECT_DIR$/src/container/hardwareTest/configForm.js" />
         <option value="$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js" />
+        <option value="$PROJECT_DIR$/src/container/systemManage/userManage/index.js" />
+        <option value="$PROJECT_DIR$/src/container/systemManage/groupManage/index.js" />
+        <option value="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
       </list>
     </option>
   </component>
@@ -273,73 +281,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="scriptManage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
+              <option name="myItemId" value="systemManage" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="container" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="productionManage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="container" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hardwareTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HW-TEST" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="container" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="catagoryManage" />
+              <option name="myItemId" value="groupManage" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -501,12 +447,12 @@
       <workItem from="1500255732116" duration="7713000" />
       <workItem from="1500341634769" duration="19939000" />
       <workItem from="1500428288903" duration="22433000" />
-      <workItem from="1500514302690" duration="2548000" />
+      <workItem from="1500514302690" duration="7865000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="605887000" />
+    <option name="totallyTimeSpent" value="611204000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -558,21 +504,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="67" column="31" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/dropzone.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/container/productionManage/mergeSeriaNum.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -584,13 +515,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="433">
           <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="67" column="4" selection-start-line="67" selection-start-column="2" selection-end-line="67" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -682,13 +606,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-405">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -791,6 +708,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
           <caret line="1566" column="9" selection-start-line="1566" selection-start-column="9" selection-end-line="1566" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -822,6 +740,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -829,6 +748,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
           <caret line="56" column="26" selection-start-line="56" selection-start-column="7" selection-end-line="56" selection-end-column="26" />
+          <folding>
+            <element signature="e#50#89#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -900,7 +822,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -939,11 +861,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/hardwareTest/hardwareTesting.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="144" column="39" selection-start-line="144" selection-start-column="39" selection-end-line="144" selection-end-column="39" />
+        <state relative-caret-position="558">
+          <caret line="314" column="55" selection-start-line="314" selection-start-column="55" selection-end-line="314" selection-end-column="55" />
           <folding>
             <element signature="e#50#89#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="58" column="1" selection-start-line="58" selection-start-column="1" selection-end-line="58" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-333">
+          <caret line="99" column="38" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/systemManage/groupManage/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="945">
+          <caret line="135" column="32" selection-start-line="135" selection-start-column="32" selection-end-line="135" selection-end-column="32" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="52" column="79" selection-start-line="52" selection-start-column="79" selection-end-line="52" selection-end-column="79" />
+          <folding />
         </state>
       </provider>
     </entry>
