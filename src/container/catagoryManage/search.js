@@ -22,8 +22,9 @@ class TopicTable extends Component {
             this.props.onChangeSearch(1, searchText)
         }
     };
-    onChangeProductsName=()=>{
-
+    onChangeProductsName=(e)=>{
+        const {q}=this.props;
+        this.props.onChangeSearch(1,q,e)
     }
     render() {
         return (

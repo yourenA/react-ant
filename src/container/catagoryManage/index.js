@@ -51,7 +51,7 @@ class Catagory extends Component {
             params = {
                 page: page,
                 query: q,
-                part_id: selectType
+                product_id: selectType
             }
         }
         axios({
@@ -169,7 +169,11 @@ class Catagory extends Component {
         }
     }
     onPageChange = (page) => {
-        this.onChangeSearch(page, this.state.q);
+        if (this.props.match.url === '/hardware_versions') {
+            this.fetchHwData(page, this.state.q, this.state.selectType);
+        } else {
+            this.onChangeSearch(page, this.state.q);
+        }
     };
     renderTitle = ()=> {
         switch (this.props.match.url) {
