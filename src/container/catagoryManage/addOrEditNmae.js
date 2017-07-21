@@ -42,7 +42,7 @@ class AddOrEditNameForm extends React.Component {
                                 <Input  />
                             )}
                         </FormItem>
-                        <FormItem
+                      {/*  <FormItem
                             label={'制造商电话'}
                             {...formItemLayout}>
                             {getFieldDecorator('telephone', {
@@ -68,7 +68,7 @@ class AddOrEditNameForm extends React.Component {
                             })(
                                 <Input  type="textarea" rows={3} />
                             )}
-                        </FormItem>
+                        </FormItem>*/}
 
                     </div>
                     : null}

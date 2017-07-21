@@ -199,7 +199,7 @@ class DrawScriptDetail extends Component {
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
+                    <Breadcrumb.Item  onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本段'${ this.state.editRecord.name}'`  :'新建脚本段' }</Breadcrumb.Item>
                     <Breadcrumb.Item>修改脚本段"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
                 </Breadcrumb>
@@ -208,7 +208,7 @@ class DrawScriptDetail extends Component {
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
-                                <Icon type="arrow-left"/>
+                                后退
                             </div>
                         </div>
                         <div className="testing-start">

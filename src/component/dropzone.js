@@ -26,7 +26,6 @@ class Dropzone extends React.Component {
             that.props.setImportModalFalse()
             setTimeout(function () {
                 that.props.onTempChangeSearch(1);
-
             },500)
         }
     }
@@ -54,7 +53,7 @@ class Dropzone extends React.Component {
             dictFallbackMessage: '您的浏览器不支持拖放文件上传',
             dictInvalidFileType:  '上传必须是csv或txt',
             dictMaxFilesExceeded: '上传文件数量超过限定',
-            autoProcessQueue: false,
+            autoProcessQueue: true,
             addRemoveLinks:true,
             dictRemoveFile:'删除文件',
             headers: getHeader(),

@@ -51,6 +51,7 @@ class ScriptManage extends Component {
         this.fetchHwData();
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
+        this.props.fetchAllProducts();
     }
 
     fetchHwData = (page = 1,q='', test_type='',test_version='')=> {
@@ -70,7 +71,7 @@ class ScriptManage extends Component {
             headers: getHeader()
         })
             .then(function (response) {
-                // console.log(response);
+                console.log(response);
                 that.setState({
                     data: response.data.data,
                     meta: response.data.meta,
@@ -202,7 +203,7 @@ class ScriptManage extends Component {
             <div>
                 <div className="content">
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>硬件测试</Breadcrumb.Item>
+                        <Breadcrumb.Item>脚本管理</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
@@ -243,7 +244,7 @@ class ScriptManage extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName ref="editScriptName" fetchTestConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
+                        <AddOrEditName ref="editScriptName" {...this.props} fetchTestConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
                     </Modal>
                 </div>
             </div>

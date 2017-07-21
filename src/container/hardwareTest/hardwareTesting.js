@@ -107,7 +107,14 @@ class HardwareTesting extends Component {
         console.log('selected', selectedKeys, info);
     }
     startTesting = ()=> {
-        if (this.state.startTest) {
+        if(this.state.percent===100){
+            this.setState({
+                startTest: false,
+                maskDisplay: 'none',
+                percent: 0
+            })
+            this.ws.close()
+        }else if (this.state.startTest) {
             const that = this;
             confirm({
                 title: '确定要停止测试吗？',
@@ -300,7 +307,7 @@ class HardwareTesting extends Component {
                             <div className="testing-start" style={{zIndex: this.state.startTest ? 1000 : ''}}>
                                 <div className="testing-start-btn" onClick={this.startTesting}
                                      style={{backgroundColor: this.state.startTest ? 'red' : ''}}>
-                                    {this.state.startTest ? "结束测试" : "开始测试"}
+                                    {this.state.percent===100?'完成':this.state.startTest ? "结束测试" : "开始测试"}
                                 </div>
                             </div>
                         </div>

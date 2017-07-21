@@ -228,6 +228,11 @@ class SerialNumber extends Component {
             title: '工作进度',
             dataIndex: 'status',
             key: 'status',
+            render: (text, record, index) => {
+                return (
+                    <span>1/1</span>
+                )
+            }
         }, {
             title: '执行情况',
             dataIndex: 'status_explain',
@@ -301,7 +306,7 @@ class SerialNumber extends Component {
                                     <Button onClick={()=> {
                                         this.props.history.goBack()
                                     }}>
-                                        取消
+                                        退出
                                     </Button>
                                     <span className="ant-divider"/>
                                     <Button icon="plus" type="primary" onClick={()=> {
@@ -351,8 +356,6 @@ class SerialNumber extends Component {
                                 <Card title="临时序列号">
                                     <Table
                                         rowClassName={function (record, index) {
-                                            console.log('record',record)
-                                            console.log('index',index)
                                             if(record.is_repeat===1){
                                                 return 'repeat'
                                             }
@@ -389,11 +392,10 @@ class SerialNumber extends Component {
                                     onClick={()=> {
                                         this.setState({importSerialNumModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.importSerialNum}>
-                                保存
-                            </Button>,
+
                         ]}
                     >
+                        <p style={{marginBottom:'10px',fontSize:'14px'}}>导入文件的第一行为表头</p>
                         <Dropzone ref="Dropzone" batchId={this.props.location.state.batchId}
                                   setImportModalFalse={this.setImportModalFalse}
                                   onTempChangeSearch={this.onTempChangeSearch}

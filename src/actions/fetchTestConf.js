@@ -193,6 +193,7 @@ export function fetchAllHardwareVersions(product_id) {
             headers: getHeader()
         })
             .then(function (response) {
+                console.log(response)
                 dispatch({
                     type: FETCH_HARDWARE_VERSIONS_SUCCESS,
                     hardware_versions: response.data.data

@@ -112,26 +112,22 @@ class DrawScript extends Component {
         // sessionStorage.setItem('originJson',JSON.stringify(resultTempJson))
     }
     turnBack = ()=> {
-        if (this.state.isChange) {
-            console.log('已经修改，请确认')
-        } else {
             this.props.history.goBack()
-        }
     }
 
     render() {
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
+                    <Breadcrumb.Item  >脚本管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.props.location.state.newScript ? '新建脚本' : `编辑脚本'${this.props.fetchTestConf.editRecord? this.props.fetchTestConf.editRecord.name: ''}'`}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
-                            <div className="testing-start-btn  testing-save-btn">
-                                <Icon type="arrow-left" />
+                            <div className="testing-start-btn  testing-save-btn"  onClick={this.turnBack}>
+                                退出
                             </div>
                         </div>
                         <div className="testing-start">

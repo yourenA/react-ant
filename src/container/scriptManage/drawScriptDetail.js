@@ -212,7 +212,6 @@ class DrawScriptDetail extends Component {
         console.log("step",step-1)
     }
     turnBack = ()=> {
-        this.props.history.push('/scriptManage')
     }
 
     render() {
@@ -221,7 +220,7 @@ class DrawScriptDetail extends Component {
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
+                    <Breadcrumb.Item  onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本'${ this.state.editRecord.name}'`  :'新建脚本' }</Breadcrumb.Item>
                     {/*<Breadcrumb.Item>{this.props.location.state.groupNmae}</Breadcrumb.Item>*/}
                     {breadcrumbArr.map((item,index)=>{
@@ -235,7 +234,7 @@ class DrawScriptDetail extends Component {
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
-                                <Icon type="arrow-left"/>
+                                后退
                             </div>
                         </div>
                         <div className="testing-start">

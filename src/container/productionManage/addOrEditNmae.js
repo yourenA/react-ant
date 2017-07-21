@@ -23,7 +23,7 @@ class AddOrEditNameForm extends React.Component {
             this.props.form.setFieldsValue({
                 hardware_version_id: {key:'',label:''},
             });
-            this.props.changeProduct(e.key)
+            this.props.changeProduct(e)
         }
     }
     changeHardwareVersion = (e)=> {
