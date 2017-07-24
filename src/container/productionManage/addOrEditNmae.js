@@ -64,7 +64,10 @@ class AddOrEditNameForm extends React.Component {
                                         } : {key: '', label: ''},
                                         rules: [{required: true, message: '请选择产品代码'}],
                                     })(
-                                        <Select labelInValue={true}  onChange={this.changeProduct}>
+                                        <Select labelInValue={true}  onChange={this.changeProduct}
+                                                dropdownMatchSelectWidth={false}
+                                                showSearch
+                                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                             { this.props.fetchTestConf.products.map((item, key) => {
                                                 return (
                                                     <Option key={item.id}
@@ -87,7 +90,10 @@ class AddOrEditNameForm extends React.Component {
                                         rules: [{required: true, message: '请选择硬件版本'}],
                                     })(
                                         <Select labelInValue={true}
-                                                onChange={this.changeHardwareVersion}>
+                                                onChange={this.changeHardwareVersion}
+                                                dropdownMatchSelectWidth={false}
+                                                showSearch
+                                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                             { this.props.fetchTestConf.hardware_versions.map((item, key) => {
                                                 return (
                                                     <Option key={item.id}
@@ -109,7 +115,7 @@ class AddOrEditNameForm extends React.Component {
                                         } : {key: '', label: ''},
                                         rules: [{required: true, message: '请选择制造厂商'}],
                                     })(
-                                        <Select labelInValue={true} allowClear={true}>
+                                        <Select labelInValue={true} >
                                             { this.props.fetchTestConf.manufactures.map((item, key) => {
                                                 return (
                                                     <Option key={item.id}

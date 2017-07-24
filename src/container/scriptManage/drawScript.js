@@ -58,7 +58,8 @@ class DrawScript extends Component {
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
-    }
+         this.props.fetchAllProducts()
+     }
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
             this.refs.ScriptIndex.delDiagram();

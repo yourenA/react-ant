@@ -13,6 +13,7 @@
   "sign out success": "登出成功",
   "user existing": "用户已存在",
   "edit password success":"修改密码成功",
+  "edit default_password success":"修改默认密码成功",
   "edit company success":"修改资料成功",
   "unknown error":"发生未知错误",
   "token fail":"登录令牌无效或过期，请重新登录",

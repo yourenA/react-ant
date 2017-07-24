@@ -88,7 +88,10 @@ class AddOrEditNameForm extends React.Component {
                                 initialValue: this.props.editRecord ?{key:this.props.editRecord.test_type_id.toString(),label:this.props.editRecord.test_type_name}:{key:'',label:''},
                                 rules: [{required: true, message: '请选择测试类型'}],
                             })(
-                                <Select labelInValue={true} allowClear={true}>
+                                <Select labelInValue={true}
+                                        dropdownMatchSelectWidth={false}
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                     { this.props.fetchTestConf.test_type.map((item, key) => {
                                         return (
                                             <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
@@ -107,7 +110,10 @@ class AddOrEditNameForm extends React.Component {
                                 } : {key: '', label: ''},
                                 rules: [{required: true, message: '请选择产品代码'}],
                             })(
-                                <Select labelInValue={true}  onChange={this.changeProduct}>
+                                <Select labelInValue={true}  onChange={this.changeProduct}
+                                        dropdownMatchSelectWidth={false}
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                     { this.props.fetchTestConf.products.map((item, key) => {
                                         return (
                                             <Option key={item.id}
@@ -124,7 +130,10 @@ class AddOrEditNameForm extends React.Component {
                                 initialValue: this.props.editRecord ? {key:this.props.editRecord.hardware_version_id.toString(),label:this.props.editRecord.hardware_version}:{key:'',label:''},
                                 rules: [{required: true, message: '请选择硬件版本'}],
                             })(
-                                <Select labelInValue={true} allowClear={true}>
+                                <Select labelInValue={true}
+                                        dropdownMatchSelectWidth={false}
+                                        showSearch
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                     { this.state.hardware_versions.map((item, key) => {
                                         return (
                                             <Option key={item.id} value={item.id.toString()}>{item.version}</Option>

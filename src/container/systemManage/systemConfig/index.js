@@ -2,11 +2,12 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Card, Pagination, Button, Col, Row, Layout, Input} from 'antd';
+import {Breadcrumb, Card, Pagination, Button, Col, message, Layout, Input} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../../common/common';
 import Masonry from 'react-masonry-component';
+import messageJson from './../../../common/message.json';
 const {Content,} = Layout;
 class Manufacture extends Component {
     constructor(props) {
@@ -40,7 +41,22 @@ class Manufacture extends Component {
         })
     }
     saveDefaultPassword = ()=> {
-
+        console.log(this.refs.default_password.refs.input.value)
+        axios({
+            url: `${configJson.prefix}/configs`,
+            method: 'put',
+            data: {
+                default_password:this.refs.default_password.refs.input.value
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response);
+                message.success(messageJson['edit default_password success']);
+            })
+            .catch(function (error) {
+                converErrorCodeToMsg(error)
+            });
     }
 
     render() {
@@ -49,7 +65,7 @@ class Manufacture extends Component {
                 return (
                     <Col span={8} key={index} style={{padding:'0 0 10px 10px'}}>
                         <Card title={item.display_name} bordered={true}>
-                            <Input defaultValue={item.value}/>
+                            <Input ref="default_password" defaultValue={item.value}/>
                             <p className="systemConfig-info">用于管理员生成用户时的默认密码。</p>
                             <div className="systemConfig-save-btn">
                                 <Button type='primary' onClick={this.saveDefaultPassword}>

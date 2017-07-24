@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Nopermission from './container/nopermission';
 import Home from './container/home';
+import About from './container/about'
 import HardwareTest from './container/hardwareTest/index';
 import HardwareTesting from './container/hardwareTest/hardwareTesting';
 import ProductionManage from './container/productionManage/index';
@@ -77,12 +78,17 @@ class App extends Component {
         }
     }
     render() {
-        console.log('configJson',configJson)
         const login = this.props.loginState;
         return (
             <Router>
                 <div>
-                    <div className="layout">
+                    <Route exact
+                           path="/about" render={(props) => {
+                        return (login.login && testPermission('test_script_management') ) ?
+                            <About {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
+                    <div className="layout" style={{display:this.state.pathname==='/about'?'none':'block'}}>
                         <Header className="layout-header" style={{minWidth:'1000px'}}>
                             <div className="logo"/>
                             <Menu
@@ -114,6 +120,8 @@ class App extends Component {
                                                                                     to="/scriptManage">脚本管理</NavLink></Menu.Item>
                                             <Menu.Item key="/segmentManage"><NavLink activeClassName="nav-selected"
                                                                                      to="/segmentManage">脚本段管理</NavLink></Menu.Item>
+                                        {/*    <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
+                                                                                     to="/about">流程图使用说明</NavLink></Menu.Item>*/}
                                         </SubMenu>
                                         : null
                                 }
@@ -232,6 +240,7 @@ class App extends Component {
                             <SegmentManage {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
+
                     <Route
                         path="/segmentManage/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
@@ -289,6 +298,7 @@ class App extends Component {
 
 
                 </div>
+
             </Router>
         );
     }

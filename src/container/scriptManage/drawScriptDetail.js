@@ -37,6 +37,7 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
+        this.props.fetchAllProducts()
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
         if (!this.props.location.state.newScript) {
             this.fetchScript(localStorage.getItem('manageScriptId'))

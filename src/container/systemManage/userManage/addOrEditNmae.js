@@ -55,7 +55,7 @@ class AddOrEditNameForm extends React.Component {
                                     } : {key: '', label: ''},
                                     rules: [{required: true, message: '请选择用户组'}],
                                 })(
-                                    <Select labelInValue={true} allowClear={true}>
+                                    <Select labelInValue={true} >
                                         { this.props.fetchTestConf.groups.map((item, key) => {
                                             return (
                                                 <Option key={item.id}
@@ -75,7 +75,7 @@ class AddOrEditNameForm extends React.Component {
                                 {getFieldDecorator('company_id', {
                                     initialValue: {key: '', label: ''},
                                 })(
-                                    <Select labelInValue={true} allowClear={true}>
+                                    <Select labelInValue={true} >
                                         { this.props.fetchTestConf.manufactures.map((item, key) => {
                                             return (
                                                 <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
@@ -95,7 +95,7 @@ class AddOrEditNameForm extends React.Component {
                                     key: this.props.editRecord.status.toString(),
                                     label: this.props.editRecord.status_explain},
                             })(
-                                <Select labelInValue={true} allowClear={true}>
+                                <Select labelInValue={true} >
                                     { [{key:'1',label:'启用'},{key:'-1',label:'禁用'}].map((item, key) => {
                                         return (
                                             <Option key={item.key} value={item.key}>{item.label}</Option>

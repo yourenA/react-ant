@@ -104,7 +104,7 @@ class FetchSegments extends Component {
     render() {
         return (
             <div className="inline-block">
-                <span>选择代码段 : </span>
+                <span>选择脚本 : </span>
                 <Select   className="search-select"
                           showSearch
                           onChange={this.onChangeSegment}
