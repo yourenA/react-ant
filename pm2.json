@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "HW-TEST",
+      "name": "HW-TEST-PROD",
       "script": "./server.js",
       "env": {
         "NODE_ENV": "development"

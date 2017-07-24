@@ -7,7 +7,7 @@ import './drawScript.less';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios'
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 var $ = window.$;
 var go = window.go;
 var myDiagram = null;

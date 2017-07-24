@@ -7,7 +7,7 @@ import axios from 'axios'
 import {
     Link
 } from 'react-router-dom';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import SearchSegment from './searchSegment'
 import {getHeader,converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';

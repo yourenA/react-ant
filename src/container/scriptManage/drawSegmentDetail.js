@@ -8,8 +8,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common';
-import configJson from './../../common/config.json';
 import axios from 'axios';
+import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'

@@ -8,7 +8,7 @@ import SearchWrap from  './search';
 import AddOrEditName from './addOrEditNmae';
 import ResetPassword from './resetPassword';
 import messageJson from './../../../common/message.json';
-import configJson from './../../../common/config.json';
+import configJson from 'configJson' ;
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../../actions/fetchTestConf';

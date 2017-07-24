@@ -4,7 +4,7 @@
 import {message} from 'antd';
 import messageJson from './../common/message.json';
 import {removeLoginStorage, getHeader} from './../common/common.js';
-import configJson from './../common/config.json';
+import configJson from 'configJson' ;
 import axios from 'axios';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';

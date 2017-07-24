@@ -5,7 +5,7 @@ import React from 'react';
 import {Form, Input, Select} from 'antd';
 import {formItemLayout} from './../../common/common'
 import {getHeader} from './../../common/common.js';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import axios from 'axios';
 const FormItem = Form.Item;
 const Option = Select.Option;

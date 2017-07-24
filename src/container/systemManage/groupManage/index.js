@@ -9,7 +9,7 @@ import AddOrEditName from './addOrEditNmae';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import messageJson from './../../../common/message.json';
-import configJson from './../../../common/config.json';
+import configJson from 'configJson' ;
 import * as fetchTestConfAction from './../../../actions/fetchTestConf';
 const {Content,} = Layout;
 class Manufacture extends Component {

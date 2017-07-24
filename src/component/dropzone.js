@@ -6,7 +6,7 @@ import {message} from 'antd';
 import DropzoneComponent from 'react-dropzone-component';
 import './../common/css/dropzone.min.css';
 import './../common/css/filepicker.css';
-import {getHeader,converErrorCodeToMsg} from './../common/common';
+import {getHeader} from './../common/common';
 class Dropzone extends React.Component {
     constructor(props) {
         super(props);

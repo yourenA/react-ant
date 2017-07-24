@@ -8,7 +8,7 @@ import {
 import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Tooltip, Badge,Select} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';

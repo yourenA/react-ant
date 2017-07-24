@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps, Progress, message, Table} from 'antd';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import axios from 'axios'
 import './hardwareTesting.less'
@@ -174,7 +174,8 @@ class HardwareTesting extends Component {
     }
     openWS = ()=> {
         const that=this;
-        this.ws = new WebSocket(`ws://api.stand.test.com:9502/?channel=${this.state.channel}`);//url地址类似与get请求
+        console.log(`${configJson.wsPrefix}:${configJson.wsPort}/?channel=${this.state.channel}`)
+        this.ws = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?channel=${this.state.channel}`);//url地址类似与get请求
         this.ws.onopen = function () {
             console.log('onopen')
         };

@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message, Card, Row, Col} from 'antd';
 import axios from 'axios'
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';

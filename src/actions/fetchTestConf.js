@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/19.
  */
 import {getHeader} from './../common/common.js';
-import configJson from './../common/config.json';
+import configJson from 'configJson' ;
 import axios from 'axios';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
 export const DEL_TEST_TYPE_SUCCESS = 'DEL_TEST_TYPE_SUCCESS';

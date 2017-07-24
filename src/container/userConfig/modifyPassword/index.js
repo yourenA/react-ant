@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {Form, Input, Button, message,Breadcrumb,Layout} from 'antd';
 import axios from 'axios';
 import messageJson from './../../../common/message.json';
-import configJson from './../../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../../common/common.js';
 import {formItemLayout} from './../../../common/common';
 const FormItem = Form.Item;

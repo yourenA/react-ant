@@ -4,9 +4,8 @@
 import React, {Component} from 'react';
 import {Breadcrumb, Card, Pagination, Button, Col, Row, Layout, Input} from 'antd';
 import axios from 'axios'
-import configJson from './../../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../../common/common';
-import messageJson from './../../../common/message.json';
 import Masonry from 'react-masonry-component';
 const {Content,} = Layout;
 class Manufacture extends Component {

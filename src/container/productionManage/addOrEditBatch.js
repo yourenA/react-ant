@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import AddOrEditName from './addOrEditNmae';
 import axios from 'axios'
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 const RadioGroup = Radio.Group;

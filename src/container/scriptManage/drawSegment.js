@@ -6,7 +6,7 @@ import {Breadcrumb, Layout,Input , Button,Modal,message,Icon} from 'antd';
 import './drawScript.less';
 import ScriptIndex from './scriptIndex.js'
 import axios from 'axios'
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common';
 import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'

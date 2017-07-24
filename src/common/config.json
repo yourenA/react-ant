@@ -1,5 +1,8 @@
 {
   "prefix":"http://api.stand.test.com",
-  "prefix_prod":"http://api.stand.prod.com",
-  "wsPort":"9502"
+  "prefix_prod":"http://api.stand.com",
+  "wsPrefix":"ws://api.stand.test.com",
+  "wsPrefix_prod":"ws://api.stand.com",
+  "wsPort":"9502",
+  "wsPort_prod":"9503"
 }

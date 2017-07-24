@@ -6,7 +6,6 @@ var path = require('path');
 var ejs = require('ejs');
 var logger = require('morgan');
 var app = express();
-process.env.NODE_ENV = 'production';
 if(process.env.NODE_ENV === 'production'){
     console.log('在生产环境')
 }
@@ -28,7 +27,7 @@ app.get('/*', function(req, res, next) {
     res.render('index');
 });
 
-var server = app.listen(3002,'0.0.0.0', function () {
+var server = app.listen(3003,'0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
 

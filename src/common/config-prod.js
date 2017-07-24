@@ -4,5 +4,7 @@
 import config from './config.json';
 
 export default  {
-        prefix: config.prefix_prod
+        prefix: config.prefix_prod,
+        wsPort:config.wsPort_prod,
+        wsPrefix:config.wsPrefix_prod,
 }

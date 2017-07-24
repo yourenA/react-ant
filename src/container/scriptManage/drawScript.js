@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common.js';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
 import AddOrEditName from './addOrEditNmae';

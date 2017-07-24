@@ -11,7 +11,7 @@ import {
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 class HardwareTest extends Component {
     constructor(props) {

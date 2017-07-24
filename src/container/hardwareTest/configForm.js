@@ -2,8 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input, Select} from 'antd';
-import {producLayout} from './../../common/common'
+import {Form,  Select} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class ConfigForm extends React.Component {

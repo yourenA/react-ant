@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import { Select,Button} from 'antd';
 import {getHeader,converErrorCodeToMsg} from './../../common/common.js';
-import configJson from './../../common/config.json';
+import configJson from 'configJson' ;
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 const Option = Select.Option;

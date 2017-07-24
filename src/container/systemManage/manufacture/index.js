@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, Layout,message} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
-import configJson from './../../../common/config.json';
+import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../../common/message.json';

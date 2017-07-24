@@ -5,5 +5,7 @@ import config from './config.json';
 
 
 export default  {
-    prefix: config.prefix
+    prefix: config.prefix,
+    wsPort:config.wsPort,
+    wsPrefix:config.wsPrefix,
 }
