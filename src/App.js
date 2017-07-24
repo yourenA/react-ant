@@ -30,6 +30,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as loginAction from './actions/login';
 import {testPermission} from './common/common'
+import Api from 'api' ;
 const {Header} = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -76,6 +77,7 @@ class App extends Component {
         }
     }
     render() {
+        console.log('Api',Api)
         const login = this.props.loginState;
         return (
             <Router>

@@ -1,4 +1,5 @@
 {
   "prefix":"http://api.stand.test.com",
+  "prefix_prod":"http://api.stand.prod.com",
   "wsPort":"9502"
 }

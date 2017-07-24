@@ -15,6 +15,7 @@ import ConfigForm from './configForm'
 const Option = Select.Option;
 const Step = Steps.Step;
 const confirm = Modal.confirm;
+
 class HardwareTesting extends Component {
     constructor(props) {
         super(props);

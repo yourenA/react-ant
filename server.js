@@ -6,6 +6,10 @@ var path = require('path');
 var ejs = require('ejs');
 var logger = require('morgan');
 var app = express();
+process.env.NODE_ENV = 'production';
+if(process.env.NODE_ENV === 'production'){
+    console.log('在生产环境')
+}
 
 app.use(express.static(path.join(__dirname, 'build')));
 // view engine setup for html
