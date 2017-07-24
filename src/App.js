@@ -157,7 +157,7 @@ class App extends Component {
                                         </SubMenu>
                                         : null
                                 }
-                                {login.login ?
+                                {  (login.login && (testPermission('user_management')||testPermission('system_management')) ) ?
                                 <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected"
                                                                         to="/systemManage/groupManage">系统管理</NavLink></Menu.Item>: null}
                                 {login.login ?

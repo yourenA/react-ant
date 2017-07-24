@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a863dbf8-9052-486c-8f6d-8242324d7132" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/6.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/container/about/about.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.js" afterPath="$PROJECT_DIR$/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/common/message.json" afterPath="$PROJECT_DIR$/src/common/message.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/about.js" afterPath="$PROJECT_DIR$/src/container/about.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/hardwareTest/configForm.js" afterPath="$PROJECT_DIR$/src/container/hardwareTest/configForm.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/productionManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/productionManage/addOrEditNmae.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/addOrEditNmae.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScript.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/drawScriptDetail.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" afterPath="$PROJECT_DIR$/src/container/scriptManage/fetchSegments.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/systemConfig/index.js" afterPath="$PROJECT_DIR$/src/container/systemManage/systemConfig/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" afterPath="$PROJECT_DIR$/src/container/systemManage/userManage/addOrEditNmae.js" />
     </list>
     <ignored path="HW-TEST.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,41 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/systemManage/groupManage/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="addOrEditNmae.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/container/systemManage/groupManage/addOrEditNmae.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="71" column="72" selection-start-line="71" selection-start-column="72" selection-end-line="71" selection-end-column="72" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fetchTestConf.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/actions/fetchTestConf.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="281" column="39" selection-start-line="281" selection-start-column="39" selection-end-line="281" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="App.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="122" column="43" selection-start-line="122" selection-start-column="40" selection-end-line="123" selection-end-column="129" />
+            <state relative-caret-position="513">
+              <caret line="159" column="120" selection-start-line="159" selection-start-column="120" selection-end-line="159" selection-end-column="120" />
               <folding />
             </state>
           </provider>
@@ -533,12 +483,12 @@
       <workItem from="1500428288903" duration="22433000" />
       <workItem from="1500514302690" duration="13052000" />
       <workItem from="1500601181538" duration="10813000" />
-      <workItem from="1500860691221" duration="19645000" />
+      <workItem from="1500860691221" duration="20413000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="646849000" />
+    <option name="totallyTimeSpent" value="647617000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1069,8 +1019,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="122" column="43" selection-start-line="122" selection-start-column="40" selection-end-line="123" selection-end-column="129" />
+        <state relative-caret-position="513">
+          <caret line="159" column="120" selection-start-line="159" selection-start-column="120" selection-end-line="159" selection-end-column="120" />
           <folding />
         </state>
       </provider>
