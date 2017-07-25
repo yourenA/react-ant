@@ -189,7 +189,7 @@ class DrawScriptDetail extends Component {
                 newSegment
                     ? setTimeout(function () {
                     that.props.history.replace({pathname: `/segmentManage`})
-                }, 1000) : that.fetchScript(localStorage.getItem('manageSegmentId'));;
+                }, 1000) : that.fetchScript(localStorage.getItem('manageSegmentId'));
                 that.setState({
                     saveModal: false
                 })

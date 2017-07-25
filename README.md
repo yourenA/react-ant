@@ -61,8 +61,9 @@ $ npm start
 
     title:方法标题(可编辑)
     
-    identity:方法名称(方法唯一标识,可编辑)
+    identity:方法名称(可编辑)
     
+    outcome_variable:结果变量(可编辑)
     
     <del>deviation:结果允许误差(可编辑)</del>
     
@@ -70,7 +71,7 @@ $ npm start
     
     lower_limit:结果下限(可编辑)
     
-    params:参数(可编辑) 右击添加  格式:同“设置参数”中的params
+    params:参数(可编辑) 右击添加   格式:```[{key:xxx,value:xxx,is_output_parameter:false},{key:xxx,value:xxx,is_output_parameter:true}]```其中is_output_parameter表示该参数是否是输出参数
     
     errors:错误参数(可编辑) 右击添加  格式:同“设置参数”中的params
     

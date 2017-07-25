@@ -67,7 +67,7 @@ class SystemManage extends React.Component {
                                 </Menu.Item>: null
                                 }
                                 {
-                                    (testPermission('user_management') ) ?
+                                    (testPermission('user_management')&&localStorage.getItem('userrole')==='系统管理员' ) ?
                                         <Menu.Item key={`/systemManage/groupManage`}>
                                             <Link title=" 组管理" to={`/systemManage/groupManage`}><Icon type="usergroup-add"/>
                                                 <span className="nav-text">

@@ -49,6 +49,7 @@ class ScriptIndex extends Component {
                         errors: [{key: 'key', value: 'value'}],
                         upper_limit: 0,
                         lower_limit: 0,
+                        outcome_variable:'结果变量'
                     }
                     for (let j = 0, len2 = funcItem.parameters.length; j < len2; j++) {
                         let paramItem = funcItem.parameters[j];
@@ -214,7 +215,7 @@ class ScriptIndex extends Component {
                 errors: [{key: 'key', value: 'value'}],
                 upper_limit: 0,
                 lower_limit: 0,
-
+                outcome_variable:'结果变量'
             }];
         if(this.state.testFuncData.length>0){
             console.log('拼接原有的test_function')
@@ -494,6 +495,18 @@ class ScriptIndex extends Component {
                                     editable: true,
                                 },
                                 new go.Binding("text", "upper_limit").makeTwoWay(),
+                            ),
+                            $(go.TextBlock, "结果变量",
+                                {row: 3, column: 0, margin: 5, font: " 10pt sans-serif"}),
+                            $(go.TextBlock,
+                                {
+                                    row: 3,
+                                    column: 1,
+                                    margin: new go.Margin(0, 10, 0, 0),
+                                    font: " 10pt sans-serif",
+                                    editable: true,
+                                },
+                                new go.Binding("text", "outcome_variable").makeTwoWay(),
                             ),
                         ),
                         $(go.TextBlock, "参数",
