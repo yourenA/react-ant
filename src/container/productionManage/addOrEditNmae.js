@@ -126,14 +126,15 @@ class AddOrEditNameForm extends React.Component {
                                     )}
                                 </FormItem>
                             </div>
-                            <div className="testing-config-item no-padding-right">
-                                <FormItem
-                                    label="说明描述"
-                                    {...producLayout}>
+                        </div>
+                        <div className="testing-config-row desc-row">
+                            <div className="">
+                                <span style={{marginRight:'10px',paddingLeft:'30px',fontSize:'12px'}}>说明描述 :</span>
+                                <FormItem>
                                     {getFieldDecorator('description', {
                                         initialValue: this.props.isEdit ? this.props.editRecord.description : '',
                                     })(
-                                        <Input />
+                                        <Input type="textarea" rows={4}/>
                                     )}
                                 </FormItem>
                             </div>

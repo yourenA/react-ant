@@ -173,6 +173,7 @@ class SegmentManage extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchSegment onChangeSearch={this.onChangeSearch} />
+                            <span className="ant-divider"/>
                             <Button type='primary'>
                                 <Link
                                     to={{

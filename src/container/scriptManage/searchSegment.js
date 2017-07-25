@@ -17,7 +17,7 @@ class SearchSegment extends Component {
     render() {
         return (
             <div className="search-wrap">
-                <span>代码段名称: </span>
+                <span>脚本段名称: </span>
                 <Search
                     defaultValue={''}
                     style={{width: 150}}
