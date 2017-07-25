@@ -37,7 +37,7 @@ class SegmentManage extends Component {
         this.setState({loading: true});
         const that = this;
         this.props.setSegmentLoadedFalse();
-        sessionStorage.clear();
+        // sessionStorage.clear();
         axios({
             url: `${configJson.prefix}/flow_diagrams`,
             method: 'get',

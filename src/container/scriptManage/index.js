@@ -58,7 +58,7 @@ class ScriptManage extends Component {
         const that = this;
         this.setState({loading: true});
         this.props.setSciptLoadedFalse();
-        sessionStorage.clear();
+        // sessionStorage.clear();
         axios({
             url: `${configJson.prefix}/test_scripts`,
             method: 'get',

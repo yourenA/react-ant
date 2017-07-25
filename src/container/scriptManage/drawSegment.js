@@ -45,6 +45,16 @@ class AddProgramSegment extends Component {
             this.refs.ScriptIndex.init();
             if(sessionStorage.getItem('segmentTempJson')){
                 this.refs.ScriptIndex.load(sessionStorage.getItem('segmentTempJson'))
+            }else{
+                this.refs.ScriptIndex.load(JSON.stringify({
+                    class: "go.GraphLinksModel",
+                    linkFromPortIdProperty: "fromPort",
+                    linkToPortIdProperty: "toPort",
+                    copiesArrays: true,
+                    copiesArrayObjects: true,
+                    nodeDataArray: [],
+                    linkDataArray: []
+                }))
             }
         }
     }
@@ -59,21 +69,21 @@ class AddProgramSegment extends Component {
         const that=this;
         this.refs.ScriptIndex.save();
         const content=JSON.parse( myDiagram.model.toJson());
-        let externalCount=0;
-        let externalTitle=''
-        for(let i=0,len=content.nodeDataArray.length;i<len;i++){
-            if(content.nodeDataArray[i].isGroup===true && !content.nodeDataArray[i].group){
-                externalTitle=content.nodeDataArray[i].title;
-                externalCount++
-            }
-            if(!content.nodeDataArray[i].isGroup && !content.nodeDataArray[i].group){
-                externalCount++
-            }
-        }
-        console.log('externalCount',externalCount)
-        if(externalCount!==1){
-            message.error('最外层只能有一个分组节点')
-        }else{
+        // let externalCount=0;
+        // let externalTitle=''
+        // for(let i=0,len=content.nodeDataArray.length;i<len;i++){
+        //     if(content.nodeDataArray[i].isGroup===true && !content.nodeDataArray[i].group){
+        //         externalTitle=content.nodeDataArray[i].title;
+        //         externalCount++
+        //     }
+        //     if(!content.nodeDataArray[i].isGroup && !content.nodeDataArray[i].group){
+        //         externalCount++
+        //     }
+        // }
+        // console.log('externalCount',externalCount)
+        // if(externalCount!==1){
+        //     message.error('最外层只能有一个分组节点')
+        // }else{
             delPointsInLink(content.linkDataArray)
             const newSegment=this.props.location.state.newSegment
             const url=newSegment ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`
@@ -83,7 +93,7 @@ class AddProgramSegment extends Component {
                 url: `${configJson.prefix}${url}`,
                 method: method,
                 data: {
-                    name:externalTitle,
+                    name:this.refs.scriptCodeNmae.refs.input.value,
                     content: JSON.stringify(content),
                 },
                 headers: getHeader()
@@ -94,7 +104,7 @@ class AddProgramSegment extends Component {
                     newSegment
                         ? setTimeout(function () {
                         that.props.history.replace({pathname:`/segmentManage`})
-                    },1000):null;
+                    },1000):that.props.fetchDrawSegment(that.props.match.params.id);;
                     that.setState({
                         saveModal:false
                     })
@@ -102,7 +112,7 @@ class AddProgramSegment extends Component {
                 console.log('获取出错',error);
                 converErrorCodeToMsg(error)
             })
-        }
+        // }
 
     }
     saveTempScript=()=>{
@@ -121,7 +131,7 @@ class AddProgramSegment extends Component {
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item   >脚本段管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.props.location.state.newSegment ? '新建脚本段' : '编辑脚本段'}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.location.state.newSegment ? '新建脚本段' : `编辑脚本段'${this.props.fetchTestConf.editSegmentRecord? this.props.fetchTestConf.editSegmentRecord.name: ''}'`}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="content-container">
                     <ScriptInfo />
@@ -161,7 +171,7 @@ class AddProgramSegment extends Component {
                         </Button>,
                     ]}
                 >
-                    {/*<Input defaultValue={this.props.location.state.name} ref="scriptCodeNmae"  placeholder="Basic usage" />*/}
+                    <Input defaultValue={this.props.fetchTestConf.editSegmentRecord?this.props.fetchTestConf.editSegmentRecord.name:''} ref="scriptCodeNmae"   />
                 </Modal>
             </Content>
         )

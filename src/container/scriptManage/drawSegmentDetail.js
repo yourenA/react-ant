@@ -2,12 +2,12 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout,Input, Icon, Button,Modal,message} from 'antd';
+import {Breadcrumb, Layout, Input, Icon, Button, Modal, message} from 'antd';
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common';
+import {getHeader, converErrorCodeToMsg, delPointsInLink} from './../../common/common';
 import axios from 'axios';
 import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
@@ -23,15 +23,21 @@ class DrawScriptDetail extends Component {
         this.state = {
             segmentsJson: '{}',
             detailIndex: 0,
-            editRecord:null
+            editRecord: null
         };
     }
 
     componentDidMount() {
         this.props.fetchAllSegments();
-        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
+        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem(this.props.match.params.id));
         if (!this.props.location.state.newSegment) {
             this.fetchScript(localStorage.getItem('manageSegmentId'))
+        }
+        if (!sessionStorage.getItem('breadcrumbArrForSegment')) {
+            sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify([{
+                key: this.props.match.params.id,
+                value: this.props.location.state.groupNmae
+            }]))
         }
     }
 
@@ -56,41 +62,58 @@ class DrawScriptDetail extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
+            const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment'));
+            let theSameBreadcrumIndex = 0;
+            for (let i = 0, len = breadcrumbArr.length; i < len; i++) {
+                if (breadcrumbArr[i].key === nextProps.match.params.id) {
+                    theSameBreadcrumIndex = i + 1
+                }
+            }
+            if (theSameBreadcrumIndex === 0) {
+                sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr.concat({
+                    key: nextProps.match.params.id,
+                    value: nextProps.location.state.groupNmae
+                })));
+            } else {
+                breadcrumbArr.splice(theSameBreadcrumIndex, breadcrumbArr.length)
+                sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr));
+            }
+
 
             this.refs.ScriptIndex.delDiagram();
             this.refs.ScriptIndex.init();
             // console.log("this.state",this.state)
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
-            const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
+            const preSessionJson = JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
 
             const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
-            const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
+            const thisPropsIdJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));
 
-            if(this.props.history.action==='POP'){
+            if (this.props.history.action === 'POP') {
                 // console.log('POP');
-                for(let i=0,len=sessionStorage.length;i<len;i++){
+                for (let i = 0, len = sessionStorage.length; i < len; i++) {
                     console.log(sessionStorage.key(i))
-                    let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-                    let intersectJsonNode=_.differenceWith(preSessionJson.nodeDataArray,thisPropsIdJson.nodeDataArray,function (a,b) {
+                    let sessionJson = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+                    let intersectJsonNode = _.differenceWith(preSessionJson.nodeDataArray, thisPropsIdJson.nodeDataArray, function (a, b) {
                         return (a.key === b.key)
                     })
-                    let intersectJsonLink=_.differenceWith(preSessionJson.linkDataArray,thisPropsIdJson.linkDataArray,_.isEqual)
-                    if(intersectJsonNode.length){
-                        sessionJson.nodeDataArray=_.differenceWith(sessionJson.nodeDataArray,intersectJsonNode,function (a,b) {
+                    let intersectJsonLink = _.differenceWith(preSessionJson.linkDataArray, thisPropsIdJson.linkDataArray, _.isEqual)
+                    if (intersectJsonNode.length) {
+                        sessionJson.nodeDataArray = _.differenceWith(sessionJson.nodeDataArray, intersectJsonNode, function (a, b) {
                             return (a.key === b.key)
                         });
-                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
+                        sessionStorage.setItem(sessionStorage.key(i), JSON.stringify(sessionJson))
                     }
-                    if(intersectJsonLink.length){
-                        sessionJson.linkDataArray=_.differenceWith(sessionJson.linkDataArray,intersectJsonLink,_.isEqual);
-                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
+                    if (intersectJsonLink.length) {
+                        sessionJson.linkDataArray = _.differenceWith(sessionJson.linkDataArray, intersectJsonLink, _.isEqual);
+                        sessionStorage.setItem(sessionStorage.key(i), JSON.stringify(sessionJson))
                     }
                 }
-                nextPropsIdJson.nodeDataArray=_.differenceWith(nextPropsIdJson.nodeDataArray, preSessionJson.nodeDataArray,function (a,b) {
+                nextPropsIdJson.nodeDataArray = _.differenceWith(nextPropsIdJson.nodeDataArray, preSessionJson.nodeDataArray, function (a, b) {
                     return (a.key === b.key)
                 }).concat(thisPropsIdJson.nodeDataArray)
 
-                nextPropsIdJson.linkDataArray=_.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray,_.isEqual)
+                nextPropsIdJson.linkDataArray = _.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray, _.isEqual)
                     .concat(thisPropsIdJson.linkDataArray);
             }
 
@@ -101,7 +124,7 @@ class DrawScriptDetail extends Component {
         }
     }
 
-    saveTempScript = (canBack,returnJson)=> {
+    saveTempScript = (canBack, returnJson)=> {
         const originJson = JSON.parse(sessionStorage.getItem('segmentTempJson'));
         const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));
         let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());
@@ -113,9 +136,9 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
-        console.log('nowJson',nowJson)
-        console.log('changeJson',changeJson)
-        let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
+        console.log('nowJson', nowJson)
+        console.log('changeJson', changeJson)
+        let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray, function (a, b) {
             return (a.key === b.key)
         }).concat(changeJson.nodeDataArray);
 
@@ -134,87 +157,77 @@ class DrawScriptDetail extends Component {
             linkDataArray: resultLinkJson
         };
         sessionStorage.setItem('segmentTempJson', JSON.stringify(segmentTempJson));
-        if(returnJson){
+        if (returnJson) {
             return segmentTempJson
         }
-        if(canBack){
+        if (canBack) {
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
             this.props.history.goBack()
         }
     }
 
     saveCode = ()=> {
-        const that=this;
-        const content=this.saveTempScript(false,true);
-        let externalCount=0;
-        let externalTitle='';
-        for(let i=0,len=content.nodeDataArray.length;i<len;i++){
-            if(content.nodeDataArray[i].isGroup===true && !content.nodeDataArray[i].group){
-                externalTitle=content.nodeDataArray[i].title;
-                externalCount++
-            }
-            if(!content.nodeDataArray[i].isGroup && !content.nodeDataArray[i].group){
-                externalCount++
-            }
-        }
-        console.log('externalCount',externalCount)
-        if(externalCount!==1){
-            message.error('最外层只能有一个分组节点')
-        }else{
-            delPointsInLink(content.linkDataArray)
-            const newSegment=!this.state.editRecord
-            const url=newSegment ?`/flow_diagrams`:`/flow_diagrams/${localStorage.getItem('manageSegmentId')}`;
-            const method=newSegment ?`post`:`put`;
-            const meg=newSegment ?messageJson[`add segment success`]:messageJson[`edit segment success`];
-            axios({
-                url: `${configJson.prefix}${url}`,
-                method: method,
-                data: {
-                    name:externalTitle,
-                    content: JSON.stringify(content),
-                },
-                headers: getHeader()
-            })
-                .then(function (response) {
-                    console.log(response);
-                    message.success(meg);
-                    newSegment
-                        ? setTimeout(function () {
-                        that.props.history.replace({pathname:`/segmentManage`})
-                    },1000):null;
-                    that.setState({
-                        saveModal:false
-                    })
-                }).catch(function (error) {
-                console.log('获取出错',error);
-                converErrorCodeToMsg(error)
-            })
-        }
+        const that = this;
+        const content = this.saveTempScript(false, true);
+        delPointsInLink(content.linkDataArray);
+        const newSegment = !this.state.editRecord;
+        const url = newSegment ? `/flow_diagrams` : `/flow_diagrams/${localStorage.getItem('manageSegmentId')}`;
+        const method = newSegment ? `post` : `put`;
+        const meg = newSegment ? messageJson[`add segment success`] : messageJson[`edit segment success`];
+        axios({
+            url: `${configJson.prefix}${url}`,
+            method: method,
+            data: {
+                name: this.refs.scriptCodeNmae.refs.input.value,
+                content: JSON.stringify(content),
+            },
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response);
+                message.success(meg);
+                newSegment
+                    ? setTimeout(function () {
+                    that.props.history.replace({pathname: `/segmentManage`})
+                }, 1000) : that.fetchScript(localStorage.getItem('manageSegmentId'));;
+                that.setState({
+                    saveModal: false
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
 
     }
     turnBack = ()=> {
     }
+
     render() {
-        console.log(this.props)
+        const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment')) || [];
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item  onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
-                    <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本段'${ this.state.editRecord.name}'`  :'新建脚本段' }</Breadcrumb.Item>
-                    <Breadcrumb.Item>修改脚本段"{this.props.location.state.groupNmae}"</Breadcrumb.Item>
+                    <Breadcrumb.Item onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.state.editRecord ? `编辑脚本段'${ this.state.editRecord.name}'` : '新建脚本段' }</Breadcrumb.Item>
+                    {breadcrumbArr.map((item, index)=> {
+                        return (
+                            <Breadcrumb.Item key={index}>{item.value}</Breadcrumb.Item>
+                        )
+                    })}
                 </Breadcrumb>
                 <div className="content-container">
                     <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
-                            <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
+                            <div className="testing-start-btn  testing-save-btn"
+                                 onClick={()=>this.saveTempScript(true)}>
                                 后退
                             </div>
                         </div>
                         <div className="testing-start">
-                            <div className="testing-start-btn testing-save-btn" onClick={()=>{
+                            <div className="testing-start-btn testing-save-btn" onClick={()=> {
                                 this.setState({
-                                    saveModal:true
+                                    saveModal: true
                                 })
                             }}>
                                 保存脚本段
@@ -222,7 +235,8 @@ class DrawScriptDetail extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex  saveTempScript={this.saveTempScript}  ref="ScriptIndex"  {...this.props} isNew={true}  fromNew={this.state.editRecord?false:true}/>
+                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true}
+                                 fromNew={this.state.editRecord ? false : true}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}
@@ -241,7 +255,8 @@ class DrawScriptDetail extends Component {
                         </Button>,
                     ]}
                 >
-                    {/*<Input defaultValue={this.state.editRecord?this.state.editRecord.name:''} ref="scriptCodeNmae"  placeholder="Basic usage" />*/}
+                    <Input defaultValue={this.state.editRecord ? this.state.editRecord.name : ''} ref="scriptCodeNmae"
+                           placeholder="Basic usage"/>
                 </Modal>
             </Content>
         )
