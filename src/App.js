@@ -67,6 +67,8 @@ class App extends Component {
     handleClick = (e) => {
         if (e.key === 'systemJournal') {
             // this.refs.SystemJournalModal.setSystemJournalModalTrue()
+        }else if(e.key === '/about'){
+
         } else {
             this.setState({
                 pathname: e.key,
