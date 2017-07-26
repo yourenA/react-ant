@@ -30,15 +30,15 @@ class TopicTable extends Component {
         return (
             <div className="search-wrap">
                 <span>{this.props.searchTitle}: </span>
-                <Search
+                <Input
                     defaultValue={''}
                     style={{width: 150}}
-                    onSearch={searchText => this.onChangeSearchText(searchText)}
+                    onPressEnter={searchText => {this.onChangeSearchText(searchText.target.value)}}
+                    onChange={searchText =>  {this.onChangeSearchText(searchText.target.value)}}
                 />
                 {this.props.type === '/hardware_versions' ?
                     <span>
-                          <span className="ant-divider"/>
-                         <span>产品名称: </span>
+                         <span className="search-text">产品名称: </span>
                         <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
                                 onChange={this.onChangeProductsName}
                                 showSearch

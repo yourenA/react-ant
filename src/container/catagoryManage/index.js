@@ -215,14 +215,13 @@ class Catagory extends Component {
             case '/test_types':
             case '/parts':
             case '/test_stands':
-                return <span><span className="ant-divider"/><Button type="primary" icon="plus" onClick={()=> {
+                return <span><Button type="primary" icon="plus" className='add-btn' onClick={()=> {
                     this.setState({addModal: true})
                 }}>
                     添加</Button></span>;
             case '/hardware_versions':
                 return <span>
-                    <span className="ant-divider"/>
-                    <Button icon="plus" type="primary" onClick={()=> {
+                    <Button icon="plus" type="primary"  className='add-btn'  onClick={()=> {
                         this.setState({addModal: true})
                     }}>
                     添加版本</Button>
@@ -290,12 +289,12 @@ class Catagory extends Component {
                 dataIndex: 'name',
                 key: 'name'
             });
-            localStorage.getItem('userrole') === '系统管理员' ?
+            /*localStorage.getItem('userrole') === '系统管理员' ?
                 columns.push({
                     title: '厂商名称',
                     dataIndex: 'company_name',
                     key: 'company_name'
-                }) : null;
+                }) : null;*/
         }
         columns.push({
             title: '操作',

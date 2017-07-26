@@ -57,14 +57,15 @@ class SystemManage extends React.Component {
                                 style={{height: '100%'}}
                             >
                                 {
-                                    (testPermission('system_management') ) ?
-                                <Menu.Item key={`/systemManage/systemConfig`}>
-                                    <Link title=" 系统参数设置" to={`/systemManage/systemConfig`}><Icon type="tool"/>
-                                        <span className="nav-text">
-                                                    系统参数设置
-                                             </span>
-                                    </Link>
-                                </Menu.Item>: null
+                                    (testPermission('user_management') ) ?
+                                        <Menu.Item key={`/systemManage/userManage`}>
+                                            <Link title=" 用户管理" to={`/systemManage/userManage`}><Icon type="user"/>
+                                                <span className="nav-text">
+                                                    用户管理
+                                                </span>
+                                            </Link>
+                                        </Menu.Item>
+                                        : null
                                 }
                                 {
                                     (testPermission('user_management')&&localStorage.getItem('userrole')==='系统管理员' ) ?
@@ -78,16 +79,17 @@ class SystemManage extends React.Component {
                                         : null
                                 }
                                 {
-                                    (testPermission('user_management') ) ?
-                                        <Menu.Item key={`/systemManage/userManage`}>
-                                            <Link title=" 用户管理" to={`/systemManage/userManage`}><Icon type="user"/>
-                                                <span className="nav-text">
-                                                    用户管理
-                                                </span>
-                                            </Link>
-                                        </Menu.Item>
-                                        : null
+                                    (testPermission('system_management') ) ?
+                                <Menu.Item key={`/systemManage/systemConfig`}>
+                                    <Link title=" 系统参数设置" to={`/systemManage/systemConfig`}><Icon type="tool"/>
+                                        <span className="nav-text">
+                                                    系统参数设置
+                                             </span>
+                                    </Link>
+                                </Menu.Item>: null
                                 }
+
+
 
                             </Menu>
                             <Icon

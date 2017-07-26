@@ -296,7 +296,7 @@ class HardwareTesting extends Component {
                                         }}>更改</Button>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span>产品SN : <Input disabled={this.state.inputDisabled} style={{width: 130}}
+                                        <span>产品序列号 : <Input disabled={this.state.inputDisabled} style={{width: 130}}
                                                    placeholder=""/>
                                             <Icon onClick={this.toggleInput}
                                                   type={this.state.inputDisabled ? 'lock' : 'unlock'}

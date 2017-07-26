@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import {Input} from 'antd';
-const Search = Input.Search;
 class SearchSegment extends Component {
     constructor(props) {
         super(props);
@@ -18,10 +17,11 @@ class SearchSegment extends Component {
         return (
             <div className="search-wrap">
                 <span>脚本段名称: </span>
-                <Search
+                <Input
                     defaultValue={''}
                     style={{width: 150}}
-                    onSearch={searchText => this.onChangeSearchText(searchText)}
+                    onPressEnter={searchText => {this.onChangeSearchText(searchText.target.value)}}
+                    onChange={searchText =>  {this.onChangeSearchText(searchText.target.value)}}
                 />
             </div>
 

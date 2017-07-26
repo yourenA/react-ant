@@ -17,7 +17,8 @@ class ScriptIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            testFuncData: []
+            testFuncData: [],
+            hadEdit:false
         };
     }
 
@@ -207,7 +208,7 @@ class ScriptIndex extends Component {
             {category: "set", params: [{key: 'key', value: 'value'}], title: '设置参数'},
             {
                 category: "item",
-                title: "方法标题",
+                title: "dll方法",
                 identity: '方法名称',
                 params: [
                     {key: 'key', value: 'value', is_output_parameter: false}
@@ -262,8 +263,10 @@ class ScriptIndex extends Component {
             // } else {
             //     if (idx >= 0) document.title = document.title.substr(0, idx);
             // }
+            // that.setState({
+            //     hadEdit:true
+            // })
         });
-
         myDiagram.nodeTemplateMap.add("if",
             $(go.Node, "Spot", that.nodeStyle(),//节点最外层根据loc属性定位
                 // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
@@ -835,7 +838,6 @@ class ScriptIndex extends Component {
         if (cb) {
             cb(cbArg)
         }
-
     }
 
     showDetail = (e, obj) => {
@@ -893,6 +895,11 @@ class ScriptIndex extends Component {
         console.log(this.props)
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
             this.props.saveTempScript();
+            const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'));
+            if( Array.indexOf(scriptStorage, `${nodedata.key}`)===-1){
+                scriptStorage.push(nodedata.key)
+                sessionStorage.setItem('scriptStorage',JSON.stringify(scriptStorage))
+            }
             if (this.props.location.pathname === '/scriptManage/newScript') {
                 this.props.history.push({
                     pathname: `/scriptDetail/${nodedata.key}`,
@@ -906,6 +913,11 @@ class ScriptIndex extends Component {
             }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
+            const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'));
+            if( Array.indexOf(segmentStorage, `${nodedata.key}`)===-1){
+                segmentStorage.push(nodedata.key)
+                sessionStorage.setItem('segmentStorage',JSON.stringify(segmentStorage))
+            }
             if (this.props.location.pathname === '/segmentManage/newSegment') {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
@@ -926,10 +938,19 @@ class ScriptIndex extends Component {
         myPalette.div = null;
         myOverview.div = null;
     }
-
+    callbackHadEdit=()=>{
+        return myDiagram.isModified
+    }
+    setHadEditFalse=()=>{
+        myDiagram.isModified = false;
+    }
+    setHadEditTrue=()=>{
+        console.log('设为true')
+        myDiagram.isModified = true;
+    }
     save = ()=> {
         document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-        myDiagram.isModified = false;
+
     }
     callbackJson = ()=> {
         return myDiagram.model.toJson();
@@ -939,6 +960,7 @@ class ScriptIndex extends Component {
     }
     load = (json)=> {
         myDiagram.model = go.Model.fromJson(json);
+        this.setHadEditTrue()
     }
     loadTextArea = ()=> {
         myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
@@ -1032,7 +1054,10 @@ class ScriptIndex extends Component {
                             </div>
                             : null}
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}
-                             style={{height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? '700px' : '746px'}}>
+                             style={{
+                                 height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 147px)` : `calc(100vh - 100px)`,
+                                minHeight:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?'calc(750px - 47px)':'750px'
+                             }}>
                         </div>
 
                     </div>

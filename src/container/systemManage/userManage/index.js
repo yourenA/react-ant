@@ -70,7 +70,7 @@ class UserManage extends Component {
         }
         if(userrole==='系统管理员'){
             data.role_id=addName.role_id.key
-            data.company_id=addName.company_id.key
+            data.company_id=addName.company_id?addName.company_id.key:''
         }
         axios({
             url: `${configJson.prefix}/users`,
@@ -198,11 +198,11 @@ class UserManage extends Component {
             title: '所属组',
             dataIndex: 'role_name',
             key: 'role_name'
-        }, {
+        },/* {
             title: '单位机构',
             dataIndex: 'company_name',
             key: 'company_name',
-        }, {
+        },*/ {
             title: '状态',
             dataIndex: 'status_explain',
             key: 'status_explain'
@@ -247,7 +247,7 @@ class UserManage extends Component {
                 <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 280}}>
                         <div className="operate-box">
                             <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                            <span className="ant-divider"/><Button type="primary" icon="plus" onClick={()=> {
+                            <Button className='add-btn' type="primary" icon="plus" onClick={()=> {
                             this.setState({addModal: true})
                         }}>
                             添加</Button>

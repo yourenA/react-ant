@@ -47,10 +47,18 @@ class ScriptManage extends Component {
 	}
      * */
     componentDidMount() {
-
+        const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'))||[];
+        if(scriptStorage.length>0){
+            for(let i=0,len=scriptStorage.length;i<len;i++){
+                sessionStorage.removeItem(scriptStorage[i])
+            }
+        }
+        sessionStorage.removeItem('scriptStorage')
+        sessionStorage.removeItem('breadcrumbArr')
         this.fetchHwData();
+        this.props.delAllHardwareVersions()
+
         this.props.fetchAllTestType();
-        this.props.fetchAllHardwareVersions();
         this.props.fetchAllProducts();
     }
 
@@ -208,8 +216,7 @@ class ScriptManage extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                            <span className="ant-divider"/>
-                            <Button type='primary'>
+                            <Button  icon="plus" type='primary' className='add-btn'>
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newScript`,

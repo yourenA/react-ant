@@ -29,7 +29,14 @@ class SegmentManage extends Component {
         };
     }
     componentDidMount() {
-
+        const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'))||[];
+        if(segmentStorage.length>0){
+            for(let i=0,len=segmentStorage.length;i<len;i++){
+                sessionStorage.removeItem(segmentStorage[i])
+            }
+        }
+        sessionStorage.removeItem('segmentStorage')
+        sessionStorage.removeItem('breadcrumbArrForSegment')
         this.fetchHwData();
     }
 
@@ -173,8 +180,7 @@ class SegmentManage extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchSegment onChangeSearch={this.onChangeSearch} />
-                            <span className="ant-divider"/>
-                            <Button type='primary'>
+                            <Button  icon="plus" type='primary' className='add-btn'>
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newSegment`,

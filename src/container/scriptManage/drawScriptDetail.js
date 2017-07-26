@@ -30,10 +30,6 @@ class DrawScriptDetail extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('load', function() {
-        });
-        window.addEventListener('popstate', function(ev){
-        });
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
@@ -204,7 +200,12 @@ class DrawScriptDetail extends Component {
             return resultTempJson
         }
         if(canBack){
-            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
+            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson));
+            const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'));
+            if( Array.indexOf(scriptStorage, `pre-${this.props.match.params.id}`)===-1){
+                scriptStorage.push(`pre-${this.props.match.params.id}`)
+                sessionStorage.setItem('scriptStorage',JSON.stringify(scriptStorage))
+            }
             this.props.history.goBack()
         }
     }

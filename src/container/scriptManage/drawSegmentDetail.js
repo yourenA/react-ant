@@ -162,6 +162,11 @@ class DrawScriptDetail extends Component {
         }
         if (canBack) {
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
+            const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'));
+            if( Array.indexOf(segmentStorage, `pre-${this.props.match.params.id}`)===-1){
+                segmentStorage.push(`pre-${this.props.match.params.id}`)
+                sessionStorage.setItem('segmentStorage',JSON.stringify(segmentStorage))
+            }
             this.props.history.goBack()
         }
     }

@@ -152,7 +152,7 @@ class AddOrEditNameForm extends React.Component {
                                 <Input  />
                             )}
                         </FormItem>
-                        {
+                       {/* {
                             localStorage.getItem('userrole')==='系统管理员'?
                                 <FormItem
                                     label="厂商名称"
@@ -171,7 +171,7 @@ class AddOrEditNameForm extends React.Component {
                                     )}
                                 </FormItem>
                                 :null
-                        }
+                        }*/}
 
                     </div>
                     : null}

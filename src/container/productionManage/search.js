@@ -2,12 +2,12 @@
  * Created by Administrator on 2017/3/24.
  */
 import React, {Component} from 'react';
-import {Input} from 'antd';
-const Search = Input.Search;
+import {Input,Button} from 'antd';
 class TopicTable extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+        };
     }
 
     componentDidMount() {
@@ -24,10 +24,11 @@ class TopicTable extends Component {
         return (
             <div className="search-wrap">
                 <span>生产批次: </span>
-                <Search
+                <Input
                     defaultValue={''}
                     style={{width: 150}}
-                    onSearch={searchText => this.onChangeSearchText(searchText)}
+                    onPressEnter={searchText => {this.onChangeSearchText(searchText.target.value)}}
+                    onChange={searchText => {this.onChangeSearchText(searchText.target.value)}}
                 />
             </div>
 

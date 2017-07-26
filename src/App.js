@@ -31,7 +31,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as loginAction from './actions/login';
 import {testPermission} from './common/common'
-import configJson from 'configJson' ;
 const {Header} = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -67,7 +66,7 @@ class App extends Component {
 
     handleClick = (e) => {
         if (e.key === 'systemJournal') {
-            this.refs.SystemJournalModal.setSystemJournalModalTrue()
+            // this.refs.SystemJournalModal.setSystemJournalModalTrue()
         } else {
             this.setState({
                 pathname: e.key,
@@ -89,7 +88,7 @@ class App extends Component {
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <div className="layout" style={{display:this.state.pathname==='/about'?'none':'block'}}>
-                        <Header className="layout-header" style={{minWidth:'1000px'}}>
+                        <Header className="layout-header" style={{minWidth:'1100px'}}>
                             <div className="logo"/>
                             <Menu
                                 onClick={this.handleClick}
@@ -128,11 +127,11 @@ class App extends Component {
                                 {
                                     (login.login && testPermission('test_stand_management') ) ?
                                         <SubMenu title={<span>分类管理</span>}>
-                                            {testPermission('company_management') ?
+                                            {/*{testPermission('company_management') ?
                                                 <Menu.Item key="/companies"><NavLink activeClassName="nav-selected"
                                                                                      to="/companies">制造厂商</NavLink></Menu.Item>
                                                 : null
-                                            }
+                                            }*/}
                                             {testPermission('product_management') ?
                                                 <Menu.Item key="/products"><NavLink activeClassName="nav-selected"
                                                                                     to="/products">产品管理</NavLink></Menu.Item>
@@ -174,13 +173,15 @@ class App extends Component {
                                     <Menu.Item key="/register"><NavLink activeClassName="nav-selected"
                                                                         to="/register">注册</NavLink></Menu.Item>
                                 </SubMenu>}
-                                {login.login ?
+                                <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
+                                                                 to="/about">说明文档</NavLink></Menu.Item>
+                                {/*{login.login ?
                                     <Menu.Item key="systemJournal"
-                                               className="systemJournal-nav">系统日志</Menu.Item> : null}
+                                               className="systemJournal-nav">系统日志</Menu.Item> : null}*/}
                             </Menu>
                         </Header>
-                        <SystemJournalModal systemJournalModal={this.state.systemJournalModal}
-                                            ref="SystemJournalModal"/>
+                        {/*<SystemJournalModal systemJournalModal={this.state.systemJournalModal}
+                                            ref="SystemJournalModal"/>*/}
                     </div>
 
                     <Route exact path="/" component={Home}/>
@@ -265,12 +266,12 @@ class App extends Component {
                             <UserConfig {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route
+                   {/* <Route
                         path="/companies" render={(props) => {
                         return (login.login && testPermission('company_management') ) ?
                             <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
+                    }}/>*/}
                     <Route
                         path="/products" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?

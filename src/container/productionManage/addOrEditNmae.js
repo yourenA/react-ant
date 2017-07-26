@@ -104,7 +104,7 @@ class AddOrEditNameForm extends React.Component {
                                     )}
                                 </FormItem>
                             </div>
-                            <div className="testing-config-item no-padding-right">
+                            {/*<div className="testing-config-item no-padding-right">
                                 <FormItem
                                     label="制造厂商"
                                     {...producLayout}>
@@ -125,7 +125,7 @@ class AddOrEditNameForm extends React.Component {
                                         </Select>
                                     )}
                                 </FormItem>
-                            </div>
+                            </div>*/}
                         </div>
                         <div className="testing-config-row desc-row">
                             <div className="">

@@ -67,7 +67,7 @@ class AddOrEditNameForm extends React.Component {
                             </FormItem>
                             : null
                     }
-                    {
+                   {/* {
                         (localStorage.getItem('userrole') === '系统管理员' && !this.props.isEdit) ?
                             <FormItem
                                 label="单位机构"
@@ -85,7 +85,7 @@ class AddOrEditNameForm extends React.Component {
                                 )}
                             </FormItem>
                             : null
-                    }
+                    }*/}
                     {this.props.isEdit ?
                         <FormItem
                             label="状态"

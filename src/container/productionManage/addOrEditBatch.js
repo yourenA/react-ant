@@ -221,7 +221,7 @@ class AddOrEditBatch extends React.Component {
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
-                            <Button onClick={()=>this.props.history.goBack()}>取消</Button>
+                            <Button onClick={()=>this.props.history.goBack()}>退出</Button>
                             <span className="ant-divider"/>
                             <Button type='primary' onClick={this.saveBatch}>保存</Button>
                         </div>
@@ -241,7 +241,7 @@ class AddOrEditBatch extends React.Component {
                                 onSelectChange={this.handleSelectChangeTestType}
                                 render={this.renderItem}
                                 listStyle={{
-                                    width: 250,
+                                    width: 230,
                                     height: 300,
                                 }}
                             />

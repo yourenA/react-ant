@@ -242,8 +242,7 @@ class ProductionManage extends Component {
                             <SearchWrap
                                 onChangeSearch={this.onChangeSearch}
                                 type={this.props.match.url} {...this.props} {...this.state} />
-                            <span className="ant-divider"/>
-                            <Button  type="primary">
+                            <Button  icon="plus" type="primary" className='add-btn'>
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newBatch`,

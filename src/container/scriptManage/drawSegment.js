@@ -14,7 +14,7 @@ import {bindActionCreators} from 'redux';
 import ScriptInfo from './scriptInfo';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-
+const confirm = Modal.confirm;
 const {Content,} = Layout;
 
 
@@ -121,10 +121,26 @@ class AddProgramSegment extends Component {
         delPointsInLink(segmentTempJson.linkDataArray);
         console.log("临时保存",segmentTempJson);
         sessionStorage.setItem('segmentTempJson',JSON.stringify(segmentTempJson));
-        // sessionStorage.setItem('originJson',JSON.stringify(resultTempJson))
+        const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'))||[];
+        if( Array.indexOf(segmentStorage, `segmentTempJson`)===-1){
+            segmentStorage.push(`segmentTempJson`)
+            sessionStorage.setItem('segmentStorage',JSON.stringify(segmentStorage))
+        }
     }
     turnBack = ()=> {
-            this.props.history.goBack()
+        const that = this;
+        confirm({
+            title: '如果放弃保存，修改的内容将会丢失',
+            okText: '直接退出',
+            cancelText: '取消',
+            maskClosable:true,
+            onOk() {
+                that.props.history.goBack()
+            },
+            onCancel() {
+                // that.props.history.goBack()
+            },
+        });
     }
     render() {
         return (
