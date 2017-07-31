@@ -31,7 +31,7 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllSegments();
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem(this.props.match.params.id));
         if (!this.props.location.state.newSegment) {
-            this.fetchScript(localStorage.getItem('manageSegmentId'))
+            this.fetchScript(sessionStorage.getItem('manageSegmentId'))
         }
         if (!sessionStorage.getItem('breadcrumbArrForSegment')) {
             sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify([{
@@ -176,7 +176,7 @@ class DrawScriptDetail extends Component {
         const content = this.saveTempScript(false, true);
         delPointsInLink(content.linkDataArray);
         const newSegment = !this.state.editRecord;
-        const url = newSegment ? `/flow_diagrams` : `/flow_diagrams/${localStorage.getItem('manageSegmentId')}`;
+        const url = newSegment ? `/flow_diagrams` : `/flow_diagrams/${sessionStorage.getItem('manageSegmentId')}`;
         const method = newSegment ? `post` : `put`;
         const meg = newSegment ? messageJson[`add segment success`] : messageJson[`edit segment success`];
         axios({
@@ -194,7 +194,7 @@ class DrawScriptDetail extends Component {
                 newSegment
                     ? setTimeout(function () {
                     that.props.history.replace({pathname: `/segmentManage`})
-                }, 1000) : that.fetchScript(localStorage.getItem('manageSegmentId'));
+                }, 1000) : that.fetchScript(sessionStorage.getItem('manageSegmentId'));
                 that.setState({
                     saveModal: false
                 })

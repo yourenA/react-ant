@@ -14,7 +14,7 @@ class TopicTable extends Component {
             <div className="search-wrap">
 
                 <span>生产批次: </span>
-                <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
+                <Select  dropdownMatchSelectWidth={false} className="search-select"
                         onChange={this.onChangeBatches}
                         showSearch
                         style={{width: 150}}

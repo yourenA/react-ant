@@ -34,6 +34,7 @@ class HardwareTesting extends Component {
                 key: '',
                 label:  ''
             },
+            serial_number:'',
             product_code: '',
             adapter: '',
             product_sn: '',
@@ -162,7 +163,8 @@ class HardwareTesting extends Component {
                     channel: response.data.channel,
                     startTestModal: false,
                     maskDisplay: 'block',
-                    startTest: !that.state.startTest
+                    startTest: !that.state.startTest,
+                    serial_number:serialNumbers
                 }, function () {
                     that.openWS()
                 });
@@ -248,7 +250,7 @@ class HardwareTesting extends Component {
                             <div className="testing-config">
                                 <div className="testing-config-row">
                                     <div className="testing-config-item">
-                                        <span title={this.state.script.label}>测试脚本 : {this.state.script.label}
+                                        <span className="testing-config-text" title={this.state.script.label}>测试脚本 : {this.state.script.label}
                                         </span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
@@ -296,13 +298,7 @@ class HardwareTesting extends Component {
                                         }}>更改</Button>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span>产品序列号 : <Input disabled={this.state.inputDisabled} style={{width: 130}}
-                                                   placeholder=""/>
-                                            <Icon onClick={this.toggleInput}
-                                                  type={this.state.inputDisabled ? 'lock' : 'unlock'}
-                                                  title={this.state.inputDisabled ? '打开' : '关闭'}
-                                                  style={{fontSize: '20px', cursor: 'pointer'}}/>
-                                        </span>
+                                        <span title={this.state.serial_number}>产品序列号 : {this.state.serial_number}</span>
                                     </div>
                                 </div>
                             </div>

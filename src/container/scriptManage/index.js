@@ -55,6 +55,7 @@ class ScriptManage extends Component {
         }
         sessionStorage.removeItem('scriptStorage')
         sessionStorage.removeItem('breadcrumbArr')
+        sessionStorage.removeItem('manageScriptId')
         this.fetchHwData();
         this.props.delAllHardwareVersions()
 
@@ -216,14 +217,14 @@ class ScriptManage extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                            <Button  icon="plus" type='primary' className='add-btn'>
+
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newScript`,
                                         state: { newScript: true}
                                     }}
-                                >新建脚本</Link>
-                            </Button>
+                                > <Button  icon="plus" type='primary' className='add-btn'>新建脚本</Button></Link>
+
                         </div>
                         <Table bordered className="main-table"
                                loading={this.state.loading}

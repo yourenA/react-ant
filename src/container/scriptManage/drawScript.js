@@ -30,7 +30,7 @@ class DrawScript extends Component {
 
     componentDidMount() {
         if (!this.props.location.state.newScript) {
-            localStorage.setItem('manageScriptId', this.props.location.state.editRecord.id);
+            sessionStorage.setItem('manageScriptId', this.props.location.state.editRecord.id);
             if (this.props.fetchTestConf.scriptLoaded) {
                 this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem('resultTempJson'));
                 this.props.fetchDrawScript(this.props.location.state.editRecord.id)

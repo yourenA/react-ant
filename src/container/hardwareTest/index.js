@@ -42,7 +42,7 @@ class HardwareTest extends Component {
 	}
      * */
     componentDidMount() {
-        this.fetchHwData();
+        // this.fetchHwData();
         this.props.fetchAllBatches();
         // this.props.fetchAllTestType();
         // this.props.fetchAllParts();

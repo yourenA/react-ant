@@ -2,7 +2,8 @@
 
 ```bash
 $ npm install
-$ npm start
+$ npm run build
+$ npm run pm2:prod
 ```
 
 ## 流程图JSON字段

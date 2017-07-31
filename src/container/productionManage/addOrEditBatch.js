@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Breadcrumb, Transfer, Card, Button, message, Icon,Radio} from 'antd';
+import {Breadcrumb, Transfer, Card, Button, message, Icon, Radio} from 'antd';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
@@ -12,14 +12,16 @@ import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 const RadioGroup = Radio.Group;
+const _ = require('lodash');
 class AddOrEditBatch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editRecord:null,
-            hardwareVersion:'',
+            editRecord: null,
+            hardwareVersion: '',
             targetTestTypeKeys: [],
             selectedTestTypeKeys: [],
+            hadClickScript:[]
         };
     }
 
@@ -30,15 +32,16 @@ class AddOrEditBatch extends React.Component {
         console.log('componentDidMount');
         this.props.fetchAllManufacture();
         this.props.fetchAllProducts();
-        if( !this.props.location.state.newBatch){
+        if (!this.props.location.state.newBatch) {
             this.fetchBatch(this.props.location.state.editId)
             this.props.fetchAllTestType()
         }
 
 
     }
-    fetchBatch=(id)=>{
-        const that=this;
+
+    fetchBatch = (id)=> {
+        const that = this;
         axios({
             url: `${configJson.prefix}/batches/${id}`,
             method: 'get',
@@ -46,17 +49,17 @@ class AddOrEditBatch extends React.Component {
         })
             .then(function (response) {
                 console.log(response.data);
-                let tesTypeArr=[]
-                for(let i=0,len=response.data.test_types.data.length;i<len;i++){
+                let tesTypeArr = []
+                for (let i = 0, len = response.data.test_types.data.length; i < len; i++) {
                     tesTypeArr.push(response.data.test_types.data[i].id);
                     that.setState({
-                        [response.data.test_types.data[i].id]:response.data.test_types.data[i].default_test_script_id
+                        [response.data.test_types.data[i].id]: response.data.test_types.data[i].default_test_script_id
                     })
                 }
                 that.setState({
-                    editRecord:response.data,
-                    hardwareVersion:response.data.hardware_version_id,
-                    targetTestTypeKeys:tesTypeArr
+                    editRecord: response.data,
+                    hardwareVersion: response.data.hardware_version_id,
+                    targetTestTypeKeys: tesTypeArr
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -67,29 +70,39 @@ class AddOrEditBatch extends React.Component {
         console.log(e)
         this.setState({
             targetTestTypeKeys: [],
+            selectedTestTypeKeys: [],
         });
         this.props.delAllScript()
         this.props.fetchAllHardwareVersions(e.key)
     }
     changeHardwareVersion = (e)=> {
         console.log(e);
+        console.log(this.state.hadClickScript)
+        const hadClickScript=this.state.hadClickScript
+        for(let i=0,len=hadClickScript.length;i<len;i++){
+            this.setState({
+                [hadClickScript[i]]:null
+            })
+        }
         this.setState({
             targetTestTypeKeys: [],
-            hardwareVersion:e.key
+            selectedTestTypeKeys: [],
+            hardwareVersion: e.key,
         });
+        this.props.delAllScript()
         this.props.fetchAllTestType()
         // this.props.fetchAllScript(e.key)
     }
     handleChangeTestType = (nextTargetKeys, direction, moveKeys) => {
         this.setState({targetTestTypeKeys: nextTargetKeys});
-        if(direction==='left'){
+        if (direction === 'left') {
             this.props.delAllScript();
-            for(let i=0,len=moveKeys.length;i<len;i++){
-                if(this.state[moveKeys[i]]){
+            for (let i = 0, len = moveKeys.length; i < len; i++) {
+                if (this.state[moveKeys[i]]) {
                     console.log('先前存在')
                     this.setState({
-                        [moveKeys[i]]:null
-                    },function () {
+                        [moveKeys[i]]: null
+                    }, function () {
                     })
                 }
             }
@@ -101,59 +114,87 @@ class AddOrEditBatch extends React.Component {
     }
     sortScript = (category, sort, selectedKeys, targetKeys)=> {
         targetKeys = [...targetKeys];//注意！这是不能直接写成let targetKeys=this.state.targetKeys;这样写视图就不会更新
-        if (selectedKeys.length !== 1) {
-            message.error('只能选一个脚本移动')
+        // if (selectedKeys.length !== 1) {
+        //     message.error('只能选一个脚本移动')
+        //     return false
+        // }
+        let canSort = true;
+        if (selectedKeys.length === targetKeys.length || canSort === false) {
+            console.log('不能移动')
             return false
         }
         if (sort === 'up') {
-            if (targetKeys.indexOf(selectedKeys[0]) === 0) {
-                message.error('不能选择第一个')
+            let parseSelectedKeys=[]
+            for (let i = 0, len = selectedKeys.length; i < len; i++) {
+                const preIndex=targetKeys.indexOf(selectedKeys[i]);
+                parseSelectedKeys[preIndex]=selectedKeys[i]
+            }
+            parseSelectedKeys= _.compact(parseSelectedKeys);
+
+            if (targetKeys.indexOf(parseSelectedKeys[0]) === 0) {
+                console.log('选择了第一个')
                 return false
             } else {
-                const index = targetKeys.indexOf(selectedKeys[0]);
-                const temp = targetKeys[index - 1]
-                targetKeys[index - 1] = targetKeys[index]
-                targetKeys[index] = temp;
 
+                for (let i = 0, len = parseSelectedKeys.length; i < len; i++) {
+                    const index = targetKeys.indexOf(parseSelectedKeys[i]);
+                    const temp = targetKeys[index - 1]
+                    targetKeys[index - 1] = targetKeys[index]
+                    targetKeys[index] = temp;
+                }
             }
+            canSort = false;
         } else if (sort === 'down') {
-            if (targetKeys.indexOf(selectedKeys[0]) === targetKeys.length - 1) {
-                message.error('不能选择最后一个')
-            } else {
-                const index = targetKeys.indexOf(selectedKeys[0]);
-                const temp = targetKeys[index + 1]
-                targetKeys[index + 1] = targetKeys[index]
-                targetKeys[index] = temp;
+            let parseSelectedKeys=[]
+            for (let i = 0, len = selectedKeys.length; i < len; i++) {
+                const preIndex=len+1-targetKeys.indexOf(selectedKeys[i]);
+                parseSelectedKeys[preIndex]=selectedKeys[i]
             }
-        }
+            parseSelectedKeys= _.compact(parseSelectedKeys);
+            canSort = false;
+            if (targetKeys.indexOf(parseSelectedKeys[0]) === targetKeys.length - 1) {
+                console.log('选择了最后一个')
+            } else {
+                for (let i = 0, len = parseSelectedKeys.length; i < len; i++) {
+                    const index = targetKeys.indexOf(parseSelectedKeys[i]);
+                    const temp = targetKeys[index + 1]
+                    targetKeys[index + 1] = targetKeys[index]
+                    targetKeys[index] = temp;
+                }
 
-            this.setState({
-                targetTestTypeKeys: targetKeys
-            })
+            }
+
+        }
+        this.setState({
+            targetTestTypeKeys: targetKeys
+        }, function () {
+            canSort = true
+        })
+
     }
     saveBatch = ()=> {
-        const isEdit=!this.props.location.state.newBatch
+        const isEdit = !this.props.location.state.newBatch
         const AddOrEditName = this.refs.AddOrEditName.getFieldsValue();
-        const { targetTestTypeKeys}=this.state;
-        const sendData={
-            code:AddOrEditName.code,
+        const {targetTestTypeKeys}=this.state;
+        const sendData = {
+            code: AddOrEditName.code,
             // product_id:AddOrEditName.product_id?AddOrEditName.product_id.key:'',
-            hardware_version_id:AddOrEditName.hardware_version_id?AddOrEditName.hardware_version_id.key:'',
-            company_id:AddOrEditName.company_id?AddOrEditName.company_id.key:'',
-            description:AddOrEditName.description,
-            test_types:[]
+            hardware_version_id: AddOrEditName.hardware_version_id ? AddOrEditName.hardware_version_id.key : '',
+            company_id: AddOrEditName.company_id ? AddOrEditName.company_id.key : '',
+            description: AddOrEditName.description,
+            test_types: []
         };
-        if(isEdit)delete sendData.code;
-        for(let i=0,len=targetTestTypeKeys.length;i<len;i++){
+        if (isEdit)delete sendData.code;
+        for (let i = 0, len = targetTestTypeKeys.length; i < len; i++) {
             sendData.test_types.push({
-                id:targetTestTypeKeys[i],
-                default_test_script_id:this.state[targetTestTypeKeys[i]]
+                id: targetTestTypeKeys[i],
+                default_test_script_id: this.state[targetTestTypeKeys[i]]
             })
         }
-        console.log( sendData.test_types)
-        const url=isEdit?`/${this.state.editRecord.id}`:'';
-        const method=isEdit?`put`:'post';
-        const msg=isEdit?`edit batches success`:`add batches success`;
+        console.log(sendData.test_types)
+        const url = isEdit ? `/${this.state.editRecord.id}` : '';
+        const method = isEdit ? `put` : 'post';
+        const msg = isEdit ? `edit batches success` : `add batches success`;
         axios({
             url: `${configJson.prefix}/batches${url}`,
             method: method,
@@ -169,29 +210,35 @@ class AddOrEditBatch extends React.Component {
         })
 
     }
-    getScript=(id)=>{
-        console.log('id',id);
-        if(this.state.targetTestTypeKeys.indexOf(id)>=0){
-            if(this.state[id]){
+    getScript = (id)=> {
+        console.log('id', id);
+        if (this.state.targetTestTypeKeys.indexOf(id) >= 0) {
+            if (this.state[id]) {
+                const hadClickScript=this.state.hadClickScript.concat(id);
+                console.log('hadClickScript',hadClickScript)
                 this.setState({
-                    nowGetScript:id
+                    hadClickScript:hadClickScript,
+                    nowGetScript: id
                 })
-            }else{
+            } else {
                 this.setState({
-                    [id]:null,
-                    nowGetScript:id
+                    [id]: null,
+                    nowGetScript: id
                 })
             }
 
-            this.props.fetchAllScript(this.state.hardwareVersion,id)
-        }else{
+            this.props.fetchAllScript(this.state.hardwareVersion, id)
+        } else {
             message.error('请将测试类型添加到右边')
         }
     }
     renderItem = (item) => {
-        const customLabel= (
+        const customLabel = (
             <span className="custom-item">
-                {item.name }<Button style={{marginLeft:'10px'}} size="small" onClick={(e)=>{e.stopPropagation();this.getScript(item.id)}}>设置默认脚本</Button>
+                {item.name }<Button style={{marginLeft: '10px'}} size="small" onClick={(e)=> {
+                e.stopPropagation();
+                this.getScript(item.id)
+            }}>选择脚本</Button>
             </span>
         );
         return {
@@ -199,25 +246,29 @@ class AddOrEditBatch extends React.Component {
             value: item.name,   // for title and filter matching
         };
     }
-    onChange=(e)=>{
+    onChange = (e)=> {
         const {nowGetScript}=this.state;
         this.setState({
-            [nowGetScript]:e.target.value
+            [nowGetScript]: e.target.value
         })
     }
+
     render() {
         const radioStyle = {
             display: 'block',
             height: '33px',
             lineHeight: '33px',
-            paddingLeft:'10px'
+            paddingLeft: '10px',
+            width: '200px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
         };
         return (
             <div>
                 <div className="content">
                     <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>生产批次管理</Breadcrumb.Item>
-                        <Breadcrumb.Item>{this.props.location.state.newBatch ? '新建产品批次' : `${this.state.editRecord?this.state.editRecord.code:''}`}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.props.location.state.newBatch ? '新建产品批次' : `${this.state.editRecord ? this.state.editRecord.code : ''}`}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
@@ -226,7 +277,10 @@ class AddOrEditBatch extends React.Component {
                             <Button type='primary' onClick={this.saveBatch}>保存</Button>
                         </div>
                         <Card title="1.批次基本信息" bordered={true} className="transfer-card">
-                            <AddOrEditName isEdit={this.state.editRecord!==null} editRecord={this.state.editRecord} changeProduct={this.changeProduct} changeHardwareVersion={this.changeHardwareVersion}  {...this.props} ref="AddOrEditName"/>
+                            <AddOrEditName isEdit={this.state.editRecord !== null} editRecord={this.state.editRecord}
+                                           changeProduct={this.changeProduct}
+                                           changeHardwareVersion={this.changeHardwareVersion}  {...this.props}
+                                           ref="AddOrEditName"/>
                         </Card>
                         <Card title="2.批次测试工序流程" bordered={true} className="transfer-card">
                             <Transfer
@@ -241,7 +295,7 @@ class AddOrEditBatch extends React.Component {
                                 onSelectChange={this.handleSelectChangeTestType}
                                 render={this.renderItem}
                                 listStyle={{
-                                    width: 230,
+                                    width: 250,
                                     height: 300,
                                 }}
                             />
@@ -257,20 +311,26 @@ class AddOrEditBatch extends React.Component {
                             </div>
                             <div className="set-defaultScript">
                                 <div className="set-defaultScript-header">选择默认脚本</div>
-                                <RadioGroup onChange={this.onChange} >
-                                {this.props.fetchTestConf.script.map((item,index)=>{
-                                        if(this.state[this.state.nowGetScript]===item.id){
+                                <RadioGroup onChange={this.onChange}>
+                                    {this.props.fetchTestConf.script.map((item, index)=> {
+                                        if (this.state[this.state.nowGetScript] === item.id) {
                                             console.log('已经选择')
-                                            return(
-                                                <Radio key={index} checked={true} style={radioStyle} value={item.id}>{item.name}</Radio>
+                                            return (
+                                                <Radio key={index} checked={true} style={radioStyle}
+                                                       value={item.id}>{item.name}<span
+                                                    style={{
+                                                        marginLeft: '5px',
+                                                        fontWeight: 'bold'
+                                                    }}>(默认脚本)</span></Radio>
                                             )
-                                        }else{
-                                            return(
-                                                <Radio key={index} style={radioStyle} value={item.id}>{item.name}</Radio>
+                                        } else {
+                                            return (
+                                                <Radio key={index} style={radioStyle}
+                                                       value={item.id}>{item.name}</Radio>
                                             )
                                         }
 
-                                })}
+                                    })}
                                 </RadioGroup>
                             </div>
                             <div className="right-transfer-description">

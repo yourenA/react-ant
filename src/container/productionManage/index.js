@@ -242,14 +242,14 @@ class ProductionManage extends Component {
                             <SearchWrap
                                 onChangeSearch={this.onChangeSearch}
                                 type={this.props.match.url} {...this.props} {...this.state} />
-                            <Button  icon="plus" type="primary" className='add-btn'>
+
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newBatch`,
                                         state: { newBatch: true,editRecord:null}
                                     }}
-                                >添加生产批次</Link>
-                            </Button>
+                                ><Button  icon="plus" type="primary" className='add-btn'>添加生产批次</Button></Link>
+
                         </div>
                         <Table bordered className="main-table"
                                loading={this.state.loading}

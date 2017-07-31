@@ -90,7 +90,7 @@ class App extends Component {
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <div className="layout" style={{display:this.state.pathname==='/about'?'none':'block'}}>
-                        <Header className="layout-header" style={{minWidth:'1100px'}}>
+                        <Header className="layout-header" style={{minWidth:'1200px'}}>
                             <div className="logo"/>
                             <Menu
                                 onClick={this.handleClick}
@@ -175,8 +175,9 @@ class App extends Component {
                                     <Menu.Item key="/register"><NavLink activeClassName="nav-selected"
                                                                         to="/register">注册</NavLink></Menu.Item>
                                 </SubMenu>}
+                                {login.login ?
                                 <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
-                                                                 to="/about">说明文档</NavLink></Menu.Item>
+                                                                 to="/about">说明文档</NavLink></Menu.Item>:null}
                                 {/*{login.login ?
                                     <Menu.Item key="systemJournal"
                                                className="systemJournal-nav">系统日志</Menu.Item> : null}*/}

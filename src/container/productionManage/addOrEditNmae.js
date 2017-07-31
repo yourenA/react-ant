@@ -13,22 +13,27 @@ class AddOrEditNameForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.isEdit!==this.props.isEdit){
+        if (nextProps.isEdit !== this.props.isEdit) {
             this.props.fetchAllHardwareVersions(nextProps.editRecord.product_id)
         }
     }
+
     changeProduct = (e)=> {
         console.log(e)
-        if(e){
+        if (e.label) {
             this.props.form.setFieldsValue({
-                hardware_version_id: {key:'',label:''},
+                hardware_version_id: {key: '', label: ''},
             });
             this.props.changeProduct(e)
+        }else{
+            this.props.form.setFieldsValue({
+                hardware_version_id: {key: '', label: ''},
+            });
         }
     }
     changeHardwareVersion = (e)=> {
         console.log(e);
-        if(e){
+        if (e) {
             // this.props.fetchAllScript(e.key)
             this.props.changeHardwareVersion(e)
         }
@@ -64,7 +69,7 @@ class AddOrEditNameForm extends React.Component {
                                         } : {key: '', label: ''},
                                         rules: [{required: true, message: '请选择产品代码'}],
                                     })(
-                                        <Select labelInValue={true}  onChange={this.changeProduct}
+                                        <Select labelInValue={true} onChange={this.changeProduct}
                                                 dropdownMatchSelectWidth={false}
                                                 showSearch
                                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
@@ -105,31 +110,31 @@ class AddOrEditNameForm extends React.Component {
                                 </FormItem>
                             </div>
                             {/*<div className="testing-config-item no-padding-right">
-                                <FormItem
-                                    label="制造厂商"
-                                    {...producLayout}>
-                                    {getFieldDecorator('company_id', {
-                                        initialValue: this.props.isEdit ? {
-                                            key: this.props.editRecord.company_id.toString(),
-                                            label: this.props.editRecord.company_name
-                                        } : {key: '', label: ''},
-                                        rules: [{required: true, message: '请选择制造厂商'}],
-                                    })(
-                                        <Select labelInValue={true} >
-                                            { this.props.fetchTestConf.manufactures.map((item, key) => {
-                                                return (
-                                                    <Option key={item.id}
-                                                            value={item.id.toString()}>{item.name}</Option>
-                                                )
-                                            }) }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </div>*/}
+                             <FormItem
+                             label="制造厂商"
+                             {...producLayout}>
+                             {getFieldDecorator('company_id', {
+                             initialValue: this.props.isEdit ? {
+                             key: this.props.editRecord.company_id.toString(),
+                             label: this.props.editRecord.company_name
+                             } : {key: '', label: ''},
+                             rules: [{required: true, message: '请选择制造厂商'}],
+                             })(
+                             <Select labelInValue={true} >
+                             { this.props.fetchTestConf.manufactures.map((item, key) => {
+                             return (
+                             <Option key={item.id}
+                             value={item.id.toString()}>{item.name}</Option>
+                             )
+                             }) }
+                             </Select>
+                             )}
+                             </FormItem>
+                             </div>*/}
                         </div>
                         <div className="testing-config-row desc-row">
                             <div className="">
-                                <span style={{marginRight:'10px',paddingLeft:'30px',fontSize:'12px'}}>说明描述 :</span>
+                                <span style={{marginRight: '10px', paddingLeft: '30px', fontSize: '12px'}}>说明描述 :</span>
                                 <FormItem>
                                     {getFieldDecorator('description', {
                                         initialValue: this.props.isEdit ? this.props.editRecord.description : '',

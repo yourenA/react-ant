@@ -28,7 +28,7 @@
 .content{
   padding: 0px 50px;
   background: #ececec;
-  min-width: 1100px;
+  min-width: 1200px;
   .content-container{
     background: #fff;
     padding: 24px;
@@ -118,13 +118,16 @@
         position: absolute;
         bottom: 10px;
         right: 50px;
-        .scroll-icon{
+        .del-icon,.scroll-icon{
           font-size: 26px;
           color: #bbbbbb;
           cursor: pointer;
           &:hover{
             color: #468847;
           }
+        }
+        .scroll-icon{
+          transform:rotate(90deg)
         }
       }
     }
@@ -163,6 +166,11 @@
 }
 .batch-transfer-process{
   margin-left: 95px;
+  .ant-transfer-list:first-child{
+    .ant-btn{
+      display: none;
+    }
+  }
 }
 
 .right-transfer-description{
@@ -174,7 +182,7 @@
   margin-left: 20px;
   display: inline-block;
   border-radius: 3px;
-  width: 220px;
+  width: 250px;
   height: 300px;
   border: 1px solid #d9d9d9;
   .set-defaultScript-header{
@@ -186,11 +194,10 @@
     width: 100%;
     text-align: right;
   }
-  .set-defaultScript-item{
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 7px 15px;
+  .ant-radio-wrapper{
+    .ant-radio{
+      display: none;
+    }
   }
 }
 

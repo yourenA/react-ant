@@ -37,6 +37,7 @@ class SegmentManage extends Component {
         }
         sessionStorage.removeItem('segmentStorage')
         sessionStorage.removeItem('breadcrumbArrForSegment')
+        sessionStorage.removeItem('manageSegmentId')
         this.fetchHwData();
     }
 
@@ -180,14 +181,14 @@ class SegmentManage extends Component {
                     <div className="content-container">
                         <div className="operate-box">
                             <SearchSegment onChangeSearch={this.onChangeSearch} />
-                            <Button  icon="plus" type='primary' className='add-btn'>
+
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/newSegment`,
                                         state: { newSegment: true , SegmentJson:'{}',name:''}
                                     }}
-                                >新建脚本段</Link>
-                            </Button>
+                                ><Button  icon="plus" type='primary' className='add-btn'>新建脚本段</Button></Link>
+
                         </div>
                         <Table bordered className="main-table"
                                loading={this.state.loading}

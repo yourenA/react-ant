@@ -36,7 +36,7 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllProducts()
         this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
         if (!this.props.location.state.newScript) {
-            this.fetchScript(localStorage.getItem('manageScriptId'))
+            this.fetchScript(sessionStorage.getItem('manageScriptId'))
         }
         if(!sessionStorage.getItem('breadcrumbArr')){
             sessionStorage.setItem('breadcrumbArr',JSON.stringify([{key:this.props.match.params.id,value:this.props.location.state.groupNmae}]))
@@ -131,7 +131,7 @@ class DrawScriptDetail extends Component {
         console.log('content',content)
         delPointsInLink(content.linkDataArray)
         const newScript=!this.state.editRecord
-        const url= newScript?`/test_scripts`:`/test_scripts/${localStorage.getItem('manageScriptId')}`;
+        const url= newScript?`/test_scripts`:`/test_scripts/${sessionStorage.getItem('manageScriptId')}`;
         const method=newScript ?`POST`:`PUT`;
         const msg=newScript ?messageJson[`add script success`]:messageJson[`edit script success`];
         axios({
@@ -152,7 +152,7 @@ class DrawScriptDetail extends Component {
                     ? setTimeout(function () {
                     that.props.history.replace({pathname:`/scriptManage`})
                 },1000)
-                    : that.fetchScript(localStorage.getItem('manageScriptId'));
+                    : that.fetchScript(sessionStorage.getItem('manageScriptId'));
 
 
 

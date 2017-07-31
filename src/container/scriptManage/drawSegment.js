@@ -30,7 +30,7 @@ class AddProgramSegment extends Component {
     componentDidMount() {
         this.props.fetchAllSegments();
         if (!this.props.location.state.newSegment) {
-            localStorage.setItem('manageSegmentId',this.props.location.state.editRecord.id);
+            sessionStorage.setItem('manageSegmentId',this.props.location.state.editRecord.id);
             // this.fetchScript(this.props.location.state.editRecord.id,this.refs.ScriptIndex.init)
             if(this.props.fetchTestConf.segmentLoaded){
                 this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem('segmentTempJson'));

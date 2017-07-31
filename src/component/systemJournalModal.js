@@ -107,13 +107,13 @@ class SystemJournal extends React.Component {
                     <div className="systemJournal-info">
                         <div className="systemJournal-scroll">
                             <div style={{marginBottom:'10px'}} >
-                                <Icon title="清空日志" type="delete" className="scroll-icon" onClick={this.clearJournalData}/>
+                                <Icon title="清空日志" type="delete" className="del-icon" onClick={this.clearJournalData}/>
                             </div>
                             <div>
-                                <Icon  title="返回顶部"  type="caret-up" className="scroll-icon" onClick={this.scrollToTop}/>
+                                <Icon  title="返回顶部"  type="step-backward" className="scroll-icon" onClick={this.scrollToTop}/>
                             </div>
                             <div>
-                                <Icon   title="跳到底部"  type="caret-down" className="scroll-icon" onClick={this.scrollToBottom}/>
+                                <Icon   title="跳到底部"  type="step-forward" className="scroll-icon" onClick={this.scrollToBottom}/>
                             </div>
                         </div>
                         {this.state.systemJournalInfo.map((item, index)=> {
