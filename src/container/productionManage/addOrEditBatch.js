@@ -11,6 +11,7 @@ import axios from 'axios'
 import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import uuidv4 from 'uuid/v4';
 const RadioGroup = Radio.Group;
 const _ = require('lodash');
 class AddOrEditBatch extends React.Component {
@@ -57,6 +58,7 @@ class AddOrEditBatch extends React.Component {
                     })
                 }
                 that.setState({
+                    hadClickScript:that.state.hadClickScript.concat(tesTypeArr),
                     editRecord: response.data,
                     hardwareVersion: response.data.hardware_version_id,
                     targetTestTypeKeys: tesTypeArr
@@ -67,17 +69,24 @@ class AddOrEditBatch extends React.Component {
     }
 
     changeProduct = (e)=> {
-        console.log(e)
+        console.log(e);
+        const hadClickScript=this.state.hadClickScript
+        for(let i=0,len=hadClickScript.length;i<len;i++){
+            this.setState({
+                [hadClickScript[i]]:null
+            })
+        }
         this.setState({
             targetTestTypeKeys: [],
             selectedTestTypeKeys: [],
+            hardwareVersion:''
         });
         this.props.delAllScript()
         this.props.fetchAllHardwareVersions(e.key)
     }
     changeHardwareVersion = (e)=> {
         console.log(e);
-        console.log(this.state.hadClickScript)
+        // console.log(this.state.hadClickScript)
         const hadClickScript=this.state.hadClickScript
         for(let i=0,len=hadClickScript.length;i<len;i++){
             this.setState({
@@ -94,6 +103,10 @@ class AddOrEditBatch extends React.Component {
         // this.props.fetchAllScript(e.key)
     }
     handleChangeTestType = (nextTargetKeys, direction, moveKeys) => {
+        if(!this.state.hardwareVersion){
+            message.error('硬件版本不能为空')
+            return false
+        }
         this.setState({targetTestTypeKeys: nextTargetKeys});
         if (direction === 'left') {
             this.props.delAllScript();
@@ -215,7 +228,7 @@ class AddOrEditBatch extends React.Component {
         if (this.state.targetTestTypeKeys.indexOf(id) >= 0) {
             if (this.state[id]) {
                 const hadClickScript=this.state.hadClickScript.concat(id);
-                console.log('hadClickScript',hadClickScript)
+                // console.log('hadClickScript',hadClickScript)
                 this.setState({
                     hadClickScript:hadClickScript,
                     nowGetScript: id
@@ -249,11 +262,12 @@ class AddOrEditBatch extends React.Component {
     onChange = (e)=> {
         const {nowGetScript}=this.state;
         this.setState({
-            [nowGetScript]: e.target.value
+            [nowGetScript]: e
         })
     }
 
     render() {
+        console.log(this.state)
         const radioStyle = {
             display: 'block',
             height: '33px',
@@ -311,27 +325,25 @@ class AddOrEditBatch extends React.Component {
                             </div>
                             <div className="set-defaultScript">
                                 <div className="set-defaultScript-header">选择默认脚本</div>
-                                <RadioGroup onChange={this.onChange}>
+                                <div>
                                     {this.props.fetchTestConf.script.map((item, index)=> {
                                         if (this.state[this.state.nowGetScript] === item.id) {
                                             console.log('已经选择')
                                             return (
-                                                <Radio key={index} checked={true} style={radioStyle}
-                                                       value={item.id}>{item.name}<span
-                                                    style={{
-                                                        marginLeft: '5px',
-                                                        fontWeight: 'bold'
-                                                    }}>(默认脚本)</span></Radio>
+                                                <div key={uuidv4()} onClick={()=>this.onChange( item.id)} className="script-item">
+                                                    <p>{item.name}</p>
+                                                    <p>(默认脚本)</p>
+                                                </div>
                                             )
                                         } else {
                                             return (
-                                                <Radio key={index} style={radioStyle}
-                                                       value={item.id}>{item.name}</Radio>
+                                                <div  key={uuidv4()}  onClick={()=>this.onChange( item.id)} className="script-item">{item.name}</div>
                                             )
                                         }
 
                                     })}
-                                </RadioGroup>
+                                </div>
+
                             </div>
                             <div className="right-transfer-description">
                                 说明：执行的测试顺序为从上到下，请排好优先顺序
