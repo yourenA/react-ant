@@ -38,7 +38,7 @@ class Editor extends React.Component {
             theme: 'monokai',
         };
         return (
-               <Codemirror className="myCodemirror" ref="editor" value={this.props.value} onChange={this.updateCode} options={options} autoFocus={true} />
+               <Codemirror className="myCodemirror" ref="editor" value={this.props.value} onChange={this.updateCode} options={options}  />
         );
     }
 }
