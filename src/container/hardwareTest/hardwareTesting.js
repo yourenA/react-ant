@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Icon, Input, Button, Modal, Select, Steps, Progress, message, Table} from 'antd';
+import {Breadcrumb,  Input, Button, Modal, Select, Steps, Progress, message} from 'antd';
 import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import axios from 'axios'
@@ -220,22 +220,6 @@ class HardwareTesting extends Component {
     }
 
     render() {
-        const columns = [{
-            title: '设备',
-            dataIndex: 'name',
-            width: '25%',
-        }, {
-            title: '类别',
-            dataIndex: 'age',
-            width: '25%',
-        }, {
-            title: '描述',
-            dataIndex: 'address',
-            width: '25%',
-        }, {
-            title: '执行报告',
-            dataIndex: 'info',
-        }];
         return (
             <div>
                 <div className="content">

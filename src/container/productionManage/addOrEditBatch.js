@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Breadcrumb, Transfer, Card, Button, message, Icon, Radio} from 'antd';
+import {Breadcrumb, Transfer, Card, Button, message, Icon} from 'antd';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
@@ -12,7 +12,6 @@ import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import uuidv4 from 'uuid/v4';
-const RadioGroup = Radio.Group;
 const _ = require('lodash');
 class AddOrEditBatch extends React.Component {
     constructor(props) {
@@ -37,8 +36,6 @@ class AddOrEditBatch extends React.Component {
             this.fetchBatch(this.props.location.state.editId)
             this.props.fetchAllTestType()
         }
-
-
     }
 
     fetchBatch = (id)=> {
@@ -189,6 +186,7 @@ class AddOrEditBatch extends React.Component {
         const isEdit = !this.props.location.state.newBatch
         const AddOrEditName = this.refs.AddOrEditName.getFieldsValue();
         const {targetTestTypeKeys}=this.state;
+        console.log('targetTestTypeKeys',targetTestTypeKeys)
         const sendData = {
             code: AddOrEditName.code,
             // product_id:AddOrEditName.product_id?AddOrEditName.product_id.key:'',
@@ -239,7 +237,6 @@ class AddOrEditBatch extends React.Component {
                     nowGetScript: id
                 })
             }
-
             this.props.fetchAllScript(this.state.hardwareVersion, id)
         } else {
             message.error('请将测试类型添加到右边')
@@ -268,15 +265,6 @@ class AddOrEditBatch extends React.Component {
 
     render() {
         console.log(this.state)
-        const radioStyle = {
-            display: 'block',
-            height: '33px',
-            lineHeight: '33px',
-            paddingLeft: '10px',
-            width: '200px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-        };
         return (
             <div>
                 <div className="content">

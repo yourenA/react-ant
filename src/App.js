@@ -25,7 +25,7 @@ import SystemManage from './container/systemManage/index';
 import UserConfig from './container/userConfig/index';
 import Login from './container/login';
 import Register from './container/register';
-import SystemJournalModal from './component/systemJournalModal'
+// import SystemJournalModal from './component/systemJournalModal'
 import './App.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';

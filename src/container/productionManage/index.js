@@ -103,7 +103,7 @@ class ProductionManage extends Component {
             url: `${configJson.prefix}/batches/${this.state.editId}/status`,
             method: 'patch',
             data:{
-                status:parseInt(this.state.statusValue.key)
+                status:parseInt(this.state.statusValue.key),
             },
             headers: getHeader()
         })

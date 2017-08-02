@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout, Icon,Modal,Button,message} from 'antd';
+import {Breadcrumb, Layout, Modal,Button,message} from 'antd';
 import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';

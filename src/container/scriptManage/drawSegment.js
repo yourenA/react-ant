@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Layout,Input , Button,Modal,message,Icon} from 'antd';
+import {Breadcrumb, Layout,Input , Button,Modal,message} from 'antd';
 import './drawScript.less';
 import ScriptIndex from './scriptIndex.js'
 import axios from 'axios'

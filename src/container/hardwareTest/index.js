@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Card} from 'antd';
+import {Breadcrumb,  Button, Card} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
 import {
