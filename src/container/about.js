@@ -234,7 +234,6 @@ class About extends React.Component {
                                                     <h4>3.条件判断框</h4>
                                                     <img  alt=""  src={require('./about/6.png')}/> <p className="about-p " >
                                                     双击文字可以编辑条件，条件的格式<br />
-                                                    <br />
                                                     {`
                              >,<,>=,<=,==,!= 数字比较符号
                              `}<br />
