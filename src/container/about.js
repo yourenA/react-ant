@@ -282,7 +282,7 @@ class About extends React.Component {
                                                 <li>
                                                     <h4>6.错误输出</h4>
                                                     <img  alt=""  src={require('./about/9.png')}/> <p className="about-p " >
-                                                    当需要把'dll方法框'中的相关错误码输出，可以将'dll方法框'与'错误输出框'相连，如下图：
+                                                    当需要把'dll方法框'中的相关错误码输出，可以将'dll方法框'与'错误输出框'相连，如下图：<br />
                                                         <img  alt=""  src={require('./about/10.png')}/><br/>
 
                                                     当'dll方法1'运行过程中出现指定的错误码404，这时候会调用'dll方法3'，而不是调用'dll方法2'
