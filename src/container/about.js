@@ -19,7 +19,7 @@ class About extends React.Component {
                                 <Link href="#system-desc" title="1.系统概述"/>
                                 <Link href="#run-env" title="2.运行环境"/>
                                 <Link href="#function" title="3.功能"/>
-                                <Link href="#use-explain" title="4.定义"/>
+                                <Link href="#definition" title="4.定义"/>
                                 <Link href="#permission" title="5.权限说明"/>
                                 <Link href="#use-explain" title="6.使用说明">
                                     <Link href="#hardware-test" title="6.1 硬件测试"/>
@@ -102,7 +102,7 @@ class About extends React.Component {
                                     <img className="about-image" alt="系统概述" src={require('./about/function.png')}/>
                                 </div>
                             </div>
-                            <div className="about-content-item" id="function">
+                            <div className="about-content-item" id="definition">
                                 <h2>4.定义</h2>
                                 <div className="item-desc">
                                     <ul>
