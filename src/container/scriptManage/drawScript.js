@@ -117,10 +117,15 @@ class DrawScript extends Component {
         let myDiagram = this.refs.ScriptIndex.callbackDiagram();
         const resultTempJson = JSON.parse(myDiagram.model.toJson());
         delPointsInLink(resultTempJson.linkDataArray);
-        // console.log("临时保存", resultTempJson);
         sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));
+
+        const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'))||[];
+        if( Array.indexOf(scriptDiagramStorage, `resultTempJson`)===-1){
+            scriptDiagramStorage.push(`resultTempJson`)
+            sessionStorage.setItem('scriptDiagramStorage',JSON.stringify(scriptDiagramStorage))
+        }
+
         const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'))||[];
-        // console.log('已经存在的scriptStorage',scriptStorage)
         if( Array.indexOf(scriptStorage, `resultTempJson`)===-1){
             scriptStorage.push(`resultTempJson`)
             sessionStorage.setItem('scriptStorage',JSON.stringify(scriptStorage))

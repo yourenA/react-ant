@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination,Button,Modal,Popconfirm,message} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message} from 'antd';
 import axios from 'axios'
 import SearchWrap from  './search';
 import {
@@ -12,7 +12,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import configJson from 'configJson' ;
-import {getHeader,converErrorCodeToMsg} from './../../common/common';
+import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
 
@@ -23,14 +23,15 @@ class ScriptManage extends Component {
             data: [],
             loading: false,
             page: 1,
-            q:'',
+            q: '',
             test_type: '',
             test_version: '',
             meta: {pagination: {total: 0, per_page: 0}},
-            editModal:false,
-            editRecord:{}
+            editModal: false,
+            editRecord: {}
         };
     }
+
     /**
      * 如果需要保存数据使用redux
      import {fetchAbout, changeStart, changeAbout} from '../actions/about';
@@ -47,15 +48,16 @@ class ScriptManage extends Component {
 	}
      * */
     componentDidMount() {
-        const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'))||[];
-        if(scriptStorage.length>0){
-            for(let i=0,len=scriptStorage.length;i<len;i++){
+        const scriptStorage = JSON.parse(sessionStorage.getItem('scriptStorage')) || [];
+        if (scriptStorage.length > 0) {
+            for (let i = 0, len = scriptStorage.length; i < len; i++) {
                 sessionStorage.removeItem(scriptStorage[i])
             }
         }
         sessionStorage.removeItem('scriptStorage')
         sessionStorage.removeItem('breadcrumbArr')
         sessionStorage.removeItem('manageScriptId')
+        sessionStorage.removeItem('scriptDiagramStorage')
         this.fetchHwData();
         this.props.delAllHardwareVersions()
 
@@ -63,7 +65,7 @@ class ScriptManage extends Component {
         this.props.fetchAllProducts();
     }
 
-    fetchHwData = (page = 1,q='', test_type='',test_version='')=> {
+    fetchHwData = (page = 1, q = '', test_type = '', test_version = '')=> {
         const that = this;
         this.setState({loading: true});
         this.props.setSciptLoadedFalse();
@@ -73,9 +75,9 @@ class ScriptManage extends Component {
             method: 'get',
             params: {
                 page: page,
-                query:q,
-                test_type_id:test_type,
-                hardware_version_id:test_version
+                query: q,
+                test_type_id: test_type,
+                hardware_version_id: test_version
             },
             headers: getHeader()
         })
@@ -88,14 +90,14 @@ class ScriptManage extends Component {
                     loading: false
                 })
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    delData=(id)=>{
-        console.log('id',id)
-        const that=this;
-        const {page, q, test_type,  test_version}=this.state;
+    delData = (id)=> {
+        console.log('id', id)
+        const that = this;
+        const {page, q, test_type, test_version}=this.state;
         axios({
             url: `${configJson.prefix}/test_scripts/${id}`,
             method: 'delete',
@@ -106,21 +108,21 @@ class ScriptManage extends Component {
                 that.fetchHwData(page, q, test_type, test_version);
                 message.success(messageJson[`del script success`]);
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    editData=()=>{
-        const that=this;
-        const {page, q, test_type,  test_version}=this.state;
+    editData = ()=> {
+        const that = this;
+        const {page, q, test_type, test_version}=this.state;
         const editScriptName = this.refs.editScriptName.getFieldsValue();
         axios({
             url: `${configJson.prefix}/test_scripts/${this.state.editRecord.id}`,
             method: 'put',
             params: {
-                name:editScriptName.name,
-                test_type_id:editScriptName.test_type_id.key,
-                hardware_version_id:editScriptName.hardware_version_id.key,
+                name: editScriptName.name,
+                test_type_id: editScriptName.test_type_id.key,
+                hardware_version_id: editScriptName.hardware_version_id.key,
             },
             headers: getHeader()
         })
@@ -128,40 +130,41 @@ class ScriptManage extends Component {
                 // console.log(response);
                 message.success(messageJson[`edit script success`]);//这三条语句的顺序不能乱
                 that.setState({
-                    editModal:false
+                    editModal: false
                 })
                 that.fetchHwData(page, q, test_type, test_version);
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q, test_type,test_version)=> {
+    onChangeSearch = (page, q, test_type, test_version)=> {
         this.setState({
-            page, q, test_type,  test_version
+            page, q, test_type, test_version
         })
-        this.fetchHwData(page, q, test_type,test_version);
+        this.fetchHwData(page, q, test_type, test_version);
     }
     onPageChange = (page) => {
-        const {q, test_type,  test_version}=this.state
+        const {q, test_type, test_version}=this.state
         this.onChangeSearch(page, q, test_type, test_version);
     };
+
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
             title: '序号',
             dataIndex: 'id',
             key: 'id',
-            width:'45px',
-            className:'table-index',
+            width: '45px',
+            className: 'table-index',
             render: (text, record, index) => {
                 return (
                     <span>
-                            {index+1}
+                            {index + 1}
                         </span>
                 )
             }
-        },{
+        }, {
             title: '脚本名称',
             dataIndex: 'name',
             key: 'name',
@@ -185,16 +188,17 @@ class ScriptManage extends Component {
                 return (
                     <div key={index}>
 
-                        <Button  type="primary">
-                            <Link
-                                to={{
-                                    pathname:`${this.props.match.url}/${record.id}`,
-                                    state: { newScript: false , scriptJson:JSON.parse(record.content),editRecord:record}
-                                }}
-                            >查看/编辑</Link>
-                        </Button>
+                        <Link
+                            to={{
+                                pathname: `${this.props.match.url}/${record.id}`,
+                                state: {newScript: false, scriptJson: JSON.parse(record.content), editRecord: record}
+                            }}
+                        ><Button type="primary">查看/编辑</Button></Link>
+
                         <span className="ant-divider"/>
-                        <Button onClick={()=>{this.setState({editRecord:record,editModal:true})}}>
+                        <Button onClick={()=> {
+                            this.setState({editRecord: record, editModal: true})
+                        }}>
                             修改属性
                         </Button>
                         <span className="ant-divider"/>
@@ -218,12 +222,12 @@ class ScriptManage extends Component {
                         <div className="operate-box">
                             <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
 
-                                <Link
-                                    to={{
-                                        pathname:`${this.props.match.url}/newScript`,
-                                        state: { newScript: true}
-                                    }}
-                                > <Button  icon="plus" type='primary' className='add-btn'>新建脚本</Button></Link>
+                            <Link
+                                to={{
+                                    pathname: `${this.props.match.url}/newScript`,
+                                    state: {newScript: true}
+                                }}
+                            > <Button icon="plus" type='primary' className='add-btn'>新建脚本</Button></Link>
 
                         </div>
                         <Table bordered className="main-table"
@@ -252,7 +256,8 @@ class ScriptManage extends Component {
                             </Button>,
                         ]}
                     >
-                        <AddOrEditName ref="editScriptName" {...this.props} fetchTestConf={this.props.fetchTestConf} editRecord={this.state.editRecord}/>
+                        <AddOrEditName ref="editScriptName" {...this.props} fetchTestConf={this.props.fetchTestConf}
+                                       editRecord={this.state.editRecord}/>
                     </Modal>
                 </div>
             </div>
@@ -268,4 +273,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispath) {
     return bindActionCreators(fetchTestConfAction, dispath);
 }
-export default connect(mapStateToProps,mapDispatchToProps)(ScriptManage);
+export default connect(mapStateToProps, mapDispatchToProps)(ScriptManage);

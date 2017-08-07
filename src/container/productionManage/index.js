@@ -195,7 +195,7 @@ class ProductionManage extends Component {
         }, {
             title: '操作',
             key: 'action',
-            width: 320,
+            width: 330,
             fixed: 'right',
             render: (text, record, index) => {
                 return (
@@ -205,22 +205,22 @@ class ProductionManage extends Component {
                             }}>
                                 状态
                             </Button><span className="ant-divider"/>
-                            <Button  type="primary">
+
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/${record.id}`,
                                         state: { newBatch: false,editId: record.id }
                                     }}
-                                >编辑</Link>
-                            </Button><span className="ant-divider"/>
-                            <Button type="primary" >
+                                ><Button  type="primary">编辑</Button></Link>
+                            <span className="ant-divider"/>
+
                                 <Link
                                     to={{
                                         pathname:`${this.props.match.url}/${record.id}/serialNumbers`,
                                         state: {batchId: record.id,editRecord:record }
                                     }}
-                                >产品序列号</Link>
-                                </Button>
+                                > <Button type="primary" >产品序列号</Button></Link>
+
                             <span className="ant-divider"/>
                             <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                         onConfirm={this.delData.bind(this, record.id)}>

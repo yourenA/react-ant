@@ -91,9 +91,10 @@ class DrawScriptDetail extends Component {
 
             if (this.props.history.action === 'POP') {
                 // console.log('POP');
-                for (let i = 0, len = sessionStorage.length; i < len; i++) {
-                    console.log(sessionStorage.key(i))
-                    let sessionJson = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+                const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
+                for (let i = 0, len = segmentDiagramStorage.length; i < len; i++) {
+                    // console.log(sessionStorage.key(i))
+                    let sessionJson = JSON.parse(sessionStorage.getItem(segmentDiagramStorage[i]));
                     let intersectJsonNode = _.differenceWith(preSessionJson.nodeDataArray, thisPropsIdJson.nodeDataArray, function (a, b) {
                         return (a.key === b.key)
                     })
@@ -102,11 +103,11 @@ class DrawScriptDetail extends Component {
                         sessionJson.nodeDataArray = _.differenceWith(sessionJson.nodeDataArray, intersectJsonNode, function (a, b) {
                             return (a.key === b.key)
                         });
-                        sessionStorage.setItem(sessionStorage.key(i), JSON.stringify(sessionJson))
+                        sessionStorage.setItem(segmentDiagramStorage[i], JSON.stringify(sessionJson))
                     }
                     if (intersectJsonLink.length) {
                         sessionJson.linkDataArray = _.differenceWith(sessionJson.linkDataArray, intersectJsonLink, _.isEqual);
-                        sessionStorage.setItem(sessionStorage.key(i), JSON.stringify(sessionJson))
+                        sessionStorage.setItem(segmentDiagramStorage[i], JSON.stringify(sessionJson))
                     }
                 }
                 nextPropsIdJson.nodeDataArray = _.differenceWith(nextPropsIdJson.nodeDataArray, preSessionJson.nodeDataArray, function (a, b) {
@@ -136,8 +137,9 @@ class DrawScriptDetail extends Component {
         delPointsInLink(changeJson.linkDataArray);
         sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
 
-        console.log('nowJson', nowJson)
-        console.log('changeJson', changeJson)
+        // console.log('nowJson', nowJson)
+        // console.log('changeJson', changeJson)
+
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray, function (a, b) {
             return (a.key === b.key)
         }).concat(changeJson.nodeDataArray);
@@ -161,7 +163,14 @@ class DrawScriptDetail extends Component {
             return segmentTempJson
         }
         if (canBack) {
-            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson))
+            sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson));
+
+            const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
+            if( Array.indexOf(segmentDiagramStorage, `pre-${this.props.match.params.id}`)===-1){
+                segmentDiagramStorage.push(`pre-${this.props.match.params.id}`)
+                sessionStorage.setItem('segmentDiagramStorage',JSON.stringify(segmentDiagramStorage))
+            }
+
             const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'));
             if( Array.indexOf(segmentStorage, `pre-${this.props.match.params.id}`)===-1){
                 segmentStorage.push(`pre-${this.props.match.params.id}`)
@@ -209,6 +218,7 @@ class DrawScriptDetail extends Component {
 
     render() {
         const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment')) || [];
+        console.log('breadcrumbArr',breadcrumbArr)
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">

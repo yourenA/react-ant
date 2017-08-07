@@ -125,12 +125,12 @@ class HardwareTest extends Component {
                                 {this.state.data.test_types?this.state.data.test_types.data.map((item,index)=>{
                                     return(
                                         <div key={index}>
-                                            <Button size="large" type="primary" style={{width:'100%'}}>
+
                                                 <Link to={{
                                                     pathname:`${this.props.match.url}/${item.id}`,
                                                     state: {testAllType:false,testTypeId:item.id,testTypeName:item.name,testScriptId:item.default_test_script_id,testRecord:this.state.data }
-                                                }}>{item.name}</Link>
-                                            </Button>
+                                                }}><Button size="large" type="primary" style={{width:'100%'}}>{item.name} </Button></Link>
+
                                         </div>
                                     )
                                 }):null}

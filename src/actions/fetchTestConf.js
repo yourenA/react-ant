@@ -4,6 +4,7 @@
 import {getHeader} from './../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
+import {converErrorCodeToMsg} from './../common/common';
 export const FETCH_TEST_TYPE_SUCCESS = 'FETCH_TEST_TYPE_SUCCESS';
 export const DEL_TEST_TYPE_SUCCESS = 'DEL_TEST_TYPE_SUCCESS';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
@@ -253,7 +254,8 @@ export function fetchAllBatches() {
                 });
             })
             .catch(function (error) {
-                console.log('获取出错', error)
+                console.log('获取出错', error);
+                converErrorCodeToMsg(error)
             });
     }
 }

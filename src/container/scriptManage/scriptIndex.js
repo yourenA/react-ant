@@ -67,6 +67,7 @@ class ScriptIndex extends Component {
                 })
                 const myPaletteModel = JSON.parse(myPalette.model.toJson()).nodeDataArray;
                 myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(testFuncData))
+                console.log('加载functionData')
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
@@ -892,9 +893,15 @@ class ScriptIndex extends Component {
         }
 
         sessionStorage.setItem(`${nodedata.key}`, JSON.stringify(detailJon));
-        console.log(this.props)
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
             this.props.saveTempScript();
+
+            const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
+            if( Array.indexOf(scriptDiagramStorage, `${nodedata.key}`)===-1){
+                scriptDiagramStorage.push(nodedata.key)
+                sessionStorage.setItem('scriptDiagramStorage',JSON.stringify(scriptDiagramStorage))
+            }
+
             const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'));
             if( Array.indexOf(scriptStorage, `${nodedata.key}`)===-1){
                 scriptStorage.push(nodedata.key)
@@ -913,11 +920,19 @@ class ScriptIndex extends Component {
             }
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
+
+            const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
+            if( Array.indexOf(segmentDiagramStorage, `${nodedata.key}`)===-1){
+                segmentDiagramStorage.push(nodedata.key)
+                sessionStorage.setItem('segmentDiagramStorage',JSON.stringify(segmentDiagramStorage))
+            }
+
             const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'));
             if( Array.indexOf(segmentStorage, `${nodedata.key}`)===-1){
                 segmentStorage.push(nodedata.key)
                 sessionStorage.setItem('segmentStorage',JSON.stringify(segmentStorage))
             }
+
             if (this.props.location.pathname === '/segmentManage/newSegment') {
                 this.props.history.push({
                     pathname: `/segmentDetail/${nodedata.key}`,
@@ -1055,8 +1070,8 @@ class ScriptIndex extends Component {
                             : null}
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}
                              style={{
-                                 height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 147px)` : `calc(100vh - 100px)`,
-                                minHeight:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?'calc(750px - 47px)':'750px'
+                                 height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 243px)` : `calc(100vh - 195px)`,
+                                minHeight:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?'calc(700px - 47px)':'700px'
                              }}>
                         </div>
 

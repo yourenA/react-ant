@@ -121,6 +121,14 @@ class AddProgramSegment extends Component {
         delPointsInLink(segmentTempJson.linkDataArray);
         console.log("临时保存",segmentTempJson);
         sessionStorage.setItem('segmentTempJson',JSON.stringify(segmentTempJson));
+
+        const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'))||[];
+        if( Array.indexOf(segmentDiagramStorage, `segmentTempJson`)===-1){
+            segmentDiagramStorage.push(`segmentTempJson`)
+            sessionStorage.setItem('segmentDiagramStorage',JSON.stringify(segmentDiagramStorage))
+        }
+
+
         const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'))||[];
         if( Array.indexOf(segmentStorage, `segmentTempJson`)===-1){
             segmentStorage.push(`segmentTempJson`)

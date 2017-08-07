@@ -2,14 +2,14 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination,Button,Modal,Popconfirm,message} from 'antd';
+import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, message} from 'antd';
 import axios from 'axios'
 import {
     Link
 } from 'react-router-dom';
 import configJson from 'configJson' ;
 import SearchSegment from './searchSegment'
-import {getHeader,converErrorCodeToMsg} from './../../common/common';
+import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';
@@ -22,26 +22,28 @@ class SegmentManage extends Component {
             data: [],
             loading: false,
             page: 1,
-            q:'',
+            q: '',
             meta: {pagination: {total: 0, per_page: 0}},
-            editModal:false,
-            editRecord:{}
+            editModal: false,
+            editRecord: {}
         };
     }
+
     componentDidMount() {
-        const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'))||[];
-        if(segmentStorage.length>0){
-            for(let i=0,len=segmentStorage.length;i<len;i++){
+        const segmentStorage = JSON.parse(sessionStorage.getItem('segmentStorage')) || [];
+        if (segmentStorage.length > 0) {
+            for (let i = 0, len = segmentStorage.length; i < len; i++) {
                 sessionStorage.removeItem(segmentStorage[i])
             }
         }
         sessionStorage.removeItem('segmentStorage')
         sessionStorage.removeItem('breadcrumbArrForSegment')
         sessionStorage.removeItem('manageSegmentId')
+        sessionStorage.removeItem('segmentDiagramStorage')
         this.fetchHwData();
     }
 
-    fetchHwData = (page = 1,q='')=> {
+    fetchHwData = (page = 1, q = '')=> {
         this.setState({loading: true});
         const that = this;
         this.props.setSegmentLoadedFalse();
@@ -51,7 +53,7 @@ class SegmentManage extends Component {
             method: 'get',
             params: {
                 page: page,
-                query:q
+                query: q
             },
             headers: getHeader()
         })
@@ -64,13 +66,13 @@ class SegmentManage extends Component {
                     loading: false
                 })
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    delData=(id)=>{
-        console.log('id',id)
-        const that=this;
+    delData = (id)=> {
+        console.log('id', id)
+        const that = this;
         const {page, q}=this.state;
         axios({
             url: `${configJson.prefix}/flow_diagrams/${id}`,
@@ -82,21 +84,21 @@ class SegmentManage extends Component {
                 that.fetchHwData(page, q);
                 message.success(messageJson[`del segment success`]);
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    editData=()=>{
+    editData = ()=> {
         const editSegmentName = this.refs.editSegmentName.getFieldsValue();
-        console.log("editScriptName",editSegmentName);
-        console.log('id',this.state.editRecord.id)
-        const that=this;
+        console.log("editScriptName", editSegmentName);
+        console.log('id', this.state.editRecord.id)
+        const that = this;
         const {page, q, test_type, test_part, test_version}=this.state;
         axios({
             url: `${configJson.prefix}/flow_diagrams/${this.state.editRecord.id}`,
             method: 'put',
             data: {
-                name:editSegmentName.name,
+                name: editSegmentName.name,
             },
             headers: getHeader()
         })
@@ -104,17 +106,17 @@ class SegmentManage extends Component {
                 console.log(response);
                 message.success(messageJson[`edit segment success`]);
                 that.setState({
-                    editModal:false
+                    editModal: false
                 })
                 that.fetchHwData(page, q, test_type, test_part, test_version);
             }).catch(function (error) {
-            console.log('获取出错',error);
+            console.log('获取出错', error);
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page,q)=> {
+    onChangeSearch = (page, q)=> {
         this.setState({
-            page,q
+            page, q
         })
         this.fetchHwData(page, q);
     }
@@ -122,43 +124,49 @@ class SegmentManage extends Component {
         const {q}=this.state;
         this.onChangeSearch(page, q);
     };
+
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
             title: '序号',
             dataIndex: 'id',
             key: 'id',
-            width:'45px',
-            className:'table-index',
+            width: '45px',
+            className: 'table-index',
             render: (text, record, index) => {
                 return (
                     <span>
-                            {index+1}
+                            {index + 1}
                         </span>
                 )
             }
-        },{
+        }, {
             title: '名称',
             dataIndex: 'name',
             key: 'name',
-        },  {
+        }, {
             title: '操作',
             key: 'action',
             width: 265,
             render: (text, record, index) => {
                 return (
                     <div key={index}>
+                        <Link
+                            to={{
+                                pathname: `${this.props.match.url}/${record.id}`,
+                                state: {
+                                    newSegment: false,
+                                    SegmentJson: record.content,
+                                    name: record.name,
+                                    editRecord: record
+                                }
+                            }}
+                        ><Button type="primary">查看/编辑</Button></Link>
 
-                        <Button  type="primary">
-                            <Link
-                                to={{
-                                    pathname:`${this.props.match.url}/${record.id}`,
-                                    state: { newSegment: false , SegmentJson:record.content,name:record.name,editRecord:record}
-                                }}
-                            >查看/编辑</Link>
-                        </Button>
                         <span className="ant-divider"/>
-                        <Button onClick={()=>{this.setState({editRecord:record,editModal:true})}}>
+                        <Button onClick={()=> {
+                            this.setState({editRecord: record, editModal: true})
+                        }}>
                             修改名称
                         </Button>
                         <span className="ant-divider"/>
@@ -180,14 +188,13 @@ class SegmentManage extends Component {
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box">
-                            <SearchSegment onChangeSearch={this.onChangeSearch} />
-
-                                <Link
-                                    to={{
-                                        pathname:`${this.props.match.url}/newSegment`,
-                                        state: { newSegment: true , SegmentJson:'{}',name:''}
-                                    }}
-                                ><Button  icon="plus" type='primary' className='add-btn'>新建脚本段</Button></Link>
+                            <SearchSegment onChangeSearch={this.onChangeSearch}/>
+                            <Link
+                                to={{
+                                    pathname: `${this.props.match.url}/newSegment`,
+                                    state: {newSegment: true, SegmentJson: '{}', name: ''}
+                                }}
+                            ><Button icon="plus" type='primary' className='add-btn'>新建脚本段</Button></Link>
 
                         </div>
                         <Table bordered className="main-table"
@@ -234,4 +241,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispath) {
     return bindActionCreators(fetchTestConfAction, dispath);
 }
-export default connect(mapStateToProps,mapDispatchToProps)(SegmentManage);
+export default connect(mapStateToProps, mapDispatchToProps)(SegmentManage);

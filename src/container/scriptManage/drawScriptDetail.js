@@ -93,8 +93,9 @@ class DrawScriptDetail extends Component {
 
             if(this.props.history.action==='POP'){
                 // console.log('POP');
-                for(let i=0,len=sessionStorage.length;i<len;i++){
-                    let sessionJson=JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+                const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
+                for(let i=0,len=scriptDiagramStorage.length;i<len;i++){
+                    let sessionJson=JSON.parse(sessionStorage.getItem(scriptDiagramStorage[i]));
                     let intersectJsonNode=_.differenceWith(preSessionJson.nodeDataArray,thisPropsIdJson.nodeDataArray,function (a,b) {
                         return (a.key === b.key)
                     })
@@ -103,11 +104,11 @@ class DrawScriptDetail extends Component {
                         sessionJson.nodeDataArray=_.differenceWith(sessionJson.nodeDataArray,intersectJsonNode,function (a,b) {
                             return (a.key === b.key)
                         });
-                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
+                        sessionStorage.setItem(scriptDiagramStorage[i],JSON.stringify(sessionJson))
                     }
                     if(intersectJsonLink.length){
                         sessionJson.linkDataArray=_.differenceWith(sessionJson.linkDataArray,intersectJsonLink,_.isEqual);
-                        sessionStorage.setItem(sessionStorage.key(i),JSON.stringify(sessionJson))
+                        sessionStorage.setItem(scriptDiagramStorage[i],JSON.stringify(sessionJson))
                     }
                 }
                 nextPropsIdJson.nodeDataArray=_.differenceWith(nextPropsIdJson.nodeDataArray, preSessionJson.nodeDataArray,function (a,b) {
@@ -201,6 +202,13 @@ class DrawScriptDetail extends Component {
         }
         if(canBack){
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson));
+
+            const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
+            if( Array.indexOf(scriptDiagramStorage, `pre-${this.props.match.params.id}`)===-1){
+                scriptDiagramStorage.push(`pre-${this.props.match.params.id}`)
+                sessionStorage.setItem('scriptDiagramStorage',JSON.stringify(scriptDiagramStorage))
+            }
+
             const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'));
             if( Array.indexOf(scriptStorage, `pre-${this.props.match.params.id}`)===-1){
                 scriptStorage.push(`pre-${this.props.match.params.id}`)
