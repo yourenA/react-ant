@@ -58,6 +58,7 @@ class ScriptManage extends Component {
         sessionStorage.removeItem('breadcrumbArr')
         sessionStorage.removeItem('manageScriptId')
         sessionStorage.removeItem('scriptDiagramStorage')
+        sessionStorage.removeItem('returnMsg')
         this.fetchHwData();
         this.props.delAllHardwareVersions()
 

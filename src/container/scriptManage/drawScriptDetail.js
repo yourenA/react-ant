@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, delPointsInLink,converErrorCodeToMsg} from './../../common/common.js';
+import {getHeader, delPointsInLink,converErrorCodeToMsg,checkJSon} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -15,6 +15,7 @@ import AddOrEditName from './addOrEditNmae';
 import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
 import ScriptInfo from './scriptInfo';
+import ScriptErrorInfo from './scriptErrorInfo'
 const _ = require('lodash');
 const {Content,} = Layout;
 
@@ -26,6 +27,7 @@ class DrawScriptDetail extends Component {
             detailIndex: 0,
             editRecord: null,
             saveScriptModal:false,
+            returnMsg:JSON.parse(sessionStorage.getItem('returnMsg'))
         };
     }
 
@@ -122,15 +124,21 @@ class DrawScriptDetail extends Component {
             sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
             // console.log("nextPropsIdJson", nextPropsIdJson)
             this.refs.ScriptIndex.load(nextPropsIdJson);
-
         }
+    }
+    getErrorInfo=()=>{
+        const content=this.saveTempScript(false,true);
+        let  canSave=checkJSon(content);
+        this.setState({
+            returnMsg:canSave.returnMsg
+        })
+        sessionStorage.setItem('returnMsg',JSON.stringify(canSave.returnMsg))
     }
     saveScript = ()=> {
         const that=this
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
         const content=this.saveTempScript(false,true);
-        console.log('content',content)
-        delPointsInLink(content.linkDataArray)
+        delPointsInLink(content.linkDataArray);
         const newScript=!this.state.editRecord
         const url= newScript?`/test_scripts`:`/test_scripts/${sessionStorage.getItem('manageScriptId')}`;
         const method=newScript ?`POST`:`PUT`;
@@ -165,7 +173,11 @@ class DrawScriptDetail extends Component {
             converErrorCodeToMsg(error)
         })
     }
+    getTempScript=()=>{
+
+    }
     saveTempScript = (canBack,returnJson)=> {
+
         const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));//总的数据
         const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));//获取页面进入前的数据
         let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());//修改后的数据
@@ -196,13 +208,11 @@ class DrawScriptDetail extends Component {
             linkDataArray: resultLinkJson
         };
         sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));//修改后总的数据
-        console.log('resultTempJson',resultTempJson)
         if(returnJson){
             return resultTempJson
         }
         if(canBack){
             sessionStorage.setItem(`pre-${this.props.match.params.id}`, JSON.stringify(nowJson));
-
             const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
             if( Array.indexOf(scriptDiagramStorage, `pre-${this.props.match.params.id}`)===-1){
                 scriptDiagramStorage.push(`pre-${this.props.match.params.id}`)
@@ -216,10 +226,6 @@ class DrawScriptDetail extends Component {
             }
             this.props.history.goBack()
         }
-    }
-    turnStepBack=(step)=>{
-        this.saveTempScript(null,null,step-1)
-        console.log("step",step-1)
     }
     turnBack = ()=> {
     }
@@ -243,12 +249,25 @@ class DrawScriptDetail extends Component {
                     <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
-                            <div className="testing-start-btn  testing-save-btn" onClick={()=>this.saveTempScript(true)}>
+                            <div className="testing-start-btn  testing-save-btn" onClick={()=>{
+                                this.getErrorInfo();
+                                this.saveTempScript(true)
+                            }}>
                                 后退
                             </div>
                         </div>
                         <div className="testing-start">
                             <div className="testing-start-btn testing-save-btn" onClick={()=>{
+                                const content=this.saveTempScript(false,true);
+                                let  canSave=checkJSon(content);
+                                this.setState({
+                                    returnMsg:canSave.returnMsg
+                                })
+                                sessionStorage.setItem('returnMsg',JSON.stringify(canSave.returnMsg))
+                                if(canSave.returnCode===-1){
+                                    message.error('脚本存在错误，不能保存，请查看错误信息');
+                                    return false
+                                }
                                 this.setState({
                                     saveScriptModal:true
                                 })
@@ -258,8 +277,9 @@ class DrawScriptDetail extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true} fromNew={this.state.editRecord?false:true}
+                    <ScriptIndex getErrorInfo={this.getErrorInfo} saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true} fromNew={this.state.editRecord?false:true}
                                 />
+                    <ScriptErrorInfo returnMsg={this.state.returnMsg} getErrorInfo={this.getErrorInfo}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

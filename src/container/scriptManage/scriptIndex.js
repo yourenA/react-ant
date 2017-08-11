@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Button, message} from 'antd'
+import {Button, message,Input} from 'antd'
 import './drawScript.less';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios'
@@ -91,7 +91,7 @@ class ScriptIndex extends Component {
                 // the Node.location is at the center of each node
                 locationSpot: go.Spot.Center,
                 //isShadowed: true,
-                //shadowColor: "#888",
+                shadowColor: "#888",
                 // handle mouse enter/leave events to show/hide the ports
                 mouseEnter: function (e, obj) {
                     that.showPorts(obj.part, true);
@@ -430,7 +430,7 @@ class ScriptIndex extends Component {
                 that.nodeStyle(),
                 $(go.Shape, "RoundedRectangle",
                     {
-                        fill: '#FFDD33', portId: "", toEndSegmentLength: 150
+                        fill: '#FFDD33', portId: "", strokeWidth: 1, stroke: "black", toEndSegmentLength: 150
                     }),
 
                 $(go.Panel, "Vertical",
@@ -587,7 +587,7 @@ class ScriptIndex extends Component {
                 that.nodeStyle(),
                 // {selectionAdornmentTemplate: UndesiredEventAdornment},
                 $(go.Shape, "RoundedRectangle",
-                    {fill: "#CC5245", portId: "", stroke: "black", toEndSegmentLength: 150}),
+                    {fill: "#CC5245", portId: "", strokeWidth: 1, stroke: "black", toEndSegmentLength: 150}),
                 $(go.Panel, "Vertical",
                     $(go.Panel, "Horizontal",  // button next to TextBlock
                         {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
@@ -894,6 +894,7 @@ class ScriptIndex extends Component {
 
         sessionStorage.setItem(`${nodedata.key}`, JSON.stringify(detailJon));
         if (this.props.match.path === '/scriptManage/:id' || this.props.match.path === '/scriptDetail/:id') {
+            this.props.getErrorInfo();
             this.props.saveTempScript();
 
             const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
@@ -985,8 +986,6 @@ class ScriptIndex extends Component {
         if (!input) return;
         input.focus();
 
-        myDiagram.startTransaction("highlight search");
-
         if (input.value) {
             // search four different data properties for the string, any of which may match for success
             // create a case insensitive RegExp from what the user typed
@@ -994,15 +993,14 @@ class ScriptIndex extends Component {
             var results = myDiagram.findNodesByExample({name: regex},
                 {text: regex},
                 {title: regex});
-            myDiagram.highlightCollection(results);
-
             // try to center the diagram at the first node that was found
-            if (results.count > 0) myDiagram.centerRect(results.first().actualBounds);
+            if (results.count > 0) {
+                myDiagram.centerRect(results.first().actualBounds);
+                myDiagram.select(results.first());
+            }
         } else {  // empty string only clears highlighteds collection
             myDiagram.clearHighlighteds();
         }
-        myDiagram.commitTransaction("highlight search");
-
 
     }
     keypressInput = (e)=> {
@@ -1056,6 +1054,11 @@ class ScriptIndex extends Component {
         return (
             <div>
                 <div className="drawScript">
+                    <div className="drawScript-search">
+                        <span>图形名称 : </span>
+                        <Input id="mySearch"  style={{width: 150,marginRight:'10px'}} onKeyPress={this.keypressInput}/>
+                        <Button type='primary' onClick={this.searchDiagram}>检索</Button>
+                    </div>
                     <div className="drawScript-sidebar">
                         <div className="drawScript-overview" id="myOverviewDiv"></div>
                         <div id="myPaletteDiv"></div>
@@ -1070,27 +1073,23 @@ class ScriptIndex extends Component {
                             : null}
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}
                              style={{
-                                 height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 243px)` : `calc(100vh - 195px)`,
+                                 height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 243px)` : `calc(100vh - 192px)`,
                                 minHeight:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?'calc(700px - 47px)':'700px'
                              }}>
                         </div>
 
                     </div>
                 </div>
-                <div className="drawScript-search">
-                    <input id="mySearch" type="text" onKeyPress={this.keypressInput}/>
-                    <Button onClick={this.searchDiagram}>检索</Button>
-                </div>
+
 
                 <div>
-                    <Button id="getCenter" onClick={this.addPalatte}>添加左侧语句</Button>
-                    {/*<Button id="getCenter" onClick={this.getCenter}>获取画布中心</Button>*/}
-                    <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
-                    <Button onClick={this.loadTextArea}>将JSON转为图表</Button>
+                    {/*<Button id="getCenter" onClick={this.addPalatte}>添加左侧语句</Button>*/}
+                    {/*/!*<Button id="getCenter" onClick={this.getCenter}>获取画布中心</Button>*!/*/}
+                    {/*<Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>*/}
+                    {/*<Button onClick={this.loadTextAxrea}>将JSON转为图表</Button>*/}
                 </div>
 
-
-                <textarea id="mySavedModel"></textarea>
+                {/*<textarea id="mySavedModel"></textarea>*/}
             </div>
 
 

@@ -212,6 +212,7 @@ class About extends React.Component {
                                             <h4><Icon type="exclamation-circle-o" style={{marginRight:'5px',color:'red'}}/>每个分组必须有一个"开始",一个或多个"结束"。每个图形之间只能有一条线相连</h4>
                                             <div className="interval"></div>
                                             <img className="about-image" alt=""  src={require('./about/3.png')}/>
+                                            <img className="about-image" alt=""  src={require('./about/3-1.png')}/>
                                             <p className="about-p ">拖动"操作框"中的图形到"编辑框"进行代码编辑</p>
                                             <p className="about-p ">将图形按住放到"编辑框"下边框附近或上边框附近，可以将编辑框拉长</p>
                                             <p className="about-p ">在"编辑框"中可以使用ctrl+z可以撤销操作，使用ctrl+y可以恢复撤销，也可以使用ctrl+c/ctrl+v对图形进行复制/粘贴</p>

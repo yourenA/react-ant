@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, converErrorCodeToMsg, delPointsInLink} from './../../common/common.js';
+import {getHeader, converErrorCodeToMsg, delPointsInLink,checkJSon} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -16,6 +16,7 @@ import ScriptIndex from './scriptIndex.js'
 import FetchSegments from './fetchSegments'
 import ScriptInfo from './scriptInfo';
 import uuidv4 from 'uuid/v4';
+import ScriptErrorInfo from './scriptErrorInfo'
 const {Content,} = Layout;
 const confirm = Modal.confirm;
 
@@ -24,7 +25,8 @@ class DrawScript extends Component {
         super(props);
         this.state = {
             scriptJson: '{}',
-            editRecord: null
+            editRecord: null,
+            returnMsg:sessionStorage.getItem('returnMsg')?JSON.parse(sessionStorage.getItem('returnMsg')):[]
         };
     }
 
@@ -73,7 +75,15 @@ class DrawScript extends Component {
             this.props.fetchDrawScript(nextProps.location.state.editRecord.id, this.refs.ScriptIndex.init)
         }
     }
-
+    getErrorInfo=()=>{
+        let myDiagram = this.refs.ScriptIndex.callbackDiagram();
+        const content = JSON.parse(myDiagram.model.toJson());
+        let  canSave=checkJSon(content);
+        this.setState({
+            returnMsg:canSave.returnMsg
+        })
+        sessionStorage.setItem('returnMsg',JSON.stringify(canSave.returnMsg))
+    }
     saveScript = ()=> {
         let myDiagram = this.refs.ScriptIndex.callbackDiagram();
         const that = this
@@ -84,7 +94,7 @@ class DrawScript extends Component {
         const url = newScript ? `/test_scripts` : `/test_scripts/${this.props.match.params.id}`
         const method = newScript ? `POST` : `PUT`;
         const msg = newScript ? messageJson[`add script success`] : messageJson[`edit script success`];
-        axios({
+       axios({
             url: `${configJson.prefix}${url}`,
             method: method,
             data: {
@@ -114,6 +124,7 @@ class DrawScript extends Component {
         })
     }
     saveTempScript = ()=> {
+
         let myDiagram = this.refs.ScriptIndex.callbackDiagram();
         const resultTempJson = JSON.parse(myDiagram.model.toJson());
         delPointsInLink(resultTempJson.linkDataArray);
@@ -164,6 +175,17 @@ class DrawScript extends Component {
                         </div>
                         <div className="testing-start">
                             <div className="testing-start-btn testing-save-btn" onClick={()=> {
+                                let myDiagram = this.refs.ScriptIndex.callbackDiagram();
+                                const content = JSON.parse(myDiagram.model.toJson());
+                                let  canSave=checkJSon(content);
+                                this.setState({
+                                    returnMsg:canSave.returnMsg
+                                })
+                                sessionStorage.setItem('returnMsg',JSON.stringify(canSave.returnMsg))
+                                if(canSave.returnCode===-1){
+                                    message.error('脚本存在错误，不能保存，请查看错误信息');
+                                    return false;
+                                }
                                 this.setState({
                                     saveScriptModal: true
                                 })
@@ -173,10 +195,12 @@ class DrawScript extends Component {
                         </div>
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
-                    <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex" {...this.props}
+                    <ScriptIndex  getErrorInfo={this.getErrorInfo}
+                                 saveTempScript={this.saveTempScript} ref="ScriptIndex" {...this.props}
                                  fromNew={this.props.location.state.newScript ? true : false}
                                  isNew={this.props.location.state.newScript}
                                  json={this.props.fetchTestConf.scriptJson}/>
+                    <ScriptErrorInfo returnMsg={this.state.returnMsg} getErrorInfo={this.getErrorInfo}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

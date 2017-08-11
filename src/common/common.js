@@ -1,14 +1,15 @@
 /**
  * Created by Administrator on 2017/3/7.
  */
-import {message } from 'antd';
+import {message} from 'antd';
 import messageJson from './message.json';
 import {signout} from './../actions/login';
 import {store} from './../index'
+const _ = require('lodash');
 /**
  * 接入管理表单ItemLayout
  * */
-exports.formItemLayout={
+exports.formItemLayout = {
     labelCol: {
         xs: {span: 6},
         sm: {span: 6},
@@ -18,7 +19,7 @@ exports.formItemLayout={
         sm: {span: 18},
     }
 };
-exports.producLayout={
+exports.producLayout = {
     labelCol: {
         xs: {span: 9},
         sm: {span: 9},
@@ -28,7 +29,7 @@ exports.producLayout={
         sm: {span: 15},
     }
 };
-exports.addSeriaNumLayout={
+exports.addSeriaNumLayout = {
     labelCol: {
         xs: {span: 8},
         sm: {span: 8},
@@ -38,7 +39,7 @@ exports.addSeriaNumLayout={
         sm: {span: 16},
     }
 };
-exports.DrawScriptConfLayout={
+exports.DrawScriptConfLayout = {
     labelCol: {
         xs: {span: 7},
         sm: {span: 7},
@@ -48,7 +49,7 @@ exports.DrawScriptConfLayout={
         sm: {span: 17},
     }
 };
-exports.formItemLayoutForOrganize={
+exports.formItemLayoutForOrganize = {
     labelCol: {
         sm: {span: 6},
     },
@@ -56,7 +57,7 @@ exports.formItemLayoutForOrganize={
         sm: {span: 18},
     }
 };
-exports.formItemLayoutWithLabel={
+exports.formItemLayoutWithLabel = {
     labelCol: {
         xs: {span: 24},
         sm: {span: 6},
@@ -66,7 +67,7 @@ exports.formItemLayoutWithLabel={
         sm: {span: 18},
     }
 };
-exports.formItemLayoutWithOutLabel={
+exports.formItemLayoutWithOutLabel = {
     wrapperCol: {
         xs: {span: 24, offset: 0},
         sm: {span: 18, offset: 6},
@@ -87,12 +88,12 @@ const removeLoginStorage = () => {
     localStorage.removeItem('permissions');
     localStorage.clear();
 };
-exports.removeLoginStorage=removeLoginStorage;
+exports.removeLoginStorage = removeLoginStorage;
 /**
  * 获取头信息
  * */
 exports.getHeader = () => {
-    return {Authorization:`Bearer ${sessionStorage.getItem('usertoken') ||localStorage.getItem('usertoken')}`}
+    return {Authorization: `Bearer ${sessionStorage.getItem('usertoken') || localStorage.getItem('usertoken')}`}
 };
 
 /**
@@ -100,17 +101,17 @@ exports.getHeader = () => {
  * */
 const testPermission = (permisionName) => {
     const permissions = JSON.parse(localStorage.getItem('permissions'));
-    for(let i=0;i<permissions.length;i++){
-        if(permissions[i].name===permisionName){
+    for (let i = 0; i < permissions.length; i++) {
+        if (permissions[i].name === permisionName) {
             return true;
         }
     }
 };
-exports.testPermission=testPermission;
+exports.testPermission = testPermission;
 /**
  * 将策略form表单转换为发送数据
  * */
-exports.convertFormToData  = (form) => {
+exports.convertFormToData = (form) => {
     const addPoliciesDate = {
         name: form.name,
         description: form.desc,
@@ -119,7 +120,7 @@ exports.convertFormToData  = (form) => {
     for (var k in form) {
         if (k.indexOf('topics') >= 0) {
             if (form.hasOwnProperty(k)) {
-                if(form[k]===undefined){
+                if (form[k] === undefined) {
                     return false
                 }
                 if (form[k].authority === 0) {
@@ -140,7 +141,7 @@ exports.convertFormToData  = (form) => {
                         allow_publish: 1,
                         allow_subscribe: 1
                     })
-                }else{
+                } else {
                     addPoliciesDate.topics.push({
                         name: form[k].name,
                         allow_publish: form[k].allow_publish,
@@ -157,26 +158,26 @@ exports.convertFormToData  = (form) => {
  * 将订阅主题表单转换为发送数据
  * */
 /*exports.convertSubFormToData  = (form) => {
-    const topics= {}
-    for (var k in form) {
-        if (k.indexOf('topics') >= 0) {
-            if (form.hasOwnProperty(k)) {
-                topics[`${form[k].theme}`]=parseInt(form[k].QoS);
-            }
-        }
-    }
+ const topics= {}
+ for (var k in form) {
+ if (k.indexOf('topics') >= 0) {
+ if (form.hasOwnProperty(k)) {
+ topics[`${form[k].theme}`]=parseInt(form[k].QoS);
+ }
+ }
+ }
 
-    return topics;
-};*/
+ return topics;
+ };*/
 /**
  * 将订阅主题表单转换为发送数据
  * */
-exports.getUrlParam  = (name) => {
-    const search=window.location.href.split('?')[window.location.href.split('?').length-1];
-    const searchParam=search.split('&');
-    for(let i=0,len=searchParam.length;i<len;i++){
-        const eachParam=searchParam[i].split('=');
-        if(eachParam[0]===name){
+exports.getUrlParam = (name) => {
+    const search = window.location.href.split('?')[window.location.href.split('?').length - 1];
+    const searchParam = search.split('&');
+    for (let i = 0, len = searchParam.length; i < len; i++) {
+        const eachParam = searchParam[i].split('=');
+        if (eachParam[0] === name) {
             return eachParam[1]
         }
     }
@@ -187,26 +188,26 @@ exports.getUrlParam  = (name) => {
  *  判断错误码(数组)
  * */
 
-exports.converErrorCodeToMsg  = (error) => {
-    console.log("error",error.toString())
-    if(error.toString()==='Error: Network Error'){
-        message.error(messageJson['network error'],3);
+exports.converErrorCodeToMsg = (error) => {
+    console.log("error", error.toString())
+    if (error.toString() === 'Error: Network Error') {
+        message.error(messageJson['network error'], 3);
         return false
     }
     if (error.response.status === 401) {
         message.error(messageJson['token fail']);
         removeLoginStorage();
-        setTimeout(()=>{
+        setTimeout(()=> {
             //hashHistory.replace('/');
             store.dispatch(signout());
-        },1000)
-    }else  if(!error.response.data.errors){
+        }, 1000)
+    } else if (!error.response.data.errors) {
         message.error(error.response.data.message);
-    } else if(error.response.status === 422){
+    } else if (error.response.status === 422) {
         let first;
-        for ( first in error.response.data.errors) break;
+        for (first in error.response.data.errors) break;
         message.error(`${error.response.data.errors[first][0]}`);
-    }else {
+    } else {
         message.error(messageJson['unknown error']);
     }
 }
@@ -214,10 +215,10 @@ exports.converErrorCodeToMsg  = (error) => {
 /**
  *  获取用户权限
  * */
-exports.getUserPermission  = (name) => {
-    const allPermisssions=JSON.parse(sessionStorage.getItem('userPermissions')||localStorage.getItem('userPermissions'));
-    for(let i=0,len=allPermisssions.len;i<len;i++){
-        if(allPermisssions[i].name===name){
+exports.getUserPermission = (name) => {
+    const allPermisssions = JSON.parse(sessionStorage.getItem('userPermissions') || localStorage.getItem('userPermissions'));
+    for (let i = 0, len = allPermisssions.len; i < len; i++) {
+        if (allPermisssions[i].name === name) {
             return true
         }
     }
@@ -228,8 +229,226 @@ exports.getUserPermission  = (name) => {
  *  删除图形的线节点
  * */
 
-exports.delPointsInLink  = (arr) => {
-    for(let i=0,len=arr.length;i<len;i++){
+exports.delPointsInLink = (arr) => {
+    for (let i = 0, len = arr.length; i < len; i++) {
         delete  arr[i].points
     }
+}
+
+/**
+ * 判断节点是否正确
+ * */
+
+exports.checkJSon = (myDiagramModel)=> {
+    const {nodeDataArray, linkDataArray}=myDiagramModel;
+    let returnCode = 1;
+    let returnMsg=[];
+    const groupErrSign='-->>';
+    const itemErrSign=' :: ';
+    //判断每一个group
+    const groups = _.groupBy(nodeDataArray, 'group');
+    console.log('groups', groups);
+    _.forEach(groups, function (group, key) {
+
+
+        if(key==='undefined'){
+            key='最外层分组'
+        }else{
+            key=_.find(nodeDataArray,function (o) {
+                return o.key===key
+            }).title
+        }
+        console.log(key, group);
+
+        let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
+        if(hasLinkIndiffGroup.length){
+            for (let i = 0, len = hasLinkIndiffGroup.length; i < len; i++) {
+                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===hasLinkIndiffGroup[i].from; }).title,'跨分组内容之间有连线');
+                returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===hasLinkIndiffGroup[i].from; }).title}${itemErrSign}'跨分组内容之间有连线'`)
+            }
+            returnCode = -1;
+        }
+        //判断link
+        let linkInGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1&&_.map(group,'key').indexOf(o.to)!==-1 });
+
+        let parseArray1 = []
+        let new_arr = [];
+        _.forEach(linkInGroup, function (value) {
+            parseArray1.push(`${value.from}_${value.to}`)
+        });
+        for (let i = 0, len = parseArray1.length; i < len; i++) {
+            let res = parseArray1[i];
+            if (new_arr.indexOf(res) === -1) {
+                new_arr.push(res)
+            } else {
+                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在重复的连线');
+                returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title}${itemErrSign}存在重复的连线`);
+                returnCode = -1;
+            }
+            let reversed = res.split('_').reverse().join('_')
+            if (new_arr.indexOf(reversed) === -1) {
+            } else {
+                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在颠倒的连线');
+                returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title}${itemErrSign}存在颠倒的连线`);
+                returnCode = -1;
+            }
+        }
+
+
+        const hasStart = _.findKey(group, function (o) {
+            return o.category === 'start';
+        });
+        const hasEnd = _.findKey(group, function (o) {
+            return o.category === 'end';
+        });
+        if (!hasStart) {
+            console.log(key,'没有起点')
+            returnMsg.push(`${key}${groupErrSign}没有起点`)
+            returnCode = -1;
+        }
+        if (!hasEnd) {
+            console.log(key,'没有终点')
+            returnMsg.push(`${key}${groupErrSign}没有终点`)
+            returnCode = -1;
+        }
+        for (let i = 0, ilen = group.length; i < ilen; i++) {
+            if (group[i].category === 'start') {
+                const startOnLink = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                if (startOnLink.length === 0) {
+                    console.log(key,'起点没有输出连线');
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输出连线`)
+                    returnCode = -1;
+                }
+                if (startOnLink.length > 1) {
+                    console.log(key,'起点有多条输出连线')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有多条输出连线`)
+                    returnCode = -1;
+                }
+            }
+
+            if (group[i].category === 'item' || group[i].category === 'if' || group[i].category === 'OfGroups' || group[i].category === 'ForGroups' || group[i].category === 'errOut') {
+                const itemOnLinkTo = _.filter(linkDataArray, function (link) {
+                    return link.to === group[i].key
+                });
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                if (itemOnLinkTo.length === 0) {
+                    console.log(key,group[i].title,'没有输入连线')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输入连线`)
+                    returnCode = -1;
+                }
+                if (itemOnLinkFrom.length === 0) {
+                    console.log(key,group[i].title,'没有输出连线')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输出连线`)
+                    returnCode = -1;
+                }
+
+            }
+
+            if (group[i].category === 'if' || group[i].category === 'item') {
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                if (itemOnLinkFrom.length > 2) {
+                    console.log(key,group[i].title,'输出连线大于2')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}输出连线大于2`)
+                    returnCode = -1;
+                }
+            }
+
+            if (group[i].category === 'item') {
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                if (itemOnLinkFrom.length === 1 || itemOnLinkFrom.length === 2) {
+                    let findToItems = []
+                    _.forEach(itemOnLinkFrom, function (item, key) {
+                        const findToItem = _.find(nodeDataArray, function (o) {
+                            return o.key === item.to;
+                        });
+                        findToItems.push(findToItem)
+                    });
+                    const hasItemIsErrOut = _.find(findToItems, function (o) {
+                        return o.category === 'errOut'
+                    });
+                    if (itemOnLinkFrom.length === 1 && hasItemIsErrOut) {
+                        console.log(key,group[i].title,'只有一条输出连线，但是输出连线连接了"错误输出"');
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}只有一条输出连线，但是输出连线连接了"错误输出"`)
+                        returnCode = -1;
+                    } else if(itemOnLinkFrom.length === 2 && !hasItemIsErrOut) {
+                        console.log(key,group[i].title,'有两条输出连线，但是没有输出连线连接"错误输出"')
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有两条输出连线，但是没有输出连线连接"错误输出"`)
+                        returnCode = -1;
+                    }
+
+                }
+            }
+
+            if (group[i].category === 'if') {
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                let condition='';
+                for(let j=0,len=itemOnLinkFrom.length;j<len;j++){
+                    if(!itemOnLinkFrom[j].condition){
+                        console.log(key,group[i].title,'if没有判断条件')
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if没有判断条件`)
+                        returnCode = -1;
+                    }else {
+                        if(itemOnLinkFrom[j].condition===condition){
+                            console.log(key,group[i].title,'if判断条件相同');
+                            returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if判断条件相同`)
+                            returnCode = -1;
+                        }
+                        condition=itemOnLinkFrom[j].condition
+                    }
+                }
+
+            }
+
+            if( group[i].category === 'errOut'){
+                const itemOnLinkTo = _.filter(linkDataArray, function (link) {
+                    return link.to === group[i].key
+                });
+                console.log('itemOnLinkTo',itemOnLinkTo)
+                for(let j=0,len=itemOnLinkTo.length;j<len;j++){
+                    let itemToErrOut=_.find(group,function (o) {
+                        return o.key===itemOnLinkTo[j].from
+                    })
+                    if(itemToErrOut.category !== 'item'){
+                        console.log(key,group[i].title,' 输入连线的图形不是dll方法');
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}输入连线的图形不是dll方法`);
+                        returnCode = -1;
+                    }
+                }
+            }
+
+            if (group[i].category === 'OfGroups' || group[i].category === 'ForGroups' || group[i].category === 'errOut') {
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+
+                if (itemOnLinkFrom.length > 1) {
+                    console.log(key,group[i].title,'有多条输出连线')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有多条输出连线`)
+                    returnCode = -1;
+                }
+            }
+            if (group[i].category === 'end') {
+                const endOnLink = _.filter(linkDataArray, function (link) {
+                    return link.to === group[i].key
+                });
+                if (endOnLink.length === 0) {
+                    console.log(key,'终点没有输入连线')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输入连线`)
+                    returnCode = -1;
+                }
+            }
+        }
+    });
+    return {returnCode,returnMsg}
+
 }
