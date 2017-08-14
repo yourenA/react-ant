@@ -241,25 +241,36 @@ exports.delPointsInLink = (arr) => {
 
 exports.checkJSon = (myDiagramModel)=> {
     const {nodeDataArray, linkDataArray}=myDiagramModel;
+
+    //对nodeDataArray进行分组
+    let tree = nodeDataArray.reduce((o, x) => {
+        let id = x.key;
+        let pId = x.group
+        o[id] = o[id] || {children: []}
+        o[id].node = x
+        if (pId) {
+            o[pId] = o[pId] || {children: []}
+            o[pId].children.push(x)
+        }
+        return o
+    }, {});
+
     let returnCode = 1;
     let returnMsg=[];
-    const groupErrSign='-->>';
+    const groupErrSign=' @ ';
     const itemErrSign=' :: ';
     //判断每一个group
     const groups = _.groupBy(nodeDataArray, 'group');
     console.log('groups', groups);
     _.forEach(groups, function (group, key) {
-
-
         if(key==='undefined'){
             key='最外层分组'
         }else{
-            key=_.find(nodeDataArray,function (o) {
+            const node=_.find(nodeDataArray,function (o) {
                 return o.key===key
-            }).title
+            })
+            key='最外层分组 -> '+listParents(tree,node ).map(x => x.title).concat(node.title).join(' -> ')
         }
-        console.log(key, group);
-
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
         if(hasLinkIndiffGroup.length){
             for (let i = 0, len = hasLinkIndiffGroup.length; i < len; i++) {
@@ -294,7 +305,6 @@ exports.checkJSon = (myDiagramModel)=> {
             }
         }
 
-
         const hasStart = _.findKey(group, function (o) {
             return o.category === 'start';
         });
@@ -303,15 +313,17 @@ exports.checkJSon = (myDiagramModel)=> {
         });
         if (!hasStart) {
             console.log(key,'没有起点')
-            returnMsg.push(`${key}${groupErrSign}没有起点`)
+            returnMsg.push(`${key}${itemErrSign} 没有起点`)
             returnCode = -1;
         }
         if (!hasEnd) {
             console.log(key,'没有终点')
-            returnMsg.push(`${key}${groupErrSign}没有终点`)
+            returnMsg.push(`${key}${itemErrSign} 没有终点`)
             returnCode = -1;
         }
+
         for (let i = 0, ilen = group.length; i < ilen; i++) {
+
             if (group[i].category === 'start') {
                 const startOnLink = _.filter(linkDataArray, function (link) {
                     return link.from === group[i].key
@@ -450,5 +462,19 @@ exports.checkJSon = (myDiagramModel)=> {
         }
     });
     return {returnCode,returnMsg}
+}
 
+
+function listParents(tree, node) {
+    if (!node.group) {
+        return []
+    }
+    return _list(tree, tree[node.group].node)
+    function _list (tree, node) {
+        if (node.group === undefined) {
+            return [node]
+        } else {
+            return _list(tree, tree[node.group].node).concat([node])
+        }
+    }
 }

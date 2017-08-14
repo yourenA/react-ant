@@ -3,8 +3,8 @@
  */
 import config from './config.json';
 
-
 export default  {
+    env:'development',
     prefix: config.prefix,
     wsPort:config.wsPort,
     wsPrefix:config.wsPrefix,

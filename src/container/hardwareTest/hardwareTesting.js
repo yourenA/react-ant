@@ -12,7 +12,6 @@ import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import HighZIndexMask from './../../component/mask'
 import ConfigForm from './configForm'
-const Option = Select.Option;
 const Step = Steps.Step;
 const confirm = Modal.confirm;
 
@@ -44,6 +43,7 @@ class HardwareTesting extends Component {
             adapterModal: false,
             startTestModal: false,
             startTest: false,
+            startLoopTest:false,
             maskDisplay: 'none',
             percent: 0,
             wsMessage:[],
@@ -120,7 +120,6 @@ class HardwareTesting extends Component {
             const that = this;
             confirm({
                 title: '确定要停止测试吗？',
-                content: 'Some descriptions',
                 onOk() {
                     that.setState({
                         startTest: false,
@@ -174,9 +173,32 @@ class HardwareTesting extends Component {
         })
         console.log('正式开始测试', serialNumbers)
     }
+    confirmLoopTesting=()=>{
+        const serialNumbers = this.refs.serialNumbers.refs.input.value;
+        const that = this;
+        const params = {
+            serial_number: serialNumbers,
+            test_script_id: this.state.script.key
+        }
+        axios({
+            url: `${configJson.prefix}/hardware_test`,
+            method: 'post',
+            params: params,
+            headers: getHeader()
+        })
+            .then(function (response) {
+                that.setState({
+                    channel: response.data.channel,
+                }, function () {
+                    that.openWS()
+                });
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
+        console.log('正式开始测试', serialNumbers)
+    }
     openWS = ()=> {
         const that=this;
-        console.log(`${configJson.wsPrefix}:${configJson.wsPort}/?channel=${this.state.channel}`)
         this.ws = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?channel=${this.state.channel}`);//url地址类似与get请求
         this.ws.onopen = function () {
             console.log('onopen')
@@ -187,6 +209,12 @@ class HardwareTesting extends Component {
                 that.setState({
                     percent:JSON.parse(evt.data).percent,
                     wsMessage:wsMessage.concat(JSON.parse(evt.data).message)
+                },function () {
+                    if(that.state.percent===100 && that.state.startLoopTest){
+                        console.log('继续开始测试');
+                        that.ws.close()
+                        that.confirmLoopTesting()
+                    }
                 })
             }
         };
@@ -218,7 +246,18 @@ class HardwareTesting extends Component {
             localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
         })
     }
-
+    renderLoopTestBtn=()=>{
+        return(
+            configJson.env==='development'?
+                <Button key="submit-loop" type="primary" size="large"
+                        onClick={()=> {
+                            this.setState({startLoopTest:true},function () {
+                                this.confirmTesting();
+                            });
+                        }}>开始循环测试</Button>
+                :null
+        )
+    }
     render() {
         return (
             <div>
@@ -289,7 +328,7 @@ class HardwareTesting extends Component {
                             <div className="testing-start" style={{zIndex: this.state.startTest ? 1000 : ''}}>
                                 <div className="testing-start-btn" onClick={this.startTesting}
                                      style={{backgroundColor: this.state.startTest ? 'red' : ''}}>
-                                    {this.state.percent===100?'完成':this.state.startTest ? "结束测试" : "开始测试"}
+                                    {this.state.percent===100?this.state.startLoopTest?"结束测试":'完成':this.state.startTest ? "结束测试" : "开始测试"}
                                 </div>
                             </div>
                         </div>
@@ -378,25 +417,14 @@ class HardwareTesting extends Component {
                                     onClick={()=> {
                                         this.setState({adapterModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.editData}>
+                            <Button key="submit" type="primary" size="large" onClick={this.changeTestStand}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <Select allowClear={true} dropdownMatchSelectWidth={false} style={{width: '100%'}}
-                                onChange={this.onChangeStand}
-                                showSearch
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            { this.props.fetchTestConf.test_stands.map((item, key) => {
-                                return (
-                                    <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
-                                )
-                            }) }
-                        </Select>
+                        <ConfigForm ref="testStandConfigForm"  {...this.props} type="adapter" script={this.state.test_stand}/>
                     </Modal>
                     <Modal
-                        key={ Date.parse(new Date()) + 3}
                         visible={this.state.startTestModal}
                         title="开始测试"
                         onCancel={()=> {
@@ -407,9 +435,14 @@ class HardwareTesting extends Component {
                                     onClick={()=> {
                                         this.setState({startTestModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.confirmTesting}>
+                            <Button key="submit" type="primary" size="large" onClick={()=> {
+                                this.setState({startLoopTest:false},function () {
+                                    this.confirmTesting();
+                                });
+                            }}>
                                 开始测试
                             </Button>,
+                            this.renderLoopTestBtn()
                         ]}
                     >
                         产品序列号 : <Input ref="serialNumbers" style={{width: '80%'}}/>
