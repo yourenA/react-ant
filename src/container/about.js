@@ -35,7 +35,7 @@ class About extends React.Component {
                             </Anchor>
                         </div>
 
-                        <div className="about-content">
+                        <div className="about-content" >
                             <div className="about-content-item" id="system-desc">
                                 <h2>1.系统概述</h2>
                                 <div className="item-desc">
@@ -65,7 +65,7 @@ class About extends React.Component {
                                     <ul>
                                         <h4>硬件：</h4>
                                         <ol>服务器一台（建议：内存8G或以上）</ol>
-                                        <ol>PC机至少一台</ol>
+                                        <ol >PC机至少一台</ol>
                                         <ol>高质量以太网（百兆或以上）</ol>
                                         <ol>测试架，连接PC的适配器</ol>
                                         <h4>软件：</h4>

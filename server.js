@@ -30,6 +30,5 @@ app.get('/*', function(req, res, next) {
 var server = app.listen(3003,'0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
-
     console.log('HW-TEST app listening at http://%s:%s', host, port);
 });

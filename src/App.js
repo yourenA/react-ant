@@ -20,6 +20,7 @@ import SegmentManage from './container/scriptManage/segmentManage';
 import ScriptDetail from './container/scriptManage/drawScriptDetail';
 import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
 import DrawSegment from './container/scriptManage/drawSegment';
+import PrintSetting from './container/scriptManage/printSetting';
 import CatagoryManage from './container/catagoryManage/index';
 import SystemManage from './container/systemManage/index';
 import UserConfig from './container/userConfig/index';
@@ -218,6 +219,12 @@ class App extends Component {
 
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
+                    <Route
+                        path="/printSetting/:id" render={(props) => {
+                        return (login.login && testPermission('test_script_management') ) ?
+                            <PrintSetting {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
                     <Route exact
                            path="/scriptManage" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?

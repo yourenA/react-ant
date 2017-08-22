@@ -184,7 +184,7 @@ class ScriptManage extends Component {
         }, {
             title: '操作',
             key: 'action',
-            width: 265,
+            width: 360,
             render: (text, record, index) => {
                 return (
                     <div key={index}>
@@ -202,6 +202,12 @@ class ScriptManage extends Component {
                         }}>
                             修改属性
                         </Button>
+                        <span className="ant-divider"/>
+                        <Link
+                            to={{
+                                pathname: `/printSetting/${record.id}`,
+                            }}
+                        ><Button >打印设置</Button></Link>
                         <span className="ant-divider"/>
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                     onConfirm={this.delData.bind(this, record.id)}>

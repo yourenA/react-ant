@@ -1,10 +1,11 @@
 /**
  * Created by Administrator on 2017/3/7.
  */
-import {message} from 'antd';
+import {message,Tree} from 'antd';
 import messageJson from './message.json';
 import {signout} from './../actions/login';
 import {store} from './../index'
+const TreeNode = Tree.TreeNode;
 const _ = require('lodash');
 /**
  * 接入管理表单ItemLayout
@@ -271,6 +272,7 @@ exports.checkJSon = (myDiagramModel)=> {
             })
             key='最外层分组 -> '+listParents(tree,node ).map(x => x.title).concat(node.title).join(' -> ')
         }
+
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
         if(hasLinkIndiffGroup.length){
             for (let i = 0, len = hasLinkIndiffGroup.length; i < len; i++) {
@@ -304,7 +306,6 @@ exports.checkJSon = (myDiagramModel)=> {
                 returnCode = -1;
             }
         }
-
         const hasStart = _.findKey(group, function (o) {
             return o.category === 'start';
         });
@@ -478,3 +479,43 @@ function listParents(tree, node) {
         }
     }
 }
+
+
+/**
+ * 打印设置--树形结构
+ * */
+function treeMenu(a){
+    console.log(a)
+    this.tree=a||[];
+    this.groups={};
+};
+treeMenu.prototype={
+    init:function(group){
+        this.group();
+        return this.getDom(this.groups[group]);
+    },
+    group:function(){
+        for(var i=0;i<this.tree.length;i++){
+            if(this.groups[this.tree[i].group]){
+                this.groups[this.tree[i].group].push(this.tree[i]);
+            }else{
+                this.groups[this.tree[i].group]=[];
+                this.groups[this.tree[i].group].push(this.tree[i]);
+            }
+        }
+    },
+    getDom:function(a){
+        if(!a){return ''}
+        var html='\n<ul>\n';
+        for(var i=0;i<a.length;i++){
+            html+='<li><a href="#">'+a[i].title+'</a>';
+            html+=this.getDom(this.groups[a[i].key]);
+            html+='</li>\n';
+        };
+        html+='</ul>\n';
+        console.log(html);
+        return html;
+    }
+};
+
+exports.transfromTree=treeMenu

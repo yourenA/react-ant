@@ -858,13 +858,6 @@ class ScriptIndex extends Component {
             nodeDataArray: [],
             linkDataArray: []
         };
-        // console.log('this.props.fromNew',this.props.fromNew)
-        // if(this.props.fromNew && !sessionStorage.getItem(`${nodedata.key}`)){
-        //         detailJon.nodeDataArray.push({category: "start",key:uuidv4(), title: "开始", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+10}`})
-        //         detailJon.nodeDataArray.push({category: "end",key:uuidv4(), title: "结束", loc:`${parseInt(nodedata.loc.split(' ')[0])+10} ${parseInt(nodedata.loc.split(' ')[1])+410}`})
-        // }
-        // if(!this.props.fromNew )
-
         let keyInGroup = []
         for (let i = 0, len = originJson.nodeDataArray.length; i < len; i++) {
             // if (originJson.nodeDataArray[i].key === nodedata.key) {
@@ -954,12 +947,6 @@ class ScriptIndex extends Component {
         myPalette.div = null;
         myOverview.div = null;
     }
-    callbackHadEdit=()=>{
-        return myDiagram.isModified
-    }
-    setHadEditFalse=()=>{
-        myDiagram.isModified = false;
-    }
     setHadEditTrue=()=>{
         console.log('设为true')
         myDiagram.isModified = true;
@@ -1029,27 +1016,6 @@ class ScriptIndex extends Component {
         const {scrollTop, scrollLeft}=this.state
         return {top, left, scrollTop, scrollLeft}
     }
-    addPalatte = ()=> {
-        const myPaletteModel = JSON.parse(myPalette.model.toJson()).nodeDataArray;
-        myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(
-            {
-                category: "item",
-                title: "测试3.3v 负载阈值",
-                identity: 'test_load_threshold_on_3_3v',
-                params: [
-                    {key: 'id', value: '0'},
-                    {key: 'max', value: '1750'},
-                    {key: 'mini', value: '1350'}
-                ],
-                errors: [
-                    {key: '404', value: 'URL地址无法访问'},
-                    {key: '500', value: '服务器错误'}
-                ],
-                deviation: 5
-            }
-        ));
-    }
-
     render() {
         return (
             <div>

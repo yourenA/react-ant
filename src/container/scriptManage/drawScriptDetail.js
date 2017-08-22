@@ -231,14 +231,12 @@ class DrawScriptDetail extends Component {
     }
 
     render() {
-        // console.log('this.props',this.props)
         const breadcrumbArr=JSON.parse(sessionStorage.getItem('breadcrumbArr'))||[];
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
                     <Breadcrumb.Item  onClick={this.turnBack}>脚本管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.state.editRecord ?`编辑脚本'${ this.state.editRecord.name}'`  :'新建脚本' }</Breadcrumb.Item>
-                    {/*<Breadcrumb.Item>{this.props.location.state.groupNmae}</Breadcrumb.Item>*/}
                     {breadcrumbArr.map((item,index)=>{
                         return(
                             <Breadcrumb.Item key={index}>{item.value}</Breadcrumb.Item>
