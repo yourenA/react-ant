@@ -7,7 +7,7 @@ import './drawScript.less';
 import ScriptIndex from './scriptIndex.js'
 import axios from 'axios'
 import configJson from 'configJson' ;
-import {getHeader,converErrorCodeToMsg,delPointsInLink} from './../../common/common';
+import {getHeader,converErrorCodeToMsg,delPointsInLink,transformPrintJson} from './../../common/common';
 import messageJson from './../../common/message.json';
 import FetchSegments from './fetchSegments'
 import {bindActionCreators} from 'redux';
@@ -33,7 +33,8 @@ class AddProgramSegment extends Component {
             sessionStorage.setItem('manageSegmentId',this.props.location.state.editRecord.id);
             // this.fetchScript(this.props.location.state.editRecord.id,this.refs.ScriptIndex.init)
             if(this.props.fetchTestConf.segmentLoaded){
-                this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem('segmentTempJson'));
+                const  transformJson=transformPrintJson(JSON.parse(sessionStorage.getItem('segmentTempJson')));
+                this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, JSON.stringify(transformJson));
                 this.props.fetchDrawSegment(this.props.location.state.editRecord.id)
             }else{
                 this.props.fetchDrawSegment(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
@@ -44,7 +45,8 @@ class AddProgramSegment extends Component {
             this.props.delSegmentEditRecord();
             this.refs.ScriptIndex.init();
             if(sessionStorage.getItem('segmentTempJson')){
-                this.refs.ScriptIndex.load(sessionStorage.getItem('segmentTempJson'))
+                const  transformJson=transformPrintJson(JSON.parse(sessionStorage.getItem('segmentTempJson')));
+                this.refs.ScriptIndex.load(JSON.stringify(transformJson))
             }else{
                 this.refs.ScriptIndex.load(JSON.stringify({
                     class: "go.GraphLinksModel",
@@ -69,21 +71,6 @@ class AddProgramSegment extends Component {
         const that=this;
         this.refs.ScriptIndex.save();
         const content=JSON.parse( myDiagram.model.toJson());
-        // let externalCount=0;
-        // let externalTitle=''
-        // for(let i=0,len=content.nodeDataArray.length;i<len;i++){
-        //     if(content.nodeDataArray[i].isGroup===true && !content.nodeDataArray[i].group){
-        //         externalTitle=content.nodeDataArray[i].title;
-        //         externalCount++
-        //     }
-        //     if(!content.nodeDataArray[i].isGroup && !content.nodeDataArray[i].group){
-        //         externalCount++
-        //     }
-        // }
-        // console.log('externalCount',externalCount)
-        // if(externalCount!==1){
-        //     message.error('最外层只能有一个分组节点')
-        // }else{
             delPointsInLink(content.linkDataArray)
             const newSegment=this.props.location.state.newSegment
             const url=newSegment ?`/flow_diagrams`:`/flow_diagrams/${this.props.match.params.id}`

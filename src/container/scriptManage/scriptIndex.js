@@ -2,12 +2,13 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react';
-import {Button, message,Input} from 'antd'
+import {Button, message, Input} from 'antd'
 import './drawScript.less';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios'
-import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import {getHeader, converErrorCodeToMsg, findChildren, findParents} from './../../common/common';
 import configJson from 'configJson' ;
+const _ = require('lodash');
 var $ = window.$;
 var go = window.go;
 var myDiagram = null;
@@ -18,7 +19,7 @@ class ScriptIndex extends Component {
         super(props);
         this.state = {
             testFuncData: [],
-            hadEdit:false
+            hadEdit: false
         };
     }
 
@@ -50,7 +51,8 @@ class ScriptIndex extends Component {
                         errors: [{key: 'key', value: 'value'}],
                         upper_limit: 0,
                         lower_limit: 0,
-                        outcome_variable:'结果变量'
+                        outcome_variable: '结果变量',
+                        isPrint: false
                     }
                     for (let j = 0, len2 = funcItem.parameters.length; j < len2; j++) {
                         let paramItem = funcItem.parameters[j];
@@ -63,7 +65,7 @@ class ScriptIndex extends Component {
                     testFuncData.push(addData)
                 }
                 that.setState({
-                    testFuncData:testFuncData
+                    testFuncData: testFuncData
                 })
                 const myPaletteModel = JSON.parse(myPalette.model.toJson()).nodeDataArray;
                 myPalette.model = new go.GraphLinksModel(myPaletteModel.concat(testFuncData))
@@ -155,7 +157,7 @@ class ScriptIndex extends Component {
                         if (n === null) return;
                         const itempanel = obj.panel;
                         const d = n.data;
-                        if (d[name].length === 1) {
+                        if (d[name].length === 1 && name === 'params') {
                             message.error('参数个数至少为一个');
                             return false
                         }
@@ -191,21 +193,39 @@ class ScriptIndex extends Component {
         var arr = adorn.adornedPart.data.errors;
         myDiagram.model.addArrayItem(arr, {key: 'key', value: 'value'});
     }
-    init=(cb, cbArg)=> {
+    renderPrintCheckbox = (isRight)=> {
+        const that = this;
+        return (
+            $("CheckBox", "isPrint", {
+                    column: 2,
+                    alignment: isRight ? go.Spot.Right : go.Spot.Center,
+                    margin: new go.Margin(0, 10, 0, 10),
+                },
+                { // _doClick is executed within a transaction by the CheckBoxButton click function
+                    "_doClick": function (e, obj) {
+                        var contextmenu = obj.part;
+                        // get the node data to which the Node is data bound
+                        var nodedata = contextmenu.data;
+                        that.findFromNode(nodedata)
+                    }
+                })
+        )
+    }
+    init = (cb, cbArg)=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
         let formulaArr = [
-            {title: "分组", isGroup: true, category: "OfGroups"},
-            {title: "循环分组", isGroup: true, category: "ForGroups", times: 1},
-            {title: "条件语句", category: "if", figure: "Diamond"},
-            {title: "错误输出", category: "errOut"},
-            {category: "start", title: "开始", loc: "80 75", belong: 'OfGroups'},
-            {category: "start", title: "开始", loc: "80 75", belong: 'ForGroups'},
-            {category: "end", title: "结束", loc: "80 475", belong: 'OfGroups'},
-            {category: "end", title: "结束", loc: "80 475", belong: 'ForGroups'},
-            {category: "end", title: "结束"},
-            {category: "comment", title: "备注"},
+            {title: "分组", isGroup: true, category: "OfGroups", isPrint: false},
+            {title: "循环分组", isGroup: true, category: "ForGroups", times: 1, isPrint: false},
+            {title: "条件语句", category: "if", figure: "Diamond", isPrint: false},
+            {title: "错误输出", category: "errOut", isPrint: false},
+            {category: "start", title: "开始", loc: "80 75", belong: 'OfGroups', isPrint: false},
+            {category: "start", title: "开始", loc: "80 75", belong: 'ForGroups', isPrint: false},
+            {category: "end", title: "结束", loc: "80 475", belong: 'OfGroups', isPrint: false},
+            {category: "end", title: "结束", loc: "80 475", belong: 'ForGroups', isPrint: false},
+            {category: "end", title: "结束", isPrint: false},
+            {category: "comment", title: "备注", isPrint: false},
             {category: "set", params: [{key: 'key', value: 'value'}], title: '设置参数'},
             {
                 category: "item",
@@ -217,11 +237,12 @@ class ScriptIndex extends Component {
                 errors: [{key: 'key', value: 'value'}],
                 upper_limit: 0,
                 lower_limit: 0,
-                outcome_variable:'结果变量'
+                outcome_variable: '结果变量',
+                isPrint: false
             }];
-        if(this.state.testFuncData.length>0){
+        if (this.state.testFuncData.length > 0) {
             console.log('拼接原有的test_function')
-            formulaArr=formulaArr.concat(this.state.testFuncData)
+            formulaArr = formulaArr.concat(this.state.testFuncData)
         }
         let OfGroupsId = '';
         let ForGroupsId = '';
@@ -274,39 +295,19 @@ class ScriptIndex extends Component {
                 $(go.Panel, "Auto",//节点第二层定义Panel
                     $(go.Shape, "Diamond",//节点第三层定义Shape,
                         {fill: "#00A9C9", stroke: null}),//Shape绑定figure
-                    $(go.TextBlock,//节点第三层定义TextBlock
-                        {
-                            font: "bold 11pt Helvetica, Arial, sans-serif",
-                            stroke: lightText,
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: true//是否可以编辑，默认是false
-                        },
-                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
-                ),
-                // four named ports, one on each side:
-                that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
-                that.makePort("L", go.Spot.Left, true, true),
-                that.makePort("R", go.Spot.Right, true, true),
-                that.makePort("B", go.Spot.Bottom, true, false)
-            ));
-        myDiagram.nodeTemplateMap.add("for",
-            $(go.Node, "Spot", that.nodeStyle(),//节点最外层根据loc属性定位
-                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-                $(go.Panel, "Auto",//节点第二层定义Panel
-                    $(go.Shape, "Diamond",//节点第三层定义Shape,
-                        {fill: "#8C0095", stroke: null}),//Shape绑定figure
-                    $(go.TextBlock,//节点第三层定义TextBlock
-                        {
-                            font: "bold 11pt Helvetica, Arial, sans-serif",
-                            stroke: lightText,
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: true//是否可以编辑，默认是false
-                        },
-                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
+                    $(go.Panel, "Vertical",
+                        $(go.TextBlock,//节点第三层定义TextBlock
+                            {
+                                font: "bold 11pt Helvetica, Arial, sans-serif",
+                                stroke: lightText,
+                                margin: 8,
+                                maxSize: new go.Size(160, NaN),
+                                wrap: go.TextBlock.WrapFit,
+                                editable: true//是否可以编辑，默认是false
+                            },
+                            new go.Binding("text", "title").makeTwoWay()),//TextBlock绑定text属性
+                        that.renderPrintCheckbox()
+                    )
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -320,16 +321,19 @@ class ScriptIndex extends Component {
                 $(go.Panel, "Auto",//节点第二层定义Panel
                     $(go.Shape, "Ellipse",//节点第三层定义Shape,
                         {fill: "#E20048", stroke: null}),//Shape绑定figure
-                    $(go.TextBlock,//节点第三层定义TextBlock
-                        {
-                            font: "bold 11pt Helvetica, Arial, sans-serif",
-                            stroke: lightText,
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: false,//是否可以编辑，默认是false
-                        },
-                        new go.Binding("text", "title").makeTwoWay())//TextBlock绑定text属性
+                    $(go.Panel, "Horizontal",
+                        $(go.TextBlock,//节点第三层定义TextBlock
+                            {
+                                font: "bold 11pt Helvetica, Arial, sans-serif",
+                                stroke: lightText,
+                                margin: 8,
+                                maxSize: new go.Size(160, NaN),
+                                wrap: go.TextBlock.WrapFit,
+                                editable: false,//是否可以编辑，默认是false
+                            },
+                            new go.Binding("text", "title").makeTwoWay()),//TextBlock绑定text属性
+                        that.renderPrintCheckbox()
+                    )
                 ),
                 // four named ports, one on each side:
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -345,9 +349,12 @@ class ScriptIndex extends Component {
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#79C900", stroke: null}),
-                    $(go.TextBlock, "Start",
-                        {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text", "title"))
+                    $(go.Panel, "Vertical",
+                        $(go.TextBlock, "Start",
+                            {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
+                            new go.Binding("text", "title")),
+                        that.renderPrintCheckbox()
+                    )
                 ),
                 // three named ports, one on each side except the top, all output only:
                 that.makePort("L", go.Spot.Left, true, false),
@@ -360,10 +367,13 @@ class ScriptIndex extends Component {
                 that.nodeStyle(),
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
-                        {minSize: new go.Size(40, 40), fill: "#000", stroke: null}),
-                    $(go.TextBlock, "End",
-                        {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
-                        new go.Binding("text", "title"))
+                        {fill: "#000", stroke: null}),
+                    $(go.Panel, "Vertical",
+                        $(go.TextBlock, "End",
+                            {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
+                            new go.Binding("text", "title")),
+                        that.renderPrintCheckbox()
+                    )
                 ),
                 // three named ports, one on each side except the bottom, all input only:
                 that.makePort("T", go.Spot.Top, false, true),
@@ -374,15 +384,18 @@ class ScriptIndex extends Component {
             $(go.Node, "Auto", this.nodeStyle(),
                 $(go.Shape, "File",
                     {fill: "#EFFAB4", stroke: null}),
-                $(go.TextBlock,
-                    {
-                        margin: 5,
-                        textAlign: "center",
-                        editable: true,
-                        font: titleFont,
-                        stroke: '#454545'
-                    },
-                    new go.Binding("text", "title").makeTwoWay())
+                $(go.Panel, "Vertical",
+                    $(go.TextBlock,
+                        {
+                            margin: new go.Margin(5, 5, 0, 5),
+                            textAlign: "center",
+                            editable: true,
+                            font: titleFont,
+                            stroke: '#454545'
+                        },
+                        new go.Binding("text", "title").makeTwoWay()),
+                    that.renderPrintCheckbox()
+                )
                 // no ports, because no links are allowed to connect with a comment
             ));
 
@@ -392,7 +405,7 @@ class ScriptIndex extends Component {
                     {column: 0},
                 ),
                 $(go.TextBlock, "key",
-                    {  column: 1, margin: 5, font: " 10pt sans-serif", editable: true},
+                    {column: 1, margin: 5, font: " 10pt sans-serif", editable: true},
                     new go.Binding("text", "key").makeTwoWay()
                 ),
                 $(go.TextBlock, "value",
@@ -432,23 +445,29 @@ class ScriptIndex extends Component {
                     {
                         fill: '#FFDD33', portId: "", strokeWidth: 1, stroke: "black", toEndSegmentLength: 150
                     }),
-
                 $(go.Panel, "Vertical",
                     // headered by a label and a PanelExpanderButton inside a Table
-                    $(go.Panel, "Horizontal",  // button next to TextBlock
+                    $(go.Panel, "Table",
                         {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
-                        $("PanelExpanderButton", "COLLAPSIBLE",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
-                            {column: 0, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
-                        ),
-                        $(go.TextBlock,
+                        $(go.Panel, "Horizontal",
                             {
-                                column: 1,
-                                editable: true,
-                                margin: new go.Margin(10, 10, 10, 0),
-                                font: titleFont,
+                                column: 0,
+                                alignment: go.Spot.Left,
                             },
-                            new go.Binding("text", "title").makeTwoWay()
-                        )
+                            $("PanelExpanderButton", "COLLAPSIBLE",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
+                                {width: 15, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
+                            ),
+                            $(go.TextBlock,
+                                {
+                                    editable: true,
+                                    alignment: go.Spot.Left,
+                                    font: titleFont,
+                                },
+                                new go.Binding("text", "title").makeTwoWay()
+                            ),
+                        ),
+
+                        that.renderPrintCheckbox(true)
                     ),
                     $(go.Panel, "Vertical",
                         {
@@ -459,8 +478,8 @@ class ScriptIndex extends Component {
                         },
                         $(go.Panel, "Table",
                             {
-                                minSize: new go.Size(150, NaN),
                                 background: "#00A9C9",
+                                stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 defaultRowSeparatorStroke: "gray",
                                 defaultColumnSeparatorStroke: "gray"
                             },
@@ -513,10 +532,10 @@ class ScriptIndex extends Component {
                                 new go.Binding("text", "outcome_variable").makeTwoWay(),
                             ),
                         ),
-                        $(go.TextBlock, "参数",
-                            {margin: new go.Margin(10, 0, 0, 0), font: " 10pt sans-serif", alignment: go.Spot.Left,},
-                        ),
-                        $(go.Panel, "Table",
+                        $(go.Panel, "Vertical",
+                            {
+                                stretch: go.GraphObject.Horizontal,  // take up whole available width
+                            },
                             {
                                 contextMenu:     // define a context menu for each node
                                     $(go.Adornment, "Vertical",  // that has one button
@@ -526,41 +545,62 @@ class ScriptIndex extends Component {
                                         // more ContextMenuButtons would go here
                                     )  // end Adornment
                             },
+                            $(go.TextBlock, "参数",
+                                {
+                                    margin: new go.Margin(10, 0, 0, 0),
+                                    font: " 10pt sans-serif",
+                                    alignment: go.Spot.Left,
+                                    stretch: go.GraphObject.Horizontal,
+                                },
+                            ),
+                            $(go.Panel, "Table",
+
+                                {
+                                    stretch: go.GraphObject.Horizontal,  // take up whole available width
+                                    defaultRowSeparatorStroke: "gray",
+                                    defaultColumnSeparatorStroke: "gray"
+                                },
+                                {
+                                    background: "#00A9C9",  // to distinguish from the node's body
+                                    itemTemplate: actionTemplate  // the Panel created for each item in Panel.itemArray
+                                },
+                                new go.Binding("itemArray", "params").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
+                            ),  // end action list Vertical Panel
+                        ),
+                        $(go.Panel, "Vertical",
                             {
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
-                                defaultRowSeparatorStroke: "gray",
-                                defaultColumnSeparatorStroke: "gray"
                             },
-                            {
-                                background: "#00A9C9",  // to distinguish from the node's body
-                                itemTemplate: actionTemplate  // the Panel created for each item in Panel.itemArray
-                            },
-                            new go.Binding("itemArray", "params").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
-                        ),  // end action list Vertical Panel
-                        $(go.TextBlock, "错误码",
-                            {font: " 10pt sans-serif", alignment: go.Spot.Left, margin: new go.Margin(10, 0, 0, 0),},
-                        ),
-                        $(go.Panel, "Table",
                             {
                                 contextMenu:     // define a context menu for each node
                                     $(go.Adornment, "Vertical",  // that has one button
                                         $("ContextMenuButton",
                                             $(go.TextBlock, "添加错误码"),
                                             {click: this.addErrorParam})
-                                        // more ContextMenuButtons would go here
                                     )  // end Adornment
                             },
-                            {
-                                stretch: go.GraphObject.Horizontal,  // take up whole available width
-                                defaultRowSeparatorStroke: "gray",
-                                defaultColumnSeparatorStroke: "gray"
-                            },
-                            {
-                                background: "#00A9C9",  // to distinguish from the node's body
-                                itemTemplate: errorTemplate  // the Panel created for each item in Panel.itemArray
-                            },
-                            new go.Binding("itemArray", "errors").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
-                        ),
+                            $(go.TextBlock, "错误码",
+                                {
+                                    font: " 10pt sans-serif",
+                                    alignment: go.Spot.Left,
+                                    margin: new go.Margin(10, 0, 0, 0),
+                                    stretch: go.GraphObject.Horizontal,
+                                },
+                            ),
+                            $(go.Panel, "Table",
+
+                                {
+                                    stretch: go.GraphObject.Horizontal,  // take up whole available width
+                                    defaultRowSeparatorStroke: "gray",
+                                    defaultColumnSeparatorStroke: "gray"
+                                },
+                                {
+                                    background: "#00A9C9",  // to distinguish from the node's body
+                                    itemTemplate: errorTemplate  // the Panel created for each item in Panel.itemArray
+                                },
+                                new go.Binding("itemArray", "errors").makeTwoWay()  // bind Panel.itemArray to nodedata.actions
+                            ),
+                        )
                     )  // end action list Vertical Panel
                 ),  // end optional Vertical Panel
                 that.makePort("T", go.Spot.Top, false, true),//创建点，顶点不可输出，可以输入
@@ -589,20 +629,27 @@ class ScriptIndex extends Component {
                 $(go.Shape, "RoundedRectangle",
                     {fill: "#CC5245", portId: "", strokeWidth: 1, stroke: "black", toEndSegmentLength: 150}),
                 $(go.Panel, "Vertical",
-                    $(go.Panel, "Horizontal",  // button next to TextBlock
+                    $(go.Panel, "Table",
                         {stretch: go.GraphObject.Horizontal, minSize: new go.Size(150, 40)},
-                        $("PanelExpanderButton", "COLLAPSIBLECONF",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
-                            {column: 0, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
-                        ),
-                        $(go.TextBlock,
+                        $(go.Panel, "Horizontal",
                             {
-                                column: 1,
-                                margin: new go.Margin(10, 10, 10, 0),
-                                font: titleFont,
+                                column: 0,
+                                alignment: go.Spot.Left,
                             },
-                            new go.Binding("text", "title").makeTwoWay()
-                        )
-                    ),  // end Horizontal Panel
+                            $("PanelExpanderButton", "COLLAPSIBLECONF",  //引用下拉菜单COLLAPSIBLE name of the object to make visible or invisible
+                                {width: 15, alignment: go.Spot.Left, margin: new go.Margin(0, 0, 0, 10),}
+                            ),
+                            $(go.TextBlock,
+                                {
+                                    alignment: go.Spot.Left,
+                                    font: titleFont,
+                                },
+                                new go.Binding("text", "title").makeTwoWay()
+                            ),
+                        ),
+
+                        that.renderPrintCheckbox(true)
+                    ),
                     $(go.Panel, "Table",
                         {
                             contextMenu:     // define a context menu for each node
@@ -656,7 +703,7 @@ class ScriptIndex extends Component {
                 $(go.Shape, "RoundedRectangle",
                     {fill: null, stroke: "black", strokeWidth: 1}),
                 $(go.Panel, "Vertical",  // title above Placeholder
-                    $(go.Panel, "Horizontal",  // button next to TextBlock
+                    $(go.Panel, "Table",
                         {stretch: go.GraphObject.Horizontal, background: "#98FB98", minSize: new go.Size(150, 40)},
                         {
                             contextMenu:     // define a context menu for each node
@@ -667,15 +714,22 @@ class ScriptIndex extends Component {
                                     // more ContextMenuButtons would go here
                                 )  // end Adornment
                         },
-                        $("SubGraphExpanderButton",
-                            {alignment: go.Spot.Center, margin: 5}),
-                        $(go.TextBlock,
+                        $(go.Panel, "Horizontal",  // button next to TextBlock
                             {
-                                alignment: go.Spot.Center,
-                                editable: true,
-                                font: titleFont,
+                                column: 0,
+                                alignment: go.Spot.Left,
                             },
-                            new go.Binding("text", "title").makeTwoWay())
+                            $("SubGraphExpanderButton",
+                                {alignment: go.Spot.Center, margin: 5}),
+                            $(go.TextBlock,
+                                {
+                                    alignment: go.Spot.Center,
+                                    editable: true,
+                                    font: titleFont,
+                                },
+                                new go.Binding("text", "title").makeTwoWay()),
+                        ),
+                        that.renderPrintCheckbox(true)
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
                         {padding: 10},
@@ -708,8 +762,8 @@ class ScriptIndex extends Component {
                 $(go.Shape, "RoundedRectangle",
                     {fill: null, stroke: "black", strokeWidth: 1}),
                 $(go.Panel, "Vertical",  // title above Placeholder
-                    $(go.Panel, "Horizontal",  // button next to TextBlock
-                        {stretch: go.GraphObject.Horizontal, background: "#00A9C9", minSize: new go.Size(150, 40)},
+                    $(go.Panel, "Table",  // button next to TextBlock
+                        {stretch: go.GraphObject.Horizontal, background: "#00A9C9", minSize: new go.Size(200, 40)},
                         {
                             contextMenu:     // define a context menu for each node
                                 $(go.Adornment, "Vertical",  // that has one button
@@ -718,33 +772,40 @@ class ScriptIndex extends Component {
                                         {click: this.showDetail})
                                 )  // end Adornment
                         },
-                        $("SubGraphExpanderButton",
-                            {alignment: go.Spot.Center, margin: 5}),
-                        $(go.TextBlock,
+                        $(go.Panel, "Horizontal",  // button next to TextBlock
                             {
-                                alignment: go.Spot.Center,
-                                editable: true,
-                                font: titleFont,
-                                stroke: lightText,
+                                column: 0,
+                                alignment: go.Spot.Left,
                             },
-                            new go.Binding("text", "title").makeTwoWay()),
-                        $(go.TextBlock, "循环次数:",
-                            {
-                                margin: new go.Margin(0, 0, 0, 10),
-                                alignment: go.Spot.Right,
-                                editable: false,
-                                font: "9pt Verdana, sans-serif",
-                                stroke: lightText,
-                            }),
-                        $(go.TextBlock,
-                            {
-                                margin: new go.Margin(0, 10, 0, 0),
-                                alignment: go.Spot.Right,
-                                editable: true,
-                                font: titleFont,
-                                stroke: lightText,
-                            },
-                            new go.Binding("text", "times").makeTwoWay()),
+                            $("SubGraphExpanderButton",
+                                {alignment: go.Spot.Center, margin: 5}),
+                            $(go.TextBlock,
+                                {
+                                    alignment: go.Spot.Center,
+                                    editable: true,
+                                    font: titleFont,
+                                    stroke: lightText,
+                                },
+                                new go.Binding("text", "title").makeTwoWay()),
+                            $(go.TextBlock, "循环次数:",
+                                {
+                                    margin: new go.Margin(0, 0, 0, 10),
+                                    alignment: go.Spot.Right,
+                                    editable: false,
+                                    font: "9pt Verdana, sans-serif",
+                                    stroke: lightText,
+                                }),
+                            $(go.TextBlock,
+                                {
+                                    margin: new go.Margin(0, 10, 0, 0),
+                                    alignment: go.Spot.Right,
+                                    editable: true,
+                                    font: titleFont,
+                                    stroke: lightText,
+                                },
+                                new go.Binding("text", "times").makeTwoWay()),
+                        ),
+                        that.renderPrintCheckbox(true)
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
                         {padding: 10},
@@ -780,7 +841,7 @@ class ScriptIndex extends Component {
                      * */
                     model: new go.GraphLinksModel(formulaArr)
                 });
-        if(!this.state.testFuncData.length){
+        if (!this.state.testFuncData.length) {
             console.log('加载test_function')
             this.getTestFunctions()
         }
@@ -840,7 +901,50 @@ class ScriptIndex extends Component {
             cb(cbArg)
         }
     }
+    findFromNode = (node)=> {
+        const model = myDiagram.model;
+        const myDiagramJson = JSON.parse(model.toJson());
+        const children = findChildren(myDiagramJson.nodeDataArray, node);
+        const parents = findParents(myDiagramJson.nodeDataArray, node);
 
+        if (node.category === 'ForGroups' || node.category === 'OfGroups') {
+            _.forEach(children, function (value, key) {
+                let findChildIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
+                    return o.key == children[key].key;
+                });
+                myDiagramJson.nodeDataArray[findChildIndex].isPrint= node.isPrint;
+                let data = model.nodeDataArray[findChildIndex];
+                model.setDataProperty(data, "isPrint", node.isPrint);
+            });
+        }
+
+        if (node.isPrint) {
+            _.forEach(parents, function (value, key) {
+                if (value) {
+                    let findParentsIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
+                        return o.key == parents[key].key;
+                    });
+                    myDiagramJson.nodeDataArray[findParentsIndex].isPrint= node.isPrint;
+                    let data = model.nodeDataArray[findParentsIndex];
+                    const findAllChildren=findChildren(myDiagramJson.nodeDataArray,data)
+                    const everyNodePrint=_.every(findAllChildren, ['isPrint', true]);
+                    if(everyNodePrint){
+                        model.setDataProperty(data, "isPrint", node.isPrint);
+                    }
+                }
+            });
+        }else{
+            _.forEach(parents, function (value, key) {
+                if (value) {
+                    let findParentsIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
+                        return o.key == parents[key].key;
+                    });
+                    let data = model.nodeDataArray[findParentsIndex];
+                    model.setDataProperty(data, "isPrint", node.isPrint);
+                }
+            });
+        }
+    }
     showDetail = (e, obj) => {
         // get the context menu that holds the button that was clicked
         var contextmenu = obj.part;
@@ -890,16 +994,16 @@ class ScriptIndex extends Component {
             this.props.getErrorInfo();
             this.props.saveTempScript();
 
-            const scriptDiagramStorage=JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
-            if( Array.indexOf(scriptDiagramStorage, `${nodedata.key}`)===-1){
+            const scriptDiagramStorage = JSON.parse(sessionStorage.getItem('scriptDiagramStorage'));
+            if (Array.indexOf(scriptDiagramStorage, `${nodedata.key}`) === -1) {
                 scriptDiagramStorage.push(nodedata.key)
-                sessionStorage.setItem('scriptDiagramStorage',JSON.stringify(scriptDiagramStorage))
+                sessionStorage.setItem('scriptDiagramStorage', JSON.stringify(scriptDiagramStorage))
             }
 
-            const scriptStorage=JSON.parse(sessionStorage.getItem('scriptStorage'));
-            if( Array.indexOf(scriptStorage, `${nodedata.key}`)===-1){
+            const scriptStorage = JSON.parse(sessionStorage.getItem('scriptStorage'));
+            if (Array.indexOf(scriptStorage, `${nodedata.key}`) === -1) {
                 scriptStorage.push(nodedata.key)
-                sessionStorage.setItem('scriptStorage',JSON.stringify(scriptStorage))
+                sessionStorage.setItem('scriptStorage', JSON.stringify(scriptStorage))
             }
             if (this.props.location.pathname === '/scriptManage/newScript') {
                 this.props.history.push({
@@ -915,16 +1019,16 @@ class ScriptIndex extends Component {
         } else if (this.props.match.path === '/segmentManage/:id' || this.props.match.path === '/segmentDetail/:id') {
             this.props.saveTempScript();
 
-            const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
-            if( Array.indexOf(segmentDiagramStorage, `${nodedata.key}`)===-1){
+            const segmentDiagramStorage = JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
+            if (Array.indexOf(segmentDiagramStorage, `${nodedata.key}`) === -1) {
                 segmentDiagramStorage.push(nodedata.key)
-                sessionStorage.setItem('segmentDiagramStorage',JSON.stringify(segmentDiagramStorage))
+                sessionStorage.setItem('segmentDiagramStorage', JSON.stringify(segmentDiagramStorage))
             }
 
-            const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'));
-            if( Array.indexOf(segmentStorage, `${nodedata.key}`)===-1){
+            const segmentStorage = JSON.parse(sessionStorage.getItem('segmentStorage'));
+            if (Array.indexOf(segmentStorage, `${nodedata.key}`) === -1) {
                 segmentStorage.push(nodedata.key)
-                sessionStorage.setItem('segmentStorage',JSON.stringify(segmentStorage))
+                sessionStorage.setItem('segmentStorage', JSON.stringify(segmentStorage))
             }
 
             if (this.props.location.pathname === '/segmentManage/newSegment') {
@@ -947,13 +1051,12 @@ class ScriptIndex extends Component {
         myPalette.div = null;
         myOverview.div = null;
     }
-    setHadEditTrue=()=>{
+    setHadEditTrue = ()=> {
         console.log('设为true')
         myDiagram.isModified = true;
     }
     save = ()=> {
         document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-
     }
     callbackJson = ()=> {
         return myDiagram.model.toJson();
@@ -1016,13 +1119,14 @@ class ScriptIndex extends Component {
         const {scrollTop, scrollLeft}=this.state
         return {top, left, scrollTop, scrollLeft}
     }
+
     render() {
         return (
             <div>
                 <div className="drawScript">
                     <div className="drawScript-search">
                         <span>图形名称 : </span>
-                        <Input id="mySearch"  style={{width: 150,marginRight:'10px'}} onKeyPress={this.keypressInput}/>
+                        <Input id="mySearch" style={{width: 150, marginRight: '10px'}} onKeyPress={this.keypressInput}/>
                         <Button type='primary' onClick={this.searchDiagram}>检索</Button>
                     </div>
                     <div className="drawScript-sidebar">
@@ -1040,7 +1144,7 @@ class ScriptIndex extends Component {
                         <div className="" id="myDiagramDiv" onScroll={this.onscroll}
                              style={{
                                  height: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? `calc(100vh - 243px)` : `calc(100vh - 192px)`,
-                                minHeight:(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?'calc(700px - 47px)':'700px'
+                                 minHeight: (this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ? 'calc(700px - 47px)' : '700px'
                              }}>
                         </div>
 

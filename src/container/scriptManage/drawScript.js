@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, converErrorCodeToMsg, delPointsInLink,checkJSon} from './../../common/common.js';
+import {getHeader, converErrorCodeToMsg, delPointsInLink,checkJSon,transformPrintJson} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -17,6 +17,7 @@ import FetchSegments from './fetchSegments'
 import ScriptInfo from './scriptInfo';
 import uuidv4 from 'uuid/v4';
 import ScriptErrorInfo from './scriptErrorInfo'
+const _ = require('lodash');
 const {Content,} = Layout;
 const confirm = Modal.confirm;
 
@@ -33,8 +34,9 @@ class DrawScript extends Component {
     componentDidMount() {
         if (!this.props.location.state.newScript) {
             sessionStorage.setItem('manageScriptId', this.props.location.state.editRecord.id);
-            if (this.props.fetchTestConf.scriptLoaded) {
-                this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem('resultTempJson'));
+            if (this.props.fetchTestConf.scriptLoaded){
+                const  transformJson=transformPrintJson(JSON.parse(sessionStorage.getItem('resultTempJson')));
+                this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, JSON.stringify(transformJson));
                 this.props.fetchDrawScript(this.props.location.state.editRecord.id)
             } else {
                 this.props.fetchDrawScript(this.props.location.state.editRecord.id, this.refs.ScriptIndex.init)
@@ -43,7 +45,8 @@ class DrawScript extends Component {
             this.props.delEditRecord();
             this.refs.ScriptIndex.init();
             if (sessionStorage.getItem('resultTempJson')) {
-                this.refs.ScriptIndex.load(sessionStorage.getItem('resultTempJson'))
+                const  transformJson=transformPrintJson(JSON.parse(sessionStorage.getItem('resultTempJson')));
+                this.refs.ScriptIndex.load(JSON.stringify(transformJson))
             } else {
                 this.refs.ScriptIndex.load(JSON.stringify({
                     class: "go.GraphLinksModel",
@@ -66,9 +69,9 @@ class DrawScript extends Component {
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
-        this.props.fetchAllProducts()
+        this.props.fetchAllProducts();
+        sessionStorage.removeItem('breadcrumbArr')
     }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
             this.refs.ScriptIndex.delDiagram();

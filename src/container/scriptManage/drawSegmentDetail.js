@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, converErrorCodeToMsg, delPointsInLink} from './../../common/common';
+import {getHeader, converErrorCodeToMsg, delPointsInLink,transformPrintJson} from './../../common/common';
 import axios from 'axios';
 import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
@@ -86,9 +86,8 @@ class DrawScriptDetail extends Component {
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
             const preSessionJson = JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));
 
-            const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
+            let nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
             const thisPropsIdJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));
-
             if (this.props.history.action === 'POP') {
                 // console.log('POP');
                 const segmentDiagramStorage=JSON.parse(sessionStorage.getItem('segmentDiagramStorage'));
@@ -117,9 +116,8 @@ class DrawScriptDetail extends Component {
                 nextPropsIdJson.linkDataArray = _.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray, _.isEqual)
                     .concat(thisPropsIdJson.linkDataArray);
             }
-
+            nextPropsIdJson=transformPrintJson(nextPropsIdJson);
             sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
-            // console.log("nextPropsIdJson", nextPropsIdJson)
             this.refs.ScriptIndex.load(nextPropsIdJson);
 
         }
@@ -182,7 +180,8 @@ class DrawScriptDetail extends Component {
 
     saveCode = ()=> {
         const that = this;
-        const content = this.saveTempScript(false, true);
+        let content = this.saveTempScript(false, true);
+        content=transformPrintJson(content);
         delPointsInLink(content.linkDataArray);
         const newSegment = !this.state.editRecord;
         const url = newSegment ? `/flow_diagrams` : `/flow_diagrams/${sessionStorage.getItem('manageSegmentId')}`;

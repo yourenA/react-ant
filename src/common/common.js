@@ -229,7 +229,6 @@ exports.getUserPermission = (name) => {
 /**
  *  删除图形的线节点
  * */
-
 exports.delPointsInLink = (arr) => {
     for (let i = 0, len = arr.length; i < len; i++) {
         delete  arr[i].points
@@ -480,42 +479,60 @@ function listParents(tree, node) {
     }
 }
 
-
 /**
- * 打印设置--树形结构
+ * 查找所有的父/子节点
  * */
-function treeMenu(a){
-    console.log(a)
-    this.tree=a||[];
-    this.groups={};
-};
-treeMenu.prototype={
-    init:function(group){
-        this.group();
-        return this.getDom(this.groups[group]);
-    },
-    group:function(){
-        for(var i=0;i<this.tree.length;i++){
-            if(this.groups[this.tree[i].group]){
-                this.groups[this.tree[i].group].push(this.tree[i]);
-            }else{
-                this.groups[this.tree[i].group]=[];
-                this.groups[this.tree[i].group].push(this.tree[i]);
+const findP=(zNodes,node)=> {
+    let ans=[];
+    for(let i=0;i<zNodes.length;i++){
+        if(node.group==zNodes[i].key){
+            if(!zNodes[i].group){
+                return [zNodes[i]];
             }
+            ans.push(zNodes[i]);
+            return  ans.concat(findP(zNodes,zNodes[i]));
         }
-    },
-    getDom:function(a){
-        if(!a){return ''}
-        var html='\n<ul>\n';
-        for(var i=0;i<a.length;i++){
-            html+='<li><a href="#">'+a[i].title+'</a>';
-            html+=this.getDom(this.groups[a[i].key]);
-            html+='</li>\n';
-        };
-        html+='</ul>\n';
-        console.log(html);
-        return html;
     }
 };
+exports.findParents=findP;
 
-exports.transfromTree=treeMenu
+const findC=(zNodes,node)=> {
+    let ans=[];
+    for(var i=0;i<zNodes.length;i++){
+        if(node.key==zNodes[i].group){
+            ans.push(zNodes[i]);
+            ans=ans.concat(findC(zNodes,zNodes[i]));
+        }
+    }
+    return ans;
+}
+
+exports.findChildren=findC;
+
+/**
+ * 判断分组是不是全选或非全选，返回修改后的json
+ * */
+exports.transformPrintJson = (transformJson) => {
+    if(!transformJson){
+        console.log('没有传入transformJson');
+        return false
+    }
+    const groups = _.groupBy(transformJson.nodeDataArray, 'group');
+    _.forEach(groups, function (group, key) {
+        if (key !== 'undefined') {
+            const findKey=_.find(transformJson.nodeDataArray, function(o) { return o.key===key; });
+            if(findKey){
+                const findAllChildren=findC(transformJson.nodeDataArray,findKey)
+                const everyNodePrint=_.every(findAllChildren, ['isPrint', true]);
+                const findEditIndex=_.findIndex(transformJson.nodeDataArray, findKey);
+                if(everyNodePrint){
+                    transformJson.nodeDataArray[findEditIndex].isPrint=true
+                }else{
+                    transformJson.nodeDataArray[findEditIndex].isPrint=false
+                }
+            }
+
+        }
+    });
+    return transformJson
+}

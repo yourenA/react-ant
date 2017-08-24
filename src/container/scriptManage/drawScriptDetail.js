@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, delPointsInLink,converErrorCodeToMsg,checkJSon} from './../../common/common.js';
+import {getHeader, delPointsInLink,converErrorCodeToMsg,checkJSon,transformPrintJson} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -40,7 +40,7 @@ class DrawScriptDetail extends Component {
         if (!this.props.location.state.newScript) {
             this.fetchScript(sessionStorage.getItem('manageScriptId'))
         }
-        if(!sessionStorage.getItem('breadcrumbArr')){
+         if(!sessionStorage.getItem('breadcrumbArr')){
             sessionStorage.setItem('breadcrumbArr',JSON.stringify([{key:this.props.match.params.id,value:this.props.location.state.groupNmae}]))
         }
     }
@@ -87,10 +87,8 @@ class DrawScriptDetail extends Component {
             //加了||使后退不会出错
             const preSessionJson=JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`))||JSON.parse(sessionStorage.getItem(this.props.match.params.id));
 
-            const nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
-            console.log('nextPropsIdJson',nextPropsIdJson)
+            let nextPropsIdJson = JSON.parse(sessionStorage.getItem(nextProps.match.params.id));
             const thisPropsIdJson=JSON.parse(sessionStorage.getItem(this.props.match.params.id));
-            // console.log("this.props.match.params.id",this.props.match.params.id,thisPropsIdJson)
             // console.log("nextProps.match.params.id",nextProps.match.params.id,JSON.parse(sessionStorage.getItem(nextProps.match.params.id)))
 
             if(this.props.history.action==='POP'){
@@ -121,13 +119,15 @@ class DrawScriptDetail extends Component {
                     .concat(thisPropsIdJson.linkDataArray);
             }
 
-            sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson))
+            nextPropsIdJson=transformPrintJson(nextPropsIdJson);
+            sessionStorage.setItem(nextProps.match.params.id, JSON.stringify(nextPropsIdJson));
+
             // console.log("nextPropsIdJson", nextPropsIdJson)
             this.refs.ScriptIndex.load(nextPropsIdJson);
         }
     }
     getErrorInfo=()=>{
-        const content=this.saveTempScript(false,true);
+        const content=this.saveTempScript(false,true,true);
         let  canSave=checkJSon(content);
         this.setState({
             returnMsg:canSave.returnMsg
@@ -137,7 +137,8 @@ class DrawScriptDetail extends Component {
     saveScript = ()=> {
         const that=this
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
-        const content=this.saveTempScript(false,true);
+        let content=this.saveTempScript(false,true);
+        content=transformPrintJson(content);
         delPointsInLink(content.linkDataArray);
         const newScript=!this.state.editRecord
         const url= newScript?`/test_scripts`:`/test_scripts/${sessionStorage.getItem('manageScriptId')}`;
@@ -173,11 +174,7 @@ class DrawScriptDetail extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    getTempScript=()=>{
-
-    }
-    saveTempScript = (canBack,returnJson)=> {
-
+    saveTempScript = (canBack,returnJson,noSetSession)=> {
         const originJson = JSON.parse(sessionStorage.getItem('resultTempJson'));//总的数据
         const nowJson = JSON.parse(sessionStorage.getItem(this.props.match.params.id));//获取页面进入前的数据
         let changeJson = JSON.parse(this.refs.ScriptIndex.callbackJson());//修改后的数据
@@ -187,7 +184,9 @@ class DrawScriptDetail extends Component {
             }
         }
         delPointsInLink(changeJson.linkDataArray);
-        sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
+        if(!noSetSession){
+            sessionStorage.setItem(this.props.match.params.id, JSON.stringify(changeJson))
+        }
 
         let resultNodeJson = _.differenceWith(originJson.nodeDataArray, nowJson.nodeDataArray,function (a,b) {
             return (a.key === b.key)
@@ -207,7 +206,9 @@ class DrawScriptDetail extends Component {
             nodeDataArray: resultNodeJson,
             linkDataArray: resultLinkJson
         };
-        sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));//修改后总的数据
+        if(!noSetSession){
+            sessionStorage.setItem('resultTempJson', JSON.stringify(resultTempJson));//修改后总的数据
+        }
         if(returnJson){
             return resultTempJson
         }
