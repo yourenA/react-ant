@@ -25,7 +25,7 @@ import CatagoryManage from './container/catagoryManage/index';
 import SystemManage from './container/systemManage/index';
 import UserConfig from './container/userConfig/index';
 import Login from './container/login';
-import Register from './container/register';
+// import Register from './container/register';
 // import SystemJournalModal from './component/systemJournalModal'
 import './App.less';
 import {bindActionCreators} from 'redux';
@@ -170,12 +170,9 @@ class App extends Component {
                                                                               to="/login">切换账号</NavLink></Menu.Item>
                                         <Menu.Item key="/signout">退出</Menu.Item>
                                     </SubMenu>
-                                    : <SubMenu className="float-right" title={<span>登录/注册</span>}>
-                                    <Menu.Item key="/login"><NavLink activeClassName="nav-selected"
-                                                                     to="/login">登录</NavLink></Menu.Item>
-                                    <Menu.Item key="/register"><NavLink activeClassName="nav-selected"
-                                                                        to="/register">注册</NavLink></Menu.Item>
-                                </SubMenu>}
+                                    : <Menu.Item key="/login"  className="float-right"><NavLink activeClassName="nav-selected"
+                                                                       to="/login">登录</NavLink></Menu.Item>
+                                }
                                 {login.login ?
                                 <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
                                                                  to="/about">说明文档</NavLink></Menu.Item>:null}
@@ -218,7 +215,7 @@ class App extends Component {
 
 
                     <Route path="/login" component={Login}/>
-                    <Route path="/register" component={Register}/>
+                    {/*<Route path="/register" component={Register}/>*/}
                     <Route
                         path="/printSetting/:id" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?

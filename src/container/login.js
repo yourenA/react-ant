@@ -50,11 +50,11 @@ class NormalLoginForm extends React.Component {
                             )}
                         </FormItem>
                         <FormItem>
-                            <a className="login-form-forgot" href="">忘记密码</a>
+                            {/*<a className="login-form-forgot" href="">忘记密码</a>*/}
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
                             </Button>
-                            还没有账号吗? <Link to="/register">现在注册!</Link>
+                            {/*还没有账号吗? <Link to="/register">现在注册!</Link>*/}
                         </FormItem>
                     </Form>
                 </div>

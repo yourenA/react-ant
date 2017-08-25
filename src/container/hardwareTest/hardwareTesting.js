@@ -35,7 +35,11 @@ class HardwareTesting extends Component {
             },
             serial_number:'',
             product_code: '',
-            adapter: '',
+            adapter: [],
+            selectedAdapter:{
+                key: localStorage.getItem('adapter') ? JSON.parse(localStorage.getItem('adapter')).key : '',
+                label: localStorage.getItem('adapter') ? JSON.parse(localStorage.getItem('adapter')).label : ''
+            },
             product_sn: '',
             inputDisabled: true,
             scriptModal: false,
@@ -73,7 +77,8 @@ class HardwareTesting extends Component {
         }
         this.setState({
             testInfo: data
-        })
+        });
+        this.getAdapter()
     }
     componentWillUnmount(){
         if(this.ws){
@@ -147,7 +152,9 @@ class HardwareTesting extends Component {
         const that = this;
         const params = {
             serial_number: serialNumbers,
-            test_script_id: this.state.script.key
+            test_script_id: this.state.script.key,
+            test_stand_id:this.state.test_stand.key,
+            adapter_index:this.state.selectedAdapter.key
         }
         axios({
             url: `${configJson.prefix}/hardware_test`,
@@ -225,11 +232,6 @@ class HardwareTesting extends Component {
             console.log('WebSocketError!');
         };
     }
-    toggleInput = ()=> {
-        this.setState({
-            inputDisabled: !this.state.inputDisabled
-        })
-    }
     changetScrip=()=>{
         const scriptConfigForm = this.refs.scriptConfigForm.getFieldsValue();
         this.setState({
@@ -245,6 +247,39 @@ class HardwareTesting extends Component {
         }, function () {
             localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
         })
+    }
+    changeAdapter=()=>{
+        const adapterConfigForm = this.refs.adapterConfigForm.getFieldsValue();
+        this.setState({
+            selectedAdapter:{key:adapterConfigForm.adapter.key,label:adapterConfigForm.adapter.label},
+            adapterModal:false
+        }, function () {
+            localStorage.setItem('adapter', JSON.stringify(this.state.selectedAdapter))
+        })
+    }
+    getAdapter=()=>{
+        console.log('获取适配器');
+        const that=this;
+        this.adapterWs = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?type=connect_adapter`);
+        this.adapterWs.onopen = function () {
+            console.log('onopen adapterWs');
+            that.adapterWs.send('get_adapters');
+        };
+        this.adapterWs.onmessage = function (evt) {
+            console.log('evt.data',evt.data)
+            if(evt.data){
+                that.setState({
+                    adapter:JSON.parse(evt.data).data
+                })
+            }
+
+        };
+        this.adapterWs.onclose = function (evt) {
+            console.log('adapterWs WebSocketClosed!');
+        };
+        this.adapterWs.onerror = function (evt) {
+            console.log('adapterWs WebSocketError!');
+        };
     }
     renderLoopTestBtn=()=>{
         return(
@@ -313,16 +348,16 @@ class HardwareTesting extends Component {
                                         <span title={this.state.product_code}>产品代码 : {this.state.product_code}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.adapter}>适配器 : {this.state.adapter}</span>
+                                        <span title={this.state.adapter}>适配器 : {this.state.selectedAdapter.label}</span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
                                                 adapterModal: true
                                             })
                                         }}>更改</Button>
                                     </div>
-                                    <div className="testing-config-item">
+                                    {/*<div className="testing-config-item">
                                         <span title={this.state.serial_number}>产品序列号 : {this.state.serial_number}</span>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </div>
                             <div className="testing-start" style={{zIndex: this.state.startTest ? 1000 : ''}}>
@@ -417,12 +452,12 @@ class HardwareTesting extends Component {
                                     onClick={()=> {
                                         this.setState({adapterModal: false})
                                     }}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.changeTestStand}>
+                            <Button key="submit" type="primary" size="large" onClick={this.changeAdapter}>
                                 保存
                             </Button>,
                         ]}
                     >
-                        <ConfigForm ref="testStandConfigForm"  {...this.props} type="adapter" script={this.state.test_stand}/>
+                        <ConfigForm ref="adapterConfigForm"  {...this.props} type="adapter" adapter={this.state.adapter} selectedAdapter={this.state.selectedAdapter}/>
                     </Modal>
                     <Modal
                         visible={this.state.startTestModal}

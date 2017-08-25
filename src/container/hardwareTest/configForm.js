@@ -59,12 +59,19 @@ class ConfigForm extends React.Component {
                 {this.props.type==='adapter'?
                     <FormItem>
                         {getFieldDecorator('adapter', {
+                            initialValue: this.props.selectedAdapter,
                             rules: [{required: true, message: '请选择适配器'}],
                         })(
                             <Select labelInValue={true} onChange={this.changeProduct}
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                { this.props.adapter.map((item, key) => {
+                                    return (
+                                        <Option key={item.index}
+                                                value={item.index.toString()}>{item.name}</Option>
+                                    )
+                                }) }
                             </Select>
                         )}
                     </FormItem>
