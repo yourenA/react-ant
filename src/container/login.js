@@ -6,7 +6,6 @@ import {Form, Icon, Input, Button,Layout,Breadcrumb} from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    Link,
     withRouter
 } from 'react-router-dom';
 import * as loginAction from './../actions/login';

@@ -4,5 +4,5 @@
   "wsPrefix":"ws://api.stand.test.com",
   "wsPrefix_prod":"ws://api.stand.com",
   "wsPort":"9502",
-  "wsPort_prod":"9503"
+  "wsPort_prod":"9502"
 }

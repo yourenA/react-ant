@@ -337,7 +337,7 @@ class HardwareTesting extends Component {
                                     </div>
                                     <div className="testing-config-item">
                                         <span
-                                            title={this.state.test_stand.label}>测试架 : {this.state.test_stand.label}</span>
+                                            className="testing-config-text" title={this.state.test_stand.label}>测试架 : {this.state.test_stand.label}</span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
                                                 standModal: true
@@ -348,7 +348,7 @@ class HardwareTesting extends Component {
                                         <span title={this.state.product_code}>产品代码 : {this.state.product_code}</span>
                                     </div>
                                     <div className="testing-config-item">
-                                        <span title={this.state.adapter}>适配器 : {this.state.selectedAdapter.label}</span>
+                                        <span className="testing-config-text" title={this.state.selectedAdapter.label}>适配器 : {this.state.selectedAdapter.label}</span>
                                         <Button className='change' type='primary' onClick={()=> {
                                             this.setState({
                                                 adapterModal: true
