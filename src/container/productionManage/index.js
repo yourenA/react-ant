@@ -162,11 +162,16 @@ class ProductionManage extends Component {
             dataIndex: 'description',
             key: 'description',
             render: (text, record, index) => {
-                return (
-                    <Tooltip title={text}>
-                        <span>{text.substring(0, 15)}</span>
-                    </Tooltip>
-                )
+                if(text){
+                    return (
+                        <Tooltip title={text}>
+                            <span>{text.substr(0, 15)}</span>
+                        </Tooltip>
+                    )
+                }else{
+                    return null
+                }
+
             }
         }, {
             title: '状态',
