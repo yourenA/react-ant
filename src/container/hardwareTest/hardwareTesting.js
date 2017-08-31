@@ -268,10 +268,12 @@ class HardwareTesting extends Component {
         this.adapterWs.onmessage = function (evt) {
             console.log('evt.data',evt.data)
             if(evt.data){
-                console.log('设置evt.data')
-                that.setState({
-                    adapter:JSON.parse(evt.data).data
-                })
+                if(JSON.parse(evt.data).data){
+                    console.log('设置evt.data')
+                    that.setState({
+                        adapter:JSON.parse(evt.data).data
+                    })
+                }
             }
 
         };
