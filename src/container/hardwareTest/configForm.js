@@ -13,6 +13,7 @@ class ConfigForm extends React.Component {
 
 
     render() {
+        console.log('this.props.adapter',this.props.adapter)
         const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit}>
