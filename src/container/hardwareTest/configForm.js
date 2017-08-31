@@ -67,7 +67,7 @@ class ConfigForm extends React.Component {
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                { this.props.adapter.length === 0 ? null : this.props.adapter.map((item, key) => {
+                                { this.props.adapter ? null : this.props.adapter.map((item, key) => {
                                     return (
                                         <Option key={item.index}
                                                 value={item.index.toString()}>{item.name}</Option>
