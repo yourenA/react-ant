@@ -26,7 +26,7 @@ class ConfigForm extends React.Component {
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                { this.props.fetchTestConf.script.map((item, key) => {
+                                {  this.props.fetchTestConf.script.length === 0 ? null :  this.props.fetchTestConf.script.map((item, key) => {
                                     return (
                                         <Option key={item.id}
                                                 value={item.id.toString()}>{item.name}</Option>
@@ -46,7 +46,7 @@ class ConfigForm extends React.Component {
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                { this.props.fetchTestConf.test_stands.map((item, key) => {
+                                {  this.props.fetchTestConf.test_stands.length === 0 ? null : this.props.fetchTestConf.test_stands.map((item, key) => {
                                     return (
                                         <Option key={item.id}
                                                 value={item.id.toString()}>{item.name}</Option>
@@ -66,7 +66,7 @@ class ConfigForm extends React.Component {
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                { this.props.adapter.map((item, key) => {
+                                { this.props.adapter.length === 0 ? null : this.props.adapter.map((item, key) => {
                                     return (
                                         <Option key={item.index}
                                                 value={item.index.toString()}>{item.name}</Option>
