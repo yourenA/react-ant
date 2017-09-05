@@ -40,6 +40,7 @@ class SegmentManage extends Component {
         sessionStorage.removeItem('breadcrumbArrForSegment')
         sessionStorage.removeItem('manageSegmentId')
         sessionStorage.removeItem('segmentDiagramStorage')
+        sessionStorage.removeItem('collapsed')
         this.fetchHwData();
     }
 

@@ -69,7 +69,7 @@ class AddProgramSegment extends Component {
     saveCode=()=>{
         let myDiagram=this.refs.ScriptIndex.callbackDiagram();
         const that=this;
-        this.refs.ScriptIndex.save();
+        // this.refs.ScriptIndex.save();
         const content=JSON.parse( myDiagram.model.toJson());
             delPointsInLink(content.linkDataArray)
             const newSegment=this.props.location.state.newSegment
@@ -114,8 +114,6 @@ class AddProgramSegment extends Component {
             segmentDiagramStorage.push(`segmentTempJson`)
             sessionStorage.setItem('segmentDiagramStorage',JSON.stringify(segmentDiagramStorage))
         }
-
-
         const segmentStorage=JSON.parse(sessionStorage.getItem('segmentStorage'))||[];
         if( Array.indexOf(segmentStorage, `segmentTempJson`)===-1){
             segmentStorage.push(`segmentTempJson`)

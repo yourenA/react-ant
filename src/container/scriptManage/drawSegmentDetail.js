@@ -62,22 +62,22 @@ class DrawScriptDetail extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.match.params.id !== nextProps.match.params.id) {
-            const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment'));
-            let theSameBreadcrumIndex = 0;
-            for (let i = 0, len = breadcrumbArr.length; i < len; i++) {
-                if (breadcrumbArr[i].key === nextProps.match.params.id) {
-                    theSameBreadcrumIndex = i + 1
-                }
-            }
-            if (theSameBreadcrumIndex === 0) {
-                sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr.concat({
-                    key: nextProps.match.params.id,
-                    value: nextProps.location.state.groupNmae
-                })));
-            } else {
-                breadcrumbArr.splice(theSameBreadcrumIndex, breadcrumbArr.length)
-                sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr));
-            }
+            // const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment'));
+            // let theSameBreadcrumIndex = 0;
+            // for (let i = 0, len = breadcrumbArr.length; i < len; i++) {
+            //     if (breadcrumbArr[i].key === nextProps.match.params.id) {
+            //         theSameBreadcrumIndex = i + 1
+            //     }
+            // }
+            // if (theSameBreadcrumIndex === 0) {
+            //     sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr.concat({
+            //         key: nextProps.match.params.id,
+            //         value: nextProps.location.state.groupNmae
+            //     })));
+            // } else {
+            //     breadcrumbArr.splice(theSameBreadcrumIndex, breadcrumbArr.length)
+            //     sessionStorage.setItem('breadcrumbArrForSegment', JSON.stringify(breadcrumbArr));
+            // }
 
 
             this.refs.ScriptIndex.delDiagram();
@@ -213,28 +213,28 @@ class DrawScriptDetail extends Component {
 
     }
     turnBack = ()=> {
+        this.saveTempScript(true)
     }
 
     render() {
-        const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment')) || [];
-        console.log('breadcrumbArr',breadcrumbArr)
+        // const breadcrumbArr = JSON.parse(sessionStorage.getItem('breadcrumbArrForSegment')) || [];
         return (
             <Content className="content">
                 <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item onClick={this.turnBack}>脚本段管理</Breadcrumb.Item>
+                    <Breadcrumb.Item >脚本段管理</Breadcrumb.Item>
                     <Breadcrumb.Item>{this.state.editRecord ? `编辑脚本段'${ this.state.editRecord.name}'` : '新建脚本段' }</Breadcrumb.Item>
-                    {breadcrumbArr.map((item, index)=> {
+                  {/*  {breadcrumbArr.map((item, index)=> {
                         return (
                             <Breadcrumb.Item key={index}>{item.value}</Breadcrumb.Item>
                         )
-                    })}
+                    })}*/}
                 </Breadcrumb>
                 <div className="content-container">
                     <ScriptInfo />
                     <div className="testing-header">
                         <div className="testing-start">
                             <div className="testing-start-btn  testing-save-btn"
-                                 onClick={()=>this.saveTempScript(true)}>
+                                 onClick={()=>this.turnBack()}>
                                 后退
                             </div>
                         </div>
@@ -250,7 +250,7 @@ class DrawScriptDetail extends Component {
                     </div>
                     <FetchSegments fetchTestConf={this.props.fetchTestConf} ScriptIndex={this.refs.ScriptIndex}/>
                     <ScriptIndex saveTempScript={this.saveTempScript} ref="ScriptIndex"  {...this.props} isNew={true}
-                                 fromNew={this.state.editRecord ? false : true}/>
+                                 fromNew={this.state.editRecord ? false : true} turnBack={this.turnBack}/>
                 </div>
                 <Modal
                     key={ Date.parse(new Date())}

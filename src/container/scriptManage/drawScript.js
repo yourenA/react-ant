@@ -48,23 +48,24 @@ class DrawScript extends Component {
                 const  transformJson=transformPrintJson(JSON.parse(sessionStorage.getItem('resultTempJson')));
                 this.refs.ScriptIndex.load(JSON.stringify(transformJson))
             } else {
+                const myDiagramDiv=document.querySelector('#myDiagramDiv');
                 this.refs.ScriptIndex.load(JSON.stringify({
                     class: "go.GraphLinksModel",
                     linkFromPortIdProperty: "fromPort",
                     linkToPortIdProperty: "toPort",
                     copiesArrays: true,
                     copiesArrayObjects: true,
-                    nodeDataArray: [{category: "start", key: uuidv4(), title: "开始", loc: "0 0"}, {
+                    nodeDataArray: [{category: "start", key: uuidv4(), title: "开始", loc: "0 0", isPrint: true}, {
                         category: "end",
                         key: uuidv4(),
                         title: "结束",
-                        loc: "0 400"
+                        loc: `${myDiagramDiv.offsetWidth-80} ${myDiagramDiv.offsetHeight-80}`,
+                        isPrint: true
                     }],
                     // nodeDataArray: [],
                     linkDataArray: []
                 }))
             }
-
         }
         this.props.fetchAllTestType();
         this.props.fetchAllHardwareVersions();
