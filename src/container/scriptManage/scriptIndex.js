@@ -1268,7 +1268,7 @@ class ScriptIndex extends Component {
 
     render() {
         const drawScriptSidebarWidth = Number(sessionStorage.getItem('collapsed')) ? '0 0 0px' : '0 0 250px';
-        const fullPageClassName = Number(sessionStorage.getItem('fullPaged')) ? 'fullPage open':'fullPage close';
+        const fullPageClassName = Number(sessionStorage.getItem('fullPaged')) ? 'fullPage close':'fullPage open';
         return (
             <div>
                 <div className="drawScript">
@@ -1277,8 +1277,10 @@ class ScriptIndex extends Component {
                         <Input id="mySearch" style={{width: 150, marginRight: '10px'}} onKeyPress={this.keypressInput}/>
                         <Button type='primary' onClick={this.searchDiagram}>检索</Button>
                     </div>
-                    <div id="drawScript-edit-container" className={Number(sessionStorage.getItem('fullPaged')) ? '':
-                    this.props.match.path === '/scriptDetail/:id'|| this.props.match.path === '/segmentDetail/:id' ? 'fullPaged in-group':'fullPaged'}>
+                    <div id="drawScript-edit-container" className={Number(sessionStorage.getItem('fullPaged')) ?
+                        this.props.match.path === '/scriptDetail/:id'|| this.props.match.path === '/segmentDetail/:id' ? 'fullPaged in-group':'fullPaged'
+                        :''
+                    }>
                         <div className="drawScript-sidebar" ref="drawScriptSidebar"
                              style={{flex: drawScriptSidebarWidth}}>
                             <div className="drawScript-overview" id="myOverviewDiv"></div>
