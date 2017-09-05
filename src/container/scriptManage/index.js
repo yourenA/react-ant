@@ -60,6 +60,7 @@ class ScriptManage extends Component {
         sessionStorage.removeItem('scriptDiagramStorage')
         sessionStorage.removeItem('returnMsg')
         sessionStorage.removeItem('collapsed')
+        sessionStorage.removeItem('fullPaged')
         this.fetchHwData();
         this.props.delAllHardwareVersions()
 

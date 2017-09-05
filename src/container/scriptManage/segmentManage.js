@@ -41,6 +41,7 @@ class SegmentManage extends Component {
         sessionStorage.removeItem('manageSegmentId')
         sessionStorage.removeItem('segmentDiagramStorage')
         sessionStorage.removeItem('collapsed')
+        sessionStorage.removeItem('fullPaged')
         this.fetchHwData();
     }
 
