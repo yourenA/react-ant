@@ -99,7 +99,9 @@ class DrawScriptDetail extends Component {
                     let intersectJsonNode=_.differenceWith(preSessionJson.nodeDataArray,thisPropsIdJson.nodeDataArray,function (a,b) {
                         return (a.key === b.key)
                     })
-                    let intersectJsonLink=_.differenceWith(preSessionJson.linkDataArray,thisPropsIdJson.linkDataArray,_.isEqual)
+                    let intersectJsonLink=_.differenceWith(preSessionJson.linkDataArray,thisPropsIdJson.linkDataArray,function (a,b) {
+                        return ((a.from === b.from) && (a.to === b.to))
+                    })
                     if(intersectJsonNode.length){
                         sessionJson.nodeDataArray=_.differenceWith(sessionJson.nodeDataArray,intersectJsonNode,function (a,b) {
                             return (a.key === b.key)
@@ -107,7 +109,9 @@ class DrawScriptDetail extends Component {
                         sessionStorage.setItem(scriptDiagramStorage[i],JSON.stringify(sessionJson))
                     }
                     if(intersectJsonLink.length){
-                        sessionJson.linkDataArray=_.differenceWith(sessionJson.linkDataArray,intersectJsonLink,_.isEqual);
+                        sessionJson.linkDataArray=_.differenceWith(sessionJson.linkDataArray,intersectJsonLink,function (a,b) {
+                            return ((a.from === b.from) && (a.to === b.to))
+                        });
                         sessionStorage.setItem(scriptDiagramStorage[i],JSON.stringify(sessionJson))
                     }
                 }
@@ -115,7 +119,9 @@ class DrawScriptDetail extends Component {
                     return (a.key === b.key)
                 }).concat(thisPropsIdJson.nodeDataArray)
 
-                nextPropsIdJson.linkDataArray=_.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray,_.isEqual)
+                nextPropsIdJson.linkDataArray=_.differenceWith(nextPropsIdJson.linkDataArray, preSessionJson.linkDataArray,function (a,b) {
+                    return ((a.from === b.from) && (a.to === b.to))
+                })
                     .concat(thisPropsIdJson.linkDataArray);
             }
 
@@ -192,7 +198,9 @@ class DrawScriptDetail extends Component {
             return (a.key === b.key)
         }).concat(changeJson.nodeDataArray);
 
-        let resultLinkJson = _.differenceWith(originJson.linkDataArray, nowJson.linkDataArray, _.isEqual).concat(changeJson.linkDataArray);
+        let resultLinkJson = _.differenceWith(originJson.linkDataArray, nowJson.linkDataArray, function (a,b) {
+            return ((a.from === b.from) && (a.to === b.to))
+        }).concat(changeJson.linkDataArray);
         for (let j = 0, len = resultLinkJson.length; j < len; j++) {
             delete  resultLinkJson[j].points
         }
