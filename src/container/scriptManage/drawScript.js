@@ -93,7 +93,7 @@ class DrawScript extends Component {
         const that = this
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
         const content = JSON.parse(myDiagram.model.toJson());
-        delPointsInLink(content.linkDataArray)
+        delPointsInLink(content.linkDataArray);
         const newScript = this.props.location.state.newScript
         const url = newScript ? `/test_scripts` : `/test_scripts/${this.props.match.params.id}`
         const method = newScript ? `POST` : `PUT`;
@@ -207,7 +207,6 @@ class DrawScript extends Component {
                     <ScriptErrorInfo returnMsg={this.state.returnMsg} getErrorInfo={this.getErrorInfo}/>
                 </div>
                 <Modal
-                    key={ Date.parse(new Date())}
                     visible={this.state.saveScriptModal}
                     title={this.props.location.state.newScript ? '新建脚本' : `编辑'${this.props.fetchTestConf.editRecord ? this.props.fetchTestConf.editRecord.name : ''}'`}
                     onCancel={()=> {

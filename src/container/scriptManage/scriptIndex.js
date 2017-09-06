@@ -79,7 +79,7 @@ class ScriptIndex extends Component {
         // console.log('e.subject.fromNode.data', e.subject.fromNode.data)
         var label = e.subject.findObject("LABEL");// name: "LABEL"
         if (label !== null) {
-            label.visible = (e.subject.toNode.data.category !== "end" && ( e.subject.fromNode.data.category === "if" || e.subject.fromNode.data.category === 'item') );
+            label.visible = ( ( e.subject.fromNode.data.category === "if" || e.subject.fromNode.data.category === 'item') );
         }
         //如果figure=Diamond则线的文字可以编辑
     }
@@ -513,7 +513,7 @@ class ScriptIndex extends Component {
                                 defaultRowSeparatorStroke: "gray",
                                 defaultColumnSeparatorStroke: "gray"
                             },
-                            $(go.TextBlock, "方法名称",
+                            $(go.TextBlock, "方法描述",
                                 {row: 0, column: 0, margin: 5, font: " 10pt sans-serif"}),
                             $(go.TextBlock,
                                 {
@@ -979,7 +979,7 @@ class ScriptIndex extends Component {
                     new go.Binding("visible", "visible").makeTwoWay(),
                     $(go.Shape, "RoundedRectangle",  // the label shape
                         {fill: "#F8F8F8", stroke: null}),
-                    $(go.TextBlock, "条件",  // the label
+                    $(go.TextBlock, "YES",  // the label
                         {
                             segmentIndex: 2, segmentFraction: 0.5,
                             margin: 3,

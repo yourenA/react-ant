@@ -231,7 +231,11 @@ exports.getUserPermission = (name) => {
  * */
 exports.delPointsInLink = (arr) => {
     for (let i = 0, len = arr.length; i < len; i++) {
+        if(arr[i].visible && !arr[i].condition){
+            arr[i].condition='YES'
+        }
         delete  arr[i].points
+
     }
 }
 
@@ -371,55 +375,45 @@ exports.checkJSon = (myDiagramModel)=> {
                 }
             }
 
-            if (group[i].category === 'item') {
+            if (group[i].category === 'item' || group[i].category === 'if') {
                 const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
                     return link.from === group[i].key
                 });
-                if (itemOnLinkFrom.length === 1 || itemOnLinkFrom.length === 2) {
-                    let findToItems = []
-                    _.forEach(itemOnLinkFrom, function (item, key) {
-                        const findToItem = _.find(nodeDataArray, function (o) {
-                            return o.key === item.to;
-                        });
-                        findToItems.push(findToItem)
-                    });
-                    const hasItemIsErrOut = _.find(findToItems, function (o) {
-                        return o.category === 'errOut'
-                    });
-                    if (itemOnLinkFrom.length === 1 && hasItemIsErrOut) {
-                        console.log(key,group[i].title,'只有一条输出连线，但是输出连线连接了"错误输出"');
-                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}只有一条输出连线，但是输出连线连接了"错误输出"`)
-                        returnCode = -1;
-                    } else if(itemOnLinkFrom.length === 2 && !hasItemIsErrOut) {
-                        console.log(key,group[i].title,'有两条输出连线，但是没有输出连线连接"错误输出"')
-                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有两条输出连线，但是没有输出连线连接"错误输出"`)
+                if (itemOnLinkFrom.length === 2) {
+                    if(itemOnLinkFrom[0].condition == itemOnLinkFrom[1].condition){
+                        console.log(key,group[i].title,'判断条件错误');
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断条件错误`);
                         returnCode = -1;
                     }
-
+                    if( (!Boolean(itemOnLinkFrom[0].condition) && itemOnLinkFrom[1].condition == 'YES') ||  (!itemOnLinkFrom[1].condition && itemOnLinkFrom[0].condition == 'YES')){
+                        console.log(key,group[i].title,'判断条件错误');
+                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断条件错误`);
+                        returnCode = -1;
+                    }
                 }
             }
 
-            if (group[i].category === 'if') {
-                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
-                    return link.from === group[i].key
-                });
-                let condition='';
-                for(let j=0,len=itemOnLinkFrom.length;j<len;j++){
-                    if(!itemOnLinkFrom[j].condition){
-                        console.log(key,group[i].title,'if没有判断条件')
-                        returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if没有判断条件`)
-                        returnCode = -1;
-                    }else {
-                        if(itemOnLinkFrom[j].condition===condition){
-                            console.log(key,group[i].title,'if判断条件相同');
-                            returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if判断条件相同`)
-                            returnCode = -1;
-                        }
-                        condition=itemOnLinkFrom[j].condition
-                    }
-                }
-
-            }
+            // if (group[i].category === 'if') {
+            //     const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+            //         return link.from === group[i].key
+            //     });
+            //     let condition='';
+            //     for(let j=0,len=itemOnLinkFrom.length;j<len;j++){
+            //         if(!itemOnLinkFrom[j].condition){
+            //             console.log(key,group[i].title,'if没有判断条件')
+            //             returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if没有判断条件`)
+            //             returnCode = -1;
+            //         }else {
+            //             if(itemOnLinkFrom[j].condition===condition){
+            //                 console.log(key,group[i].title,'if判断条件相同');
+            //                 returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}if判断条件相同`)
+            //                 returnCode = -1;
+            //             }
+            //             condition=itemOnLinkFrom[j].condition
+            //         }
+            //     }
+            //
+            // }
 
             if( group[i].category === 'errOut'){
                 const itemOnLinkTo = _.filter(linkDataArray, function (link) {

@@ -152,6 +152,26 @@ class AddOrEditNameForm extends React.Component {
                                 <Input  />
                             )}
                         </FormItem>
+                        <FormItem
+                            label='IP地址'
+                            {...formItemLayout}>
+                            {getFieldDecorator('ip', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.ip : '',
+                                rules: [{required: true, message: '请输入测试架IP地址'}],
+                            })(
+                                <Input  />
+                            )}
+                        </FormItem>
+                        <FormItem
+                            label='通道号'
+                            {...formItemLayout}>
+                            {getFieldDecorator('port', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.port : '',
+                                rules: [{required: true, message: '请输入测试架通道号'}],
+                            })(
+                                <Input  />
+                            )}
+                        </FormItem>
                        {/* {
                             localStorage.getItem('userrole')==='系统管理员'?
                                 <FormItem

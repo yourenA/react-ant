@@ -140,7 +140,7 @@ class DrawScriptDetail extends Component {
         let content=this.saveTempScript(false,true);
         content=transformPrintJson(content);
         delPointsInLink(content.linkDataArray);
-        const newScript=!this.state.editRecord
+        const newScript=!this.state.editRecord;
         const url= newScript?`/test_scripts`:`/test_scripts/${sessionStorage.getItem('manageScriptId')}`;
         const method=newScript ?`POST`:`PUT`;
         const msg=newScript ?messageJson[`add script success`]:messageJson[`edit script success`];

@@ -55,7 +55,6 @@ class ScriptManage extends Component {
             }
         }
         sessionStorage.removeItem('scriptStorage')
-        sessionStorage.removeItem('breadcrumbArr')
         sessionStorage.removeItem('manageScriptId')
         sessionStorage.removeItem('scriptDiagramStorage')
         sessionStorage.removeItem('returnMsg')
