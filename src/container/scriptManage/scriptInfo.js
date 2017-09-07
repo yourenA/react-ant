@@ -15,7 +15,7 @@ class ScriptInfo extends React.Component {
     render() {
         return (
             <div className="scriptInfo" style={{lineHeight:'30px'}}>
-                <h3><Icon type="exclamation-circle-o" style={{marginRight:'5px',color:'red'}}/>暂不要使用浏览器的"前进"与"后退"按钮。右击"分组"可查看详情，右击"方法标题"和"设置参数"中的key-value表格可以添加数据</h3>
+                <h3><Icon type="exclamation-circle-o" style={{marginRight:'5px',color:'red'}}/>暂不要使用浏览器的"前进"与"后退"按钮。双击"分组/循环分组"可查看当前分组下面的详情</h3>
             </div>
         )
     }

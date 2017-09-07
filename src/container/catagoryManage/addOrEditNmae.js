@@ -165,8 +165,8 @@ class AddOrEditNameForm extends React.Component {
                         <FormItem
                             label='通道号'
                             {...formItemLayout}>
-                            {getFieldDecorator('port', {
-                                initialValue: this.props.isEdit ? this.props.editRecord.port : '',
+                            {getFieldDecorator('index', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.index : '',
                                 rules: [{required: true, message: '请输入测试架通道号'}],
                             })(
                                 <Input  />

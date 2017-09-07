@@ -288,6 +288,14 @@ class Catagory extends Component {
                 title: '测试架名称',
                 dataIndex: 'name',
                 key: 'name'
+            }, {
+                title: 'IP地址',
+                dataIndex: 'ip',
+                key: 'ip'
+            }, {
+                title: '通道号',
+                dataIndex: 'index',
+                key: 'index'
             });
             /*localStorage.getItem('userrole') === '系统管理员' ?
                 columns.push({

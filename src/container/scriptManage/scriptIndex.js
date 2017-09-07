@@ -361,7 +361,9 @@ class ScriptIndex extends Component {
             ));
         myDiagram.nodeTemplateMap.add("start",
             $(go.Node, "Spot",
+                // new go.Binding("guid", "num"),
                 {
+                    // copyable: false,
                     deletable: false  // do not allow this node to be removed by the user
                 }, that.nodeStyle(),
                 $(go.Panel, "Auto",
@@ -382,6 +384,7 @@ class ScriptIndex extends Component {
 
         myDiagram.nodeTemplateMap.add("end",
             $(go.Node, "Spot",
+                // new go.Binding("guid", "num"),
                 that.nodeStyle(),
                 $(go.Panel, "Auto",
                     $(go.Shape, "Circle",
@@ -1313,13 +1316,13 @@ class ScriptIndex extends Component {
                 </div>
 
 
-                <div>
-                    {/*<Button id="getCenter" onClick={this.addPalatte}>添加左侧语句</Button>*/}
-                    {/*<Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>*/}
-                    {/*<Button onClick={this.loadTextAxrea}>将JSON转为图表</Button>*/}
+              {/*  <div>
+                    <Button id="getCenter" onClick={this.addPalatte}>添加左侧语句</Button>
+                    <Button id="SaveButton" onClick={this.save}>将图表转为JSON</Button>
+                    <Button onClick={this.loadTextAxrea}>将JSON转为图表</Button>
                 </div>
 
-                {/*<textarea id="mySavedModel"></textarea>*/}
+                <textarea id="mySavedModel"></textarea>*/}
             </div>
 
 

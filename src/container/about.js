@@ -222,13 +222,13 @@ class About extends React.Component {
                                                 <li>
                                                     <h4>1.分组框</h4>
                                                     <img  alt=""  src={require('./about/4.png')}/> <p className="about-p ">
-                                                    右击查看详情可以进入到分组里面，双击文字可以编辑分组名称</p>
+                                                    双击可以进入到分组里面，双击文字可以编辑分组名称</p>
                                                 </li>
 
                                                 <li>
                                                     <h4>2.循环分组框</h4>
                                                     <img  alt=""  src={require('./about/5.png')}/> <p className="about-p ">
-                                                    一种特殊的"分组"，双击循环次数后面的数字可以设置"循环次数"</p>
+                                                    一种特殊的"分组"，双击默认值后面的数字可以设置"默认值"，双击循环次数后面的数字可以设置"循环次数"，</p>
                                                 </li>
                                                 <li>
                                                     <h4>3.条件判断框</h4>
@@ -258,35 +258,12 @@ class About extends React.Component {
                                                 </p>
                                                 </li>
                                                 <li>
-                                                    <h4>4.设置参数框</h4>
-                                                    <img  alt=""  src={require('./about/7.png')}/> <p className="about-p ">
-                                                    设置当前分组的参数，双击key或value可以编辑，右击key-value表格可以添加key-value值</p>
-                                                    <p className="about-p ">参数中的第一个单元格为参数kye</p>
-                                                    <p className="about-p ">参数中的第二个单元格为参数value</p>
-                                                    <p className="about-p ">参数中的第三个单元格为删除当前参数按钮</p>
-                                                </li>
-                                                <li>
-                                                    <h4>5.dll方法框</h4>
+                                                    <h4>4.dll方法框</h4>
                                                     <img  alt=""  src={require('./about/8.png')}/>
-                                                    <p className="about-p ">dll方法。参数和错误码操作如"设置参数框"。</p>
-                                                    <p className="about-p">"方法名称"表示代码中dll方法名称;"结果下限"/"结果上限"表示期待结果的范围;</p>
-                                                    <p className="about-p">"结果变量"表示在将当前的dll方法的结果赋值为这个变量，方便在判断语句中引用。下一层分组可以调用上一层分组定义的"结果变量"</p><br/>
-                                                    <p className="about-p ">参数中的第一个单元格--选择按钮，选中表示该参数是 <b>输出参数</b></p>
+                                                    <p className="about-p">"方法描述"表示代码中dll方法的相关描述</p>
+                                                    <p className="about-p ">参数中的第一个单元格如果有箭头表示该参数是 <b>输出参数</b> 如果没有箭头则表示是普通参数</p>
                                                     <p className="about-p ">参数中的第二个单元格为参数kye</p>
                                                     <p className="about-p ">参数中的第三个单元格为参数value</p>
-                                                    <p className="about-p ">参数中的第四个单元格为删除当前参数按钮</p><br/>
-                                                    <p className="about-p ">错误码中的第一个单元格为错误码kye</p>
-                                                    <p className="about-p ">错误码中的第二个单元格为错误码value</p>
-                                                    <p className="about-p ">错误码中的第三个单元格为删除当前错误码按钮</p>
-                                                </li>
-                                                <li>
-                                                    <h4>6.错误输出</h4>
-                                                    <img  alt=""  src={require('./about/9.png')}/> <p className="about-p " >
-                                                    当需要把'dll方法框'中的相关错误码输出，可以将'dll方法框'与'错误输出框'相连，如下图：<br />
-                                                        <img  alt=""  src={require('./about/10.png')}/><br/>
-
-                                                    当'dll方法1'运行过程中出现指定的错误码404，这时候会调用'dll方法3'，而不是调用'dll方法2'
-                                                </p>
                                                 </li>
                                             </ul>
                                         </div>

@@ -115,13 +115,13 @@ class HardwareTesting extends Component {
         console.log('selected', selectedKeys, info);
     }
     startTesting = ()=> {
-        if(this.state.percent===100){
+        if(this.state.percent===100 &&  !this.state.startLoopTest){
             this.setState({
                 startTest: false,
                 maskDisplay: 'none',
                 percent: 0
-            })
-            this.ws.close()
+            });
+            // this.stopWS()
         }else if (this.state.startTest) {
             const that = this;
             confirm({
@@ -132,7 +132,8 @@ class HardwareTesting extends Component {
                         maskDisplay: 'none',
                         percent: 0
                     });
-                    that.ws.close()
+                    that.ws.close();
+                    // that.stopWS()
                     // clearInterval(that.timer)
                 },
                 onCancel() {
@@ -151,35 +152,12 @@ class HardwareTesting extends Component {
     confirmTesting = ()=> {
         const serialNumbers = this.refs.serialNumbers.refs.input.value;
         const that = this;
-        const params = {
+        const parameters = {
             serial_number: serialNumbers,
             test_script_id: this.state.script.key,
             test_stand_id:this.state.test_stand.key,
-            // adapter_index:this.state.selectedAdapter.key
         }
-        axios({
-            url: `${configJson.prefix}/hardware_test`,
-            method: 'post',
-            params: params,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success('开始测试')
-                that.setState({
-                    channel: response.data.channel,
-                    startTestModal: false,
-                    maskDisplay: 'block',
-                    startTest: !that.state.startTest,
-                    serial_number:serialNumbers
-                }, function () {
-                    that.openWS()
-                });
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-        console.log('正式开始测试', serialNumbers)
+        that.openWS('start',parameters);
     }
     confirmLoopTesting=()=>{
         const serialNumbers = this.refs.serialNumbers.refs.input.value;
@@ -205,25 +183,59 @@ class HardwareTesting extends Component {
         })
         console.log('正式开始测试', serialNumbers)
     }
-    openWS = ()=> {
+    openWS = (command,parameters)=> {
+        console.log('parameters',parameters);
         const that=this;
-        this.ws = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?channel=${this.state.channel}`);//url地址类似与get请求
+        this.ws = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?token=${localStorage.getItem('usertoken')}`);//url地址类似与get请求
         this.ws.onopen = function () {
-            console.log('onopen')
+            console.log('onopen');
+            const sendData=JSON.stringify({
+                command:command,
+                parameters:parameters
+            })
+            that.ws.send(sendData);
         };
         this.ws.onmessage = function (evt) {
-            const {wsMessage}={...that.state}
-            if(JSON.parse(evt.data).percent){
+            const {wsMessage}={...that.state};
+            const evtData=JSON.parse(evt.data)
+            console.log('evt',evtData)
+            if(evtData.status_code === 200 && evtData.type === 'START_TEST'){
+                console.log('开始正确测试');
                 that.setState({
-                    percent:JSON.parse(evt.data).percent,
-                    wsMessage:wsMessage.concat(JSON.parse(evt.data).message)
-                },function () {
-                    if(that.state.percent===100 && that.state.startLoopTest){
-                        console.log('继续开始测试');
-                        that.ws.close()
-                        that.confirmLoopTesting()
-                    }
+                    startTestModal: false,
+                    maskDisplay: 'block',
+                    startTest: true,
                 })
+            }
+            if(evtData.status_code === 200 && evtData.type === 'STOP_TEST'){
+                console.log('结束正确测试');
+                that.ws.close();
+                if(that.state.percent===100 && that.state.startLoopTest){
+                    console.log('继续开始测试');
+                    // that.stopWS();
+                    that.setState({
+                        percent:0,
+                        // startTest:false
+                    });
+                    that.confirmTesting()
+                }
+            }
+            if(evtData.status_code === 200 && evtData.type === 'TESTING' ){
+                console.log('that.state.percent',that.state.percent)
+                that.setState({
+                    percent:evtData.data.percent,
+                    wsMessage:wsMessage.concat(evtData.data.message)
+                })
+            }else if(evtData.status_code === 400 ||evtData.status_code === 401 || evtData.status_code === 403|| evtData.status_code === 422){
+                that.ws.close();
+                if(evtData.errors){
+                    let first;
+                    for (first in evtData.errors) break;
+                    message.error(evtData.errors[first][0]);
+                }else{
+                    message.error(evtData.message);
+                }
+
             }
         };
         this.ws.onclose = function (evt) {
@@ -232,6 +244,15 @@ class HardwareTesting extends Component {
         this.ws.onerror = function (evt) {
             console.log('WebSocketError!');
         };
+    }
+    stopWS=()=>{
+        const sendData=JSON.stringify({
+            command:'stop',
+        });
+        this.ws.send(sendData);
+        console.log('关闭websocket');
+        this.ws.close();
+
     }
     changetScrip=()=>{
         const scriptConfigForm = this.refs.scriptConfigForm.getFieldsValue();
@@ -249,42 +270,6 @@ class HardwareTesting extends Component {
             localStorage.setItem('test_stand', JSON.stringify(this.state.test_stand))
         })
     }
-    // changeAdapter=()=>{
-    //     const adapterConfigForm = this.refs.adapterConfigForm.getFieldsValue();
-    //     this.setState({
-    //         selectedAdapter:{key:adapterConfigForm.adapter.key,label:adapterConfigForm.adapter.label},
-    //         adapterModal:false
-    //     }, function () {
-    //         localStorage.setItem('adapter', JSON.stringify(this.state.selectedAdapter))
-    //     })
-    // }
-    // getAdapter=()=>{
-    //     console.log('获取适配器');
-    //     const that=this;
-    //     this.adapterWs = new WebSocket(`${configJson.wsPrefix}:${configJson.wsPort}/?type=connect_adapter`);
-    //     this.adapterWs.onopen = function () {
-    //         console.log('onopen adapterWs');
-    //         that.adapterWs.send('get_adapters');
-    //     };
-    //     this.adapterWs.onmessage = function (evt) {
-    //         console.log('evt.data',evt.data)
-    //         if(evt.data){
-    //             if(JSON.parse(evt.data).data){
-    //                 console.log('设置evt.data')
-    //                 that.setState({
-    //                     adapter:JSON.parse(evt.data).data
-    //                 })
-    //             }
-    //         }
-    //
-    //     };
-    //     this.adapterWs.onclose = function (evt) {
-    //         console.log('adapterWs WebSocketClosed!');
-    //     };
-    //     this.adapterWs.onerror = function (evt) {
-    //         console.log('adapterWs WebSocketError!');
-    //     };
-    // }
     renderLoopTestBtn=()=>{
         return(
             configJson.env==='development'?

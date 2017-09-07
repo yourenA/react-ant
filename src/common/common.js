@@ -261,19 +261,19 @@ exports.checkJSon = (myDiagramModel)=> {
 
     let returnCode = 1;
     let returnMsg=[];
-    const groupErrSign=' @ ';
-    const itemErrSign=' :: ';
+    const groupErrSign=' < ';
+    const itemErrSign=' > ';
     //判断每一个group
     const groups = _.groupBy(nodeDataArray, 'group');
     console.log('groups', groups);
     _.forEach(groups, function (group, key) {
         if(key==='undefined'){
-            key='最外层分组'
+            key=' / '
         }else{
             const node=_.find(nodeDataArray,function (o) {
                 return o.key===key
             })
-            key='最外层分组 -> '+listParents(tree,node ).map(x => x.title).concat(node.title).join(' -> ')
+            key='/ '+listParents(tree,node ).map(x => x.title).concat(node.title).join(' / ')
         }
 
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
