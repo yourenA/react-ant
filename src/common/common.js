@@ -237,6 +237,10 @@ exports.delPointsInLink = (arr) => {
         delete  arr[i].points
     }
 }
+
+/**
+ * 为每个节点添加命名空间"."分隔
+ * */
 exports.setPointsNamespace = (arr) => {
     for (let i = 0, len = arr.length; i < len; i++) {
         let rootNamespace='root';
@@ -248,11 +252,8 @@ exports.setPointsNamespace = (arr) => {
         }
         arr[i].namespace=rootNamespace
     }
-    console.log(arr)
 }
-/**
- * 为每个节点添加命名空间"."分隔
- * */
+
 
 /**
  * 判断节点是否正确
@@ -276,20 +277,21 @@ exports.checkJSon = (myDiagramModel)=> {
 
     let returnCode = 1;
     let returnMsg=[];
-    const groupErrSign=' < ';
-    const itemErrSign=' >: ';
+    const groupErrSign=' </span><span class="item"> ';
+    const itemErrSign=' </span> ';
     //判断每一个group
     const groups = _.groupBy(nodeDataArray, 'group');
     console.log('groups', groups);
     _.forEach(groups, function (group, key) {
         if(key==='undefined'){
-            key='root'
+            key='<span class="group">root'
         }else{
             const node=_.find(nodeDataArray,function (o) {
                 return o.key===key
             })
-            key='root.'+listParents(tree,node ).map(x => x.title).concat(node.title).join('.')
+            key='<span class="group">root</span><span class="group">'+listParents(tree,node ).map(x => x.title).concat(node.title).join('</span><span class="group">')
         }
+
 
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
         if(hasLinkIndiffGroup.length){
@@ -340,6 +342,7 @@ exports.checkJSon = (myDiagramModel)=> {
             returnMsg.push(`${key}${itemErrSign} 没有终点`)
             returnCode = -1;
         }
+
 
         for (let i = 0, ilen = group.length; i < ilen; i++) {
             if(group[i].title.length===0 &&  group[i].category !== 'comment'){
@@ -491,6 +494,29 @@ exports.checkJSon = (myDiagramModel)=> {
                 }
             }
         }
+
+        /**
+         * 判断是否存在相同命名的节点
+         * */
+        let titleArr=[];
+        for (let i = 0, ilen = group.length; i < ilen; i++) {
+            if(group[i].category === 'item' || group[i].category === 'OfGroups' || group[i].category === 'ForGroups'){
+                titleArr.push( {key:group[i].key,title:group[i].title})
+            }
+        }
+        titleArr.filter((item, idx, its) => {
+            // 一旦发现有重复的元素就返回 true  (通过 its.some 注意他的两个参数 e 和 idx2)
+            // 无重复的过滤掉
+            return its.some((e, idx2) => {
+                return (e.title === item.title && idx2 !== idx);
+            });
+        }).forEach(function (a,b) {
+            console.log(key,_.find(nodeDataArray, function(o) { return o.key ===a.key; }).title,'命名重复');
+            returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===a.key; }).title}${itemErrSign}命名重复`);
+            returnCode = -1;
+        })
+
+
     });
     return {returnCode,returnMsg}
 }

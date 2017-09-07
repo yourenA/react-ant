@@ -20,8 +20,7 @@ class ScriptErrorInfo extends Component {
                 <div className="scriptErrorInfo-content">
                     {this.props.returnMsg.map(function (item,index) {
                         return (
-                            <p key={index}>
-                                {item}
+                            <p key={index} dangerouslySetInnerHTML={{__html: item}}>
                             </p>
                         )
                     })}
