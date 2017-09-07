@@ -283,12 +283,12 @@ exports.checkJSon = (myDiagramModel)=> {
     console.log('groups', groups);
     _.forEach(groups, function (group, key) {
         if(key==='undefined'){
-            key='root '
+            key='root'
         }else{
             const node=_.find(nodeDataArray,function (o) {
                 return o.key===key
             })
-            key='root . '+listParents(tree,node ).map(x => x.title).concat(node.title).join(' . ')
+            key='root.'+listParents(tree,node ).map(x => x.title).concat(node.title).join('.')
         }
 
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
@@ -342,10 +342,18 @@ exports.checkJSon = (myDiagramModel)=> {
         }
 
         for (let i = 0, ilen = group.length; i < ilen; i++) {
-            if((group[i].title.length===0 || group[i].title.indexOf('.')>=0 ) && ( group[i].category !== 'if' ||  group[i].category !== 'comment') ){
-                console.log(key,group[i].title,'命名错误')
-                returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}命名错误`);
+            if(group[i].title.length===0 &&  group[i].category !== 'comment'){
+                console.log(key,group[i].title,'命名不能为空')
+                returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}命名不能为空`);
                 returnCode = -1;
+            }
+            if( group[i].title.indexOf('.')>=0 ){
+                if( group[i].category === 'if' ||  group[i].category === 'comment'){
+                }else{
+                    console.log(key,group[i].title,'命名错误')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}命名错误`);
+                    returnCode = -1;
+                }
             }
             if (group[i].category === 'start') {
                 const startOnLink = _.filter(linkDataArray, function (link) {
