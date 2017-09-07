@@ -391,6 +391,16 @@ exports.checkJSon = (myDiagramModel)=> {
 
             }
 
+            if (group[i].category === 'if') {
+                const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
+                    return link.from === group[i].key
+                });
+                if (itemOnLinkFrom.length < 2) {
+                    console.log(key,group[i].title,'判断必须有两个条件')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断必须有两个条件`)
+                    returnCode = -1;
+                }
+            }
             if (group[i].category === 'if' || group[i].category === 'item') {
                 const itemOnLinkFrom = _.filter(linkDataArray, function (link) {
                     return link.from === group[i].key
