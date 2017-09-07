@@ -63,7 +63,9 @@ $ npm run pm2:prod
 * dll方法 category:item(黄色矩形)
 
 
-    title:方法名称(唯一标识)
+    title:方法唯一标识
+    
+    action:方法名称
     
     desc:方法描述(可编辑)
     
