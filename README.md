@@ -62,9 +62,14 @@ $ npm run pm2:prod
 
 * dll方法 category:item(黄色矩形)
 
-    title:方法标题(可编辑)
+
+    title:方法名称(唯一标识)
     
-    action:方法名称(唯一标识)
+    desc:方法描述(可编辑)
+    
+    params:参数  格式:```[{key:xxx,value:xxx,is_output_parameter:false},{key:xxx,value:xxx,is_output_parameter:true}]```其中is_output_parameter表示该参数是否是输出参数
+
+    namespace:命名空间
     
     <del>outcome_variable:结果变量(可编辑)</del>
     
@@ -73,8 +78,6 @@ $ npm run pm2:prod
     <del>upper_limit:结果上限(可编辑)</del>
     
     <del>lower_limit:结果下限(可编辑)</del>
-    
-    params:参数(可编辑) 右击添加   格式:```[{key:xxx,value:xxx,is_output_parameter:false},{key:xxx,value:xxx,is_output_parameter:true}]```其中is_output_parameter表示该参数是否是输出参数
     
     <del>errors:错误参数(可编辑) 右击添加  格式:同“设置参数”中的params</del>
     

@@ -45,8 +45,8 @@ class ScriptIndex extends Component {
                     let addData = {
                         key: uuidv4(),
                         category: "item",
-                        title: funcItem.display_name,
-                        action: funcItem.action,
+                        desc: funcItem.display_name,
+                        title: funcItem.action,
                         params: [],
                         // errors: [{key: 'key', value: 'value'}],
                         // upper_limit: 0,
@@ -245,8 +245,8 @@ class ScriptIndex extends Component {
             // {category: "set", params: [{key: 'key', value: 'value'}], title: '设置参数'},
             {
                 category: "item",
-                title: "dll方法",
-                action: 'action',
+                desc: "dll方法",
+                title: 'action',
                 params: [
                     {key: 'key', value: 'value', is_output_parameter: true,},
                     {key: 'key', value: 'value', is_output_parameter: false,},
@@ -496,7 +496,7 @@ class ScriptIndex extends Component {
                                     alignment: go.Spot.Left,
                                     font: titleFont,
                                 },
-                                new go.Binding("text", "action").makeTwoWay()
+                                new go.Binding("text", "title").makeTwoWay()
                             ),
                         ),
 
@@ -526,7 +526,7 @@ class ScriptIndex extends Component {
                                     font: " 10pt sans-serif",
                                     editable: true,
                                 },
-                                new go.Binding("text", "title").makeTwoWay(),
+                                new go.Binding("text", "desc").makeTwoWay(),
                             ),
                             // $(go.TextBlock, "结果下限",
                             //     {row: 1, column: 0, margin: 5, font: " 10pt sans-serif"}),
@@ -1237,13 +1237,13 @@ class ScriptIndex extends Component {
             });
             if (findParents(json.nodeDataArray, findKey)) {
                 let resultKeys = findParents(json.nodeDataArray, findKey).reverse().map(x => x.title);
-                resultKeys.unshift('');
-                return resultKeys.join(' / ') + ' / ' + this.props.location.state.groupNmae;
+                resultKeys.unshift('root');
+                return resultKeys.join(' . ') + ' . ' + this.props.location.state.groupNmae;
             } else {
-                return '' + ' / ' + this.props.location.state.groupNmae
+                return 'root' + ' . ' + this.props.location.state.groupNmae
             }
         } else {
-            return '' + ' / ' + this.props.location.state.groupNmae
+            return 'root' + ' . ' + this.props.location.state.groupNmae
         }
     }
     toggle = () => {
@@ -1298,7 +1298,7 @@ class ScriptIndex extends Component {
                             {(this.props.match.path === '/scriptDetail/:id' || this.props.match.path === '/segmentDetail/:id') ?
                                 <div className="detail-header"
                                      style={{background: this.props.location.state.category === 'ForGroups' ? '#00A9C9' : '#98FB98'}}>
-                                    <Button onClick={()=>this.props.turnBack()}>后退</Button>
+                                    <Button onClick={()=>this.props.turnBack()} style={{marginRight:'5px'}}>后退</Button>
                                     {this.renderParents()}
                                 </div>
                                 : null}

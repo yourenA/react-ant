@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, delPointsInLink,converErrorCodeToMsg,checkJSon,transformPrintJson} from './../../common/common.js';
+import {getHeader, delPointsInLink,converErrorCodeToMsg,checkJSon,transformPrintJson,setPointsNamespace} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -146,6 +146,7 @@ class DrawScriptDetail extends Component {
         let content=this.saveTempScript(false,true);
         content=transformPrintJson(content);
         delPointsInLink(content.linkDataArray);
+        setPointsNamespace(content.nodeDataArray);
         const newScript=!this.state.editRecord;
         const url= newScript?`/test_scripts`:`/test_scripts/${sessionStorage.getItem('manageScriptId')}`;
         const method=newScript ?`POST`:`PUT`;

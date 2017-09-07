@@ -7,7 +7,7 @@ import './drawScript.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
-import {getHeader, converErrorCodeToMsg, delPointsInLink,checkJSon,transformPrintJson} from './../../common/common.js';
+import {getHeader, converErrorCodeToMsg, delPointsInLink,checkJSon,transformPrintJson,setPointsNamespace} from './../../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 import messageJson from './../../common/message.json';
@@ -94,6 +94,7 @@ class DrawScript extends Component {
         const DrawScriptCof = this.refs.DrawScriptCofForm.getFieldsValue();
         const content = JSON.parse(myDiagram.model.toJson());
         delPointsInLink(content.linkDataArray);
+        setPointsNamespace(content.nodeDataArray);
         const newScript = this.props.location.state.newScript
         const url = newScript ? `/test_scripts` : `/test_scripts/${this.props.match.params.id}`
         const method = newScript ? `POST` : `PUT`;

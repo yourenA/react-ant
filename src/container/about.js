@@ -250,11 +250,8 @@ class About extends React.Component {
                              && 优先级比 || 高，支持使用 () 更改表达式优先级
                              `}<br />
                                                     {`
-                             结果偏差判断：[结果变量]=={数字}。 结果变量是dll方法中的定义结果变量
+                             结果偏差判断：[root.group1.group2.add]=={数字}。 表示调用 root->分组group1->分组group2 中的add 方法
                              `}<br />
-                                                    {`
-                             例如：设置了结果上限1，结果下限2，表达式 [variable]=={5} 表示 variable 的值介于 3-6 时为真`
-                                                    }
                                                 </p>
                                                 </li>
                                                 <li>

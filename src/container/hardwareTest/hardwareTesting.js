@@ -159,30 +159,6 @@ class HardwareTesting extends Component {
         }
         that.openWS('start',parameters);
     }
-    confirmLoopTesting=()=>{
-        const serialNumbers = this.refs.serialNumbers.refs.input.value;
-        const that = this;
-        const params = {
-            serial_number: serialNumbers,
-            test_script_id: this.state.script.key
-        }
-        axios({
-            url: `${configJson.prefix}/hardware_test`,
-            method: 'post',
-            params: params,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                that.setState({
-                    channel: response.data.channel,
-                }, function () {
-                    that.openWS()
-                });
-            }).catch(function (error) {
-            console.log('获取出错', error);
-        })
-        console.log('正式开始测试', serialNumbers)
-    }
     openWS = (command,parameters)=> {
         console.log('parameters',parameters);
         const that=this;
