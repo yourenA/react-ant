@@ -215,6 +215,9 @@ class ScriptIndex extends Component {
                 })
         )
     }
+    okName = (textblock, oldstr, newstr)=>{
+        return newstr.length >= 1 && !/\./g.test(newstr);
+    }
     init = (cb, cbArg,category)=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif";
@@ -532,6 +535,7 @@ class ScriptIndex extends Component {
                                     editable: true,
                                     alignment: go.Spot.Left,
                                     font: titleFont,
+                                    textValidation: that.okName
                                 },
                                 new go.Binding("text", "title").makeTwoWay()
                             ),
@@ -812,6 +816,7 @@ class ScriptIndex extends Component {
                                     alignment: go.Spot.Center,
                                     editable: true,
                                     font: titleFont,
+                                    textValidation: that.okName
                                 },
                                 new go.Binding("text", "title").makeTwoWay()),
                         ),
@@ -873,6 +878,7 @@ class ScriptIndex extends Component {
                                     editable: true,
                                     font: titleFont,
                                     stroke: lightText,
+                                    textValidation: that.okName
                                 },
                                 new go.Binding("text", "title").makeTwoWay()),
                             $(go.TextBlock, "默认值:",
@@ -985,14 +991,6 @@ class ScriptIndex extends Component {
                 });
         myPalette.initialScale = 0.85;
 
-        myDiagram.addDiagramListener("ExternalObjectsDropped", function (e) {
-            var sel = e.diagram.selection;
-            var elem = sel.first();
-            console.log('selectText', elem.data.title);
-            // elem.data.title='123'
-            // var part = e.subject.part;
-            // if ((part instanceof go.Link)) console.log(e.subject.link);
-        })
 
 
         if (!this.state.testFuncData.length) {
@@ -1016,13 +1014,15 @@ class ScriptIndex extends Component {
                     },
                     mouseLeave: function (e, link) {
                         link.findObject("HIGHLIGHT").stroke = "transparent";
-                    }
+                    },
                 },
                 new go.Binding("points").makeTwoWay(),
                 $(go.Shape,  // the highlight shape, normally transparent
                     {isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT"}),
                 $(go.Shape,  // the link path shape
-                    {isPanelMain: true, stroke: "gray", strokeWidth: 2}),
+                    {isPanelMain: true, stroke:"gray" , strokeWidth: 2},
+                    new go.Binding("stroke", "condition", function(v) { return v==='YES' ? "gray" : "red"; }
+                    )),
                 $(go.Shape,  // the arrowhead
                     {toArrow: "standard", stroke: null, fill: "gray"}),
                 $(go.Panel, "Auto",  //是否显示线的描述文字 the link label, normally not visible
@@ -1040,7 +1040,9 @@ class ScriptIndex extends Component {
                             stroke: "#333333",
                             editable: true,
                             textEditor: window.TextEditorSelectBox,
-                            choices: ['YES', 'NO']
+                            choices: ['YES', 'NO'],
+                            doubleClick:  // here the second argument is this object, which is this Node
+                                function(e, node) { console.log(node.data.key) }
                         },
                         new go.Binding("text", "condition").makeTwoWay())
                 )
