@@ -39,7 +39,7 @@ class Catagory extends Component {
         }
     }
 
-    fetchHwData = (page = 1, q = '', selectType = '')=> {
+    fetchHwData = (page = 1, q = '', selectTypeOrCompany = '')=> {
         this.setState({loading: true});
         const that = this;
         this.setState({loading: true});
@@ -51,7 +51,13 @@ class Catagory extends Component {
             params = {
                 page: page,
                 query: q,
-                product_id: selectType
+                product_id: selectTypeOrCompany
+            }
+        }else if(this.props.match.url === '/test_stands'){
+            params = {
+                page: page,
+                query: q,
+                company_id: selectTypeOrCompany
             }
         }
         axios({

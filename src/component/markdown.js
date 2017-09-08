@@ -1,5 +1,3 @@
-'use strict';
-
 
 import Editor from './editor'
 import CodeBlock from './code-block'

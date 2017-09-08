@@ -36,7 +36,7 @@ class DrawScriptDetail extends Component {
         this.props.fetchAllHardwareVersions();
         this.props.fetchAllSegments();
         this.props.fetchAllProducts()
-        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id));
+        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load,sessionStorage.getItem(this.props.match.params.id),this.props.location.state.category);
         if (!this.props.location.state.newScript) {
             this.fetchScript(sessionStorage.getItem('manageScriptId'))
         }
@@ -81,7 +81,7 @@ class DrawScriptDetail extends Component {
             // }
 
             this.refs.ScriptIndex.delDiagram();
-            this.refs.ScriptIndex.init();
+            this.refs.ScriptIndex.init(null,null,nextProps.location.state.category);
             // console.log("this.state",this.state)
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
             //加了||使后退不会出错

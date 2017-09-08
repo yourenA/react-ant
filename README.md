@@ -24,11 +24,14 @@ $ npm run pm2:prod
     text:描述(固定)
     
 
-* 结束 category:end(黑色圆形)
+* 结束/正常结束 category:end(黑色圆形)
 
     text:描述(固定)
     
+* break结束 category:breakEnd(黑色圆形)
 
+    text:描述(固定)
+    
 * 条件语句 category:if(紫色五边形)
 
     text:条件描述(可编辑)

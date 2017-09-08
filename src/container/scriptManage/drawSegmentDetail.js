@@ -29,7 +29,7 @@ class DrawScriptDetail extends Component {
 
     componentDidMount() {
         this.props.fetchAllSegments();
-        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem(this.props.match.params.id));
+        this.refs.ScriptIndex.init(this.refs.ScriptIndex.load, sessionStorage.getItem(this.props.match.params.id),this.props.location.state.category);
         if (!this.props.location.state.newSegment) {
             this.fetchScript(sessionStorage.getItem('manageSegmentId'))
         }
@@ -81,7 +81,7 @@ class DrawScriptDetail extends Component {
 
 
             this.refs.ScriptIndex.delDiagram();
-            this.refs.ScriptIndex.init();
+            this.refs.ScriptIndex.init(null,null,nextProps.location.state.category);
             // console.log("this.state",this.state)
             // this.refs.ScriptIndex.load(this.state[nextProps.match.params.id]);
             const preSessionJson = JSON.parse(sessionStorage.getItem(`pre-${this.props.match.params.id}`));

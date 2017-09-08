@@ -296,7 +296,7 @@ exports.checkJSon = (myDiagramModel)=> {
         let hasLinkIndiffGroup=_.filter(linkDataArray, function(o) { return _.map(group,'key').indexOf(o.from)!==-1 &&_.map(group,'key').indexOf(o.to)===-1 });
         if(hasLinkIndiffGroup.length){
             for (let i = 0, len = hasLinkIndiffGroup.length; i < len; i++) {
-                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===hasLinkIndiffGroup[i].from; }).title,'跨分组内容之间有连线');
+                // console.log(key,_.find(nodeDataArray, function(o) { return o.key ===hasLinkIndiffGroup[i].from; }).title,'跨分组内容之间有连线');
                 returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===hasLinkIndiffGroup[i].from; }).title}${itemErrSign}'跨分组内容之间有连线'`)
             }
             returnCode = -1;
@@ -314,14 +314,14 @@ exports.checkJSon = (myDiagramModel)=> {
             if (new_arr.indexOf(res) === -1) {
                 new_arr.push(res)
             } else {
-                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在重复的连线');
+                // console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在重复的连线');
                 returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title}${itemErrSign}存在重复的连线`);
                 returnCode = -1;
             }
             let reversed = res.split('_').reverse().join('_')
             if (new_arr.indexOf(reversed) === -1) {
             } else {
-                console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在颠倒的连线');
+                // console.log(key,_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title,'存在颠倒的连线');
                 returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===linkInGroup[i].from; }).title}${itemErrSign}存在颠倒的连线`);
                 returnCode = -1;
             }
@@ -333,12 +333,12 @@ exports.checkJSon = (myDiagramModel)=> {
             return o.category === 'end';
         });
         if (!hasStart) {
-            console.log(key,'没有起点')
+            // console.log(key,'没有起点')
             returnMsg.push(`${key}${itemErrSign} 没有起点`)
             returnCode = -1;
         }
         if (!hasEnd) {
-            console.log(key,'没有终点')
+            // console.log(key,'没有终点')
             returnMsg.push(`${key}${itemErrSign} 没有终点`)
             returnCode = -1;
         }
@@ -346,14 +346,14 @@ exports.checkJSon = (myDiagramModel)=> {
 
         for (let i = 0, ilen = group.length; i < ilen; i++) {
             if(group[i].title.length===0 &&  group[i].category !== 'comment'){
-                console.log(key,group[i].title,'命名不能为空')
+                // console.log(key,group[i].title,'命名不能为空')
                 returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}命名不能为空`);
                 returnCode = -1;
             }
             if( group[i].title.indexOf('.')>=0 ){
                 if( group[i].category === 'if' ||  group[i].category === 'comment'){
                 }else{
-                    console.log(key,group[i].title,'命名错误')
+                    // console.log(key,group[i].title,'命名错误')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}命名错误`);
                     returnCode = -1;
                 }
@@ -363,12 +363,12 @@ exports.checkJSon = (myDiagramModel)=> {
                     return link.from === group[i].key
                 });
                 if (startOnLink.length === 0) {
-                    console.log(key,'起点没有输出连线');
+                    // console.log(key,'起点没有输出连线');
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输出连线`)
                     returnCode = -1;
                 }
                 if (startOnLink.length > 1) {
-                    console.log(key,'起点有多条输出连线')
+                    // console.log(key,'起点有多条输出连线')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有多条输出连线`)
                     returnCode = -1;
                 }
@@ -382,12 +382,12 @@ exports.checkJSon = (myDiagramModel)=> {
                     return link.from === group[i].key
                 });
                 if (itemOnLinkTo.length === 0) {
-                    console.log(key,group[i].title,'没有输入连线')
+                    // console.log(key,group[i].title,'没有输入连线')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输入连线`)
                     returnCode = -1;
                 }
                 if (itemOnLinkFrom.length === 0) {
-                    console.log(key,group[i].title,'没有输出连线')
+                    // console.log(key,group[i].title,'没有输出连线')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输出连线`)
                     returnCode = -1;
                 }
@@ -399,8 +399,8 @@ exports.checkJSon = (myDiagramModel)=> {
                     return link.from === group[i].key
                 });
                 if (itemOnLinkFrom.length < 2) {
-                    console.log(key,group[i].title,'判断必须有两个条件')
-                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断必须有两个条件`)
+                    // console.log(key,group[i].title,'判断必须有两个条件输出')
+                    returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断必须有两个条件输出`)
                     returnCode = -1;
                 }
             }
@@ -409,7 +409,7 @@ exports.checkJSon = (myDiagramModel)=> {
                     return link.from === group[i].key
                 });
                 if (itemOnLinkFrom.length > 2) {
-                    console.log(key,group[i].title,'输出连线大于2')
+                    // console.log(key,group[i].title,'输出连线大于2')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}输出连线大于2`)
                     returnCode = -1;
                 }
@@ -421,12 +421,12 @@ exports.checkJSon = (myDiagramModel)=> {
                 });
                 if (itemOnLinkFrom.length === 2) {
                     if(itemOnLinkFrom[0].condition == itemOnLinkFrom[1].condition){
-                        console.log(key,group[i].title,'判断条件错误');
+                        // console.log(key,group[i].title,'判断条件错误');
                         returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断条件错误`);
                         returnCode = -1;
                     }
                     if( (!Boolean(itemOnLinkFrom[0].condition) && itemOnLinkFrom[1].condition == 'YES') ||  (!itemOnLinkFrom[1].condition && itemOnLinkFrom[0].condition == 'YES')){
-                        console.log(key,group[i].title,'判断条件错误');
+                        // console.log(key,group[i].title,'判断条件错误');
                         returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}判断条件错误`);
                         returnCode = -1;
                     }
@@ -459,13 +459,13 @@ exports.checkJSon = (myDiagramModel)=> {
                 const itemOnLinkTo = _.filter(linkDataArray, function (link) {
                     return link.to === group[i].key
                 });
-                console.log('itemOnLinkTo',itemOnLinkTo)
+                // console.log('itemOnLinkTo',itemOnLinkTo)
                 for(let j=0,len=itemOnLinkTo.length;j<len;j++){
                     let itemToErrOut=_.find(group,function (o) {
                         return o.key===itemOnLinkTo[j].from
                     })
                     if(itemToErrOut.category !== 'item'){
-                        console.log(key,group[i].title,' 输入连线的图形不是dll方法');
+                        // console.log(key,group[i].title,' 输入连线的图形不是dll方法');
                         returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}输入连线的图形不是dll方法`);
                         returnCode = -1;
                     }
@@ -478,17 +478,17 @@ exports.checkJSon = (myDiagramModel)=> {
                 });
 
                 if (itemOnLinkFrom.length > 1) {
-                    console.log(key,group[i].title,'有多条输出连线')
+                    // console.log(key,group[i].title,'有多条输出连线')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}有多条输出连线`)
                     returnCode = -1;
                 }
             }
-            if (group[i].category === 'end') {
+            if (group[i].category === 'end' || group[i].category === 'breakEnd') {
                 const endOnLink = _.filter(linkDataArray, function (link) {
                     return link.to === group[i].key
                 });
                 if (endOnLink.length === 0) {
-                    console.log(key,'终点没有输入连线')
+                    // console.log(key,'终点没有输入连线')
                     returnMsg.push(`${key}${groupErrSign}${group[i].title}${itemErrSign}没有输入连线`)
                     returnCode = -1;
                 }
@@ -511,7 +511,7 @@ exports.checkJSon = (myDiagramModel)=> {
                 return (e.title === item.title && idx2 !== idx);
             });
         }).forEach(function (a,b) {
-            console.log(key,_.find(nodeDataArray, function(o) { return o.key ===a.key; }).title,'命名重复');
+            // console.log(key,_.find(nodeDataArray, function(o) { return o.key ===a.key; }).title,'命名重复');
             returnMsg.push(`${key}${groupErrSign}${_.find(nodeDataArray, function(o) { return o.key ===a.key; }).title}${itemErrSign}命名重复`);
             returnCode = -1;
         })

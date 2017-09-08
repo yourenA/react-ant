@@ -215,7 +215,7 @@ class ScriptIndex extends Component {
                 })
         )
     }
-    init = (cb, cbArg)=> {
+    init = (cb, cbArg,category)=> {
         const that = this;
         const titleFont = "11pt Verdana, sans-serif";
         const lightText = 'whitesmoke';
@@ -236,7 +236,7 @@ class ScriptIndex extends Component {
             },
             {
                 category: "end",
-                title: "结束",
+                title: "正常\n结束",
                 loc: `${myDiagramDiv.offsetWidth - 80} ${myDiagramDiv.offsetHeight - 80}`,
                 belong: 'ForGroups',
                 isPrint: true
@@ -260,6 +260,16 @@ class ScriptIndex extends Component {
                 // outcome_variable: '结果变量',
                 isPrint: true
             }];
+
+        if(category==='ForGroups'){
+            for(let i=0,len=formulaArr.length;i<len;i++){
+                if(formulaArr[i].category==='end' && !formulaArr[i].belong){
+                    formulaArr[i].title='正常\n结束';
+                }
+            }
+            formulaArr.splice(3,0, {category: "breakEnd", title: "Break\n结束", isPrint: true});
+        }
+
         if (this.state.testFuncData.length > 0) {
             console.log('拼接原有的test_function')
             formulaArr = formulaArr.concat(this.state.testFuncData)
@@ -286,6 +296,10 @@ class ScriptIndex extends Component {
         myDiagram =
             $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
                 {
+                    // "grid.visible": true, //以下四句是画网格底纹
+                    // "grid.gridCellSize": new go.Size(30, 20),
+                    // "draggingTool.isGridSnapEnabled": true,
+                    // "resizingTool.isGridSnapEnabled": true,
                     initialContentAlignment: go.Spot.Center,
                     "LinkDrawn": that.showLinkLabel,  //画线
                     "LinkRelinked": that.showLinkLabel,//重新连接
@@ -403,6 +417,27 @@ class ScriptIndex extends Component {
                 that.makePort("L", go.Spot.Left, false, true),
                 that.makePort("R", go.Spot.Right, false, true)
             ));
+
+        myDiagram.nodeTemplateMap.add("breakEnd",
+            $(go.Node, "Spot",
+                // new go.Binding("guid", "num"),
+                that.nodeStyle(),
+                $(go.Panel, "Auto",
+                    $(go.Shape, "Circle",
+                        {fill: "#000", stroke: null}),
+                    $(go.Panel, "Vertical",
+                        $(go.TextBlock, "End",
+                            {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText,wrap: go.TextBlock.WrapFit, textAlign: "center"},
+                            new go.Binding("text", "title")),
+                        that.renderPrintCheckbox()
+                    )
+                ),
+                // three named ports, one on each side except the bottom, all input only:
+                that.makePort("T", go.Spot.Top, false, true),
+                that.makePort("L", go.Spot.Left, false, true),
+                that.makePort("R", go.Spot.Right, false, true)
+            ));
+
         myDiagram.nodeTemplateMap.add("comment",
             $(go.Node, "Auto", this.nodeStyle(),
                 $(go.Shape, "File",

@@ -53,6 +53,23 @@ class TopicTable extends Component {
                     </span>
                     : null
                 }
+              {/*  {this.props.type === '/test_stands' ?
+                    <span>
+                         <span className="search-text">制造厂商: </span>
+                        <Select allowClear={true} dropdownMatchSelectWidth={false} className="search-select"
+                                onChange={this.onChangeProductsName}
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                        { this.props.fetchTestConf.manufactures.map((item, key) => {
+                            return (
+                                <Option key={item.id} value={item.id.toString()}>{item.name}</Option>
+                            )
+                        }) }
+                </Select>
+                    </span>
+                    : null
+                }*/}
             </div>
 
         );
