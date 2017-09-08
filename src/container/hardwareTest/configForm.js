@@ -13,7 +13,6 @@ class ConfigForm extends React.Component {
 
 
     render() {
-        console.log('this.props.adapter',this.props.adapter)
         const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -23,7 +22,7 @@ class ConfigForm extends React.Component {
                             initialValue: this.props.script,
                             rules: [{required: true, message: '请选择测试脚本'}],
                         })(
-                            <Select labelInValue={true} onChange={this.changeProduct}
+                            <Select labelInValue={true}
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
@@ -40,10 +39,10 @@ class ConfigForm extends React.Component {
                 {this.props.type==='test_stand'?
                     <FormItem>
                         {getFieldDecorator('test_stand', {
-                            initialValue: this.props.script,
+                            initialValue: this.props.test_stand,
                             rules: [{required: true, message: '请选择测试架'}],
                         })(
-                            <Select labelInValue={true} onChange={this.changeProduct}
+                            <Select labelInValue={true}
                                     dropdownMatchSelectWidth={false}
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>

@@ -250,7 +250,7 @@ class ScriptIndex extends Component {
             {
                 category: "item",
                 desc: "dll方法",
-                title: 'action',
+                title: 'action.1',
                 action: 'action',
                 params: [
                     {key: 'key', value: 'value', is_output_parameter: true,},
