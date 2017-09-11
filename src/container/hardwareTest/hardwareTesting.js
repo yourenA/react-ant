@@ -65,31 +65,21 @@ class HardwareTesting extends Component {
             this.fetchHwTestingData(testRecord.batch_id, this.props.location.state.testScriptId)
 
         }
-        this.props.fetchAllTestStand()
-        const data = [];
-        for (let i = 0; i < 100; i++) {
-            data.push({
-                key: i,
-                name: `Edward King ${i}`,
-                age: 32,
-                address: `London, Park Lane no. ${i}`,
-                info: `Info ${i}`
-            });
-        }
-        this.setState({
-            testInfo: data
-        });
-        // this.getAdapter()
+        this.props.fetchAllTestStand();
+        let subPanel = document.querySelector('.testing-content');
+        let subPanelOffsetTop = subPanel.offsetTop+24;//24为父容器padding-bottom
+        let documentHeight= document.documentElement.clientHeight;
+        console.log('subPanelOffsetTop',subPanelOffsetTop);
+        console.log('documentHeight',documentHeight);
+        subPanel.style.height=(documentHeight-subPanelOffsetTop)+'px'
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount')
         window.removeEventListener('beforeunload', this.unload)//和addEventListener调用相同的参数才能正确移除
         if (this.ws) {
             this.ws.close()
         }
     }
-
     unload = (event)=> {
         event.returnValue = "离开页面将丢失信息";
     }

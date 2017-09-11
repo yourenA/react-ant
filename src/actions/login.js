@@ -50,7 +50,7 @@ export function login(user, from, history) {
                     token: response.data.token,
                     permissions: response.data.permissions.data
                 });
-                window.location.replace('/')
+                history.replace('/')
             })
             .catch(function (error) {
                 if (error.toString() === 'Error: Network Error') {
@@ -66,7 +66,7 @@ export function login(user, from, history) {
     }
 }
 
-export function signout() {
+export function signout(history) {
     console.log("执行退出");
     return dispatch => {
         axios({
@@ -80,15 +80,15 @@ export function signout() {
                 dispatch({
                     type: SIGNOUT_SUCCESS,
                 });
-                window.location.replace('/login')
+                // history.replace('/')
             })
             .catch(function (error) {
                 removeLoginStorage();
-                message.error(`${error.response.data.message},请重新登陆`);
+                // message.success(messageJson['sign out success']);
                 dispatch({
                     type: SIGNOUT_FAIL,
                 });
-                window.location.replace('/login')
+                // history.replace('/login')
             });
     }
 }

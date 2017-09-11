@@ -4,7 +4,8 @@ import {
     BrowserRouter as Router,
     Route,
     NavLink,
-    Redirect
+    Redirect,
+
 } from 'react-router-dom';
 import Nopermission from './container/nopermission';
 import Home from './container/home';
@@ -52,6 +53,13 @@ class App extends Component {
         }
     }
 
+    componentDidMount = ()=> {
+        const that = this;
+        document.body.onclick = function (e) {
+            that.launchFullscreen(document.documentElement);
+        }
+    }
+
     componentWillMount() {
         if (window.location.pathname.indexOf('systemManage') >= 0) {
             this.setState({
@@ -62,23 +70,35 @@ class App extends Component {
                 pathname: window.location.pathname
             })
         }
-
     }
 
+    launchFullscreen = (element)=> {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    }
     handleClick = (e) => {
         if (e.key === 'systemJournal') {
             // this.refs.SystemJournalModal.setSystemJournalModalTrue()
-        }else if(e.key === '/about'){
+        } else if (e.key === '/about') {
 
         } else {
             this.setState({
                 pathname: e.key,
             });
             if (e.key === '/signout') {
+                console.log(this.refs.Login)
                 this.props.signout();
             }
         }
     }
+
     render() {
         const login = this.props.loginState;
         return (
@@ -90,8 +110,11 @@ class App extends Component {
                             <About {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <div className="layout" style={{display:this.state.pathname==='/about'?'none':'block'}}>
-                        <Header className="layout-header" style={{minWidth:'1200px'}}>
+                    <div className="layout" style={{display: this.state.pathname === '/about' ? 'none' : 'block'}}>
+                       {/* <div className="hide-div" id="hide-div"
+                             onClick={()=>this.launchFullscreen(document.documentElement)}>这是隐藏的区域，用于控制全屏
+                        </div>*/}
+                        <Header className="layout-header" style={{minWidth: '1200px'}}>
                             <div className="logo"/>
                             <Menu
                                 onClick={this.handleClick}
@@ -122,8 +145,8 @@ class App extends Component {
                                                                                     to="/scriptManage">脚本管理</NavLink></Menu.Item>
                                             <Menu.Item key="/segmentManage"><NavLink activeClassName="nav-selected"
                                                                                      to="/segmentManage">脚本段管理</NavLink></Menu.Item>
-                                        {/*    <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
-                                                                                     to="/about">流程图使用说明</NavLink></Menu.Item>*/}
+                                            {/*    <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
+                                             to="/about">流程图使用说明</NavLink></Menu.Item>*/}
                                         </SubMenu>
                                         : null
                                 }
@@ -131,10 +154,10 @@ class App extends Component {
                                     (login.login && testPermission('test_stand_management') ) ?
                                         <SubMenu title={<span>分类管理</span>}>
                                             {/*{testPermission('company_management') ?
-                                                <Menu.Item key="/companies"><NavLink activeClassName="nav-selected"
-                                                                                     to="/companies">制造厂商</NavLink></Menu.Item>
-                                                : null
-                                            }*/}
+                                             <Menu.Item key="/companies"><NavLink activeClassName="nav-selected"
+                                             to="/companies">制造厂商</NavLink></Menu.Item>
+                                             : null
+                                             }*/}
                                             {testPermission('product_management') ?
                                                 <Menu.Item key="/products"><NavLink activeClassName="nav-selected"
                                                                                     to="/products">产品管理</NavLink></Menu.Item>
@@ -159,9 +182,9 @@ class App extends Component {
                                         </SubMenu>
                                         : null
                                 }
-                                {  (login.login && (testPermission('user_management')||testPermission('system_management')) ) ?
-                                <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected"
-                                                                        to="/systemManage/userManage">系统管理</NavLink></Menu.Item>: null}
+                                {  (login.login && (testPermission('user_management') || testPermission('system_management')) ) ?
+                                    <Menu.Item key="/systemManage"><NavLink activeClassName="nav-selected"
+                                                                            to="/systemManage/userManage">系统管理</NavLink></Menu.Item> : null}
                                 {login.login ?
                                     <SubMenu className="float-right" title={<span>{login.username}  </span>}>
                                         <Menu.Item key="/userConfig"><NavLink activeClassName="nav-selected"
@@ -170,19 +193,20 @@ class App extends Component {
                                                                               to="/login">切换账号</NavLink></Menu.Item>
                                         <Menu.Item key="/signout">退出</Menu.Item>
                                     </SubMenu>
-                                    : <Menu.Item key="/login"  className="float-right"><NavLink activeClassName="nav-selected"
-                                                                       to="/login">登录</NavLink></Menu.Item>
+                                    : <Menu.Item key="/login" className="float-right"><NavLink
+                                    activeClassName="nav-selected"
+                                    to="/login">登录</NavLink></Menu.Item>
                                 }
                                 {login.login ?
-                                <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
-                                                                 to="/about">说明文档</NavLink></Menu.Item>:null}
+                                    <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
+                                                                     to="/about">说明文档</NavLink></Menu.Item> : null}
                                 {/*{login.login ?
-                                    <Menu.Item key="systemJournal"
-                                               className="systemJournal-nav">系统日志</Menu.Item> : null}*/}
+                                 <Menu.Item key="systemJournal"
+                                 className="systemJournal-nav">系统日志</Menu.Item> : null}*/}
                             </Menu>
                         </Header>
                         {/*<SystemJournalModal systemJournalModal={this.state.systemJournalModal}
-                                            ref="SystemJournalModal"/>*/}
+                         ref="SystemJournalModal"/>*/}
                     </div>
 
                     <Route exact path="/" component={Home}/>
@@ -197,24 +221,24 @@ class App extends Component {
                             <HardwareTesting {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route  exact path="/productionManagement" render={(props) => {
+                    <Route exact path="/productionManagement" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
                             <ProductionManage {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route  exact  path="/productionManagement/:id" render={(props) => {
+                    <Route exact path="/productionManagement/:id" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
                             <AddOrEditBatch {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                    <Route  path="/productionManagement/:id/serialNumbers" render={(props) => {
+                    <Route path="/productionManagement/:id/serialNumbers" render={(props) => {
                         return (login.login && testPermission('production_management') ) ?
                             <SerialNumber {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
 
 
-                    <Route path="/login" component={Login}/>
+                    <Route path="/login" component={Login} ref="Login"/>
                     {/*<Route path="/register" component={Register}/>*/}
                     <Route
                         path="/printSetting/:id" render={(props) => {
@@ -273,12 +297,12 @@ class App extends Component {
                             <UserConfig {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-                   {/* <Route
-                        path="/companies" render={(props) => {
-                        return (login.login && testPermission('company_management') ) ?
-                            <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>*/}
+                    {/* <Route
+                     path="/companies" render={(props) => {
+                     return (login.login && testPermission('company_management') ) ?
+                     <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
+                     <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                     }}/>*/}
                     <Route
                         path="/products" render={(props) => {
                         return (login.login && testPermission('product_management') ) ?

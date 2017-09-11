@@ -216,7 +216,19 @@ class ScriptIndex extends Component {
         )
     }
     okName = (textblock, oldstr, newstr)=>{
-        return newstr.length >= 1 && !/\./g.test(newstr);
+        console.log(textblock)
+        // const nodeDataArray =JSON.parse(this.callbackJson()).nodeDataArray;
+        let isNewStrValid=true;
+        // _.forEach(nodeDataArray, function(value, key) {
+        //     if(value.title===newstr){
+        //         isNewStrValid=false;
+        //         return;
+        //     }
+        // });
+        if( newstr.length < 1 || /\./g.test(newstr)){
+            isNewStrValid=false;
+        }
+        return isNewStrValid;
     }
     init = (cb, cbArg,category)=> {
         const that = this;
@@ -250,7 +262,7 @@ class ScriptIndex extends Component {
             {
                 category: "item",
                 desc: "dll方法",
-                title: 'action.1',
+                title: 'action1',
                 action: 'action',
                 params: [
                     {key: 'key', value: 'value', is_output_parameter: true,},
@@ -1069,7 +1081,7 @@ class ScriptIndex extends Component {
         if (node.category === 'ForGroups' || node.category === 'OfGroups') {
             _.forEach(children, function (value, key) {
                 let findChildIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
-                    return o.key == children[key].key;
+                    return o.key === children[key].key;
                 });
                 myDiagramJson.nodeDataArray[findChildIndex].isPrint = node.isPrint;
                 let data = model.nodeDataArray[findChildIndex];
@@ -1081,7 +1093,7 @@ class ScriptIndex extends Component {
             _.forEach(parents, function (value, key) {
                 if (value) {
                     let findParentsIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
-                        return o.key == parents[key].key;
+                        return o.key === parents[key].key;
                     });
                     myDiagramJson.nodeDataArray[findParentsIndex].isPrint = node.isPrint;
                     let data = model.nodeDataArray[findParentsIndex];
@@ -1096,7 +1108,7 @@ class ScriptIndex extends Component {
             _.forEach(parents, function (value, key) {
                 if (value) {
                     let findParentsIndex = _.findIndex(myDiagramJson.nodeDataArray, function (o) {
-                        return o.key == parents[key].key;
+                        return o.key === parents[key].key;
                     });
                     let data = model.nodeDataArray[findParentsIndex];
                     model.setDataProperty(data, "isPrint", node.isPrint);
@@ -1263,7 +1275,7 @@ class ScriptIndex extends Component {
     getCenter = ()=> {
         var bottom = myDiagram.computeBounds().bottom
         var top = myDiagram.computeBounds().top
-        const {scrollTop, scrollLeft}=this.state
+        const {scrollTop}=this.state
         console.log("top", top)
         console.log("bottom", bottom)
         console.log("bottom-top", bottom - top)
@@ -1292,10 +1304,10 @@ class ScriptIndex extends Component {
                 resultKeys.unshift('root');
                 return resultKeys.join(' . ') + ' . ' + this.props.location.state.groupNmae;
             } else {
-                return 'root' + ' . ' + this.props.location.state.groupNmae
+                return 'root' + ' . ' + this.props.location.state.groupNmae ;
             }
         } else {
-            return 'root' + ' . ' + this.props.location.state.groupNmae
+            return 'root' + ' . ' + this.props.location.state.groupNmae ;
         }
     }
     toggle = () => {
