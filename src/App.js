@@ -23,6 +23,7 @@ import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
 import DrawSegment from './container/scriptManage/drawSegment';
 import PrintSetting from './container/scriptManage/printSetting';
 import CatagoryManage from './container/catagoryManage/index';
+import ReportDetail from './container/catagoryManage/reportDetail';
 import SystemManage from './container/systemManage/index';
 import UserConfig from './container/userConfig/index';
 import Login from './container/login';
@@ -104,17 +105,12 @@ class App extends Component {
         return (
             <Router>
                 <div>
-                    <Route exact
-                           path="/about" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <About {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
+
                     <div className="layout" style={{display: this.state.pathname === '/about' ? 'none' : 'block'}}>
                        {/* <div className="hide-div" id="hide-div"
                              onClick={()=>this.launchFullscreen(document.documentElement)}>这是隐藏的区域，用于控制全屏
                         </div>*/}
-                        <Header className="layout-header" style={{minWidth: '1200px'}}>
+                        <Header className="layout-header notprint" style={{minWidth: '1200px'}}>
                             <div className="logo"/>
                             <Menu
                                 onClick={this.handleClick}
@@ -130,6 +126,12 @@ class App extends Component {
                                     (login.login && testPermission('hardware_testing') ) ?
                                         <Menu.Item key="/hardwareTest"><NavLink activeClassName="nav-selected"
                                                                                 to="/hardwareTest">硬件测试</NavLink></Menu.Item>
+                                        : null
+                                }
+                                {
+                                    (login.login && testPermission('report_print') ) ?
+                                        <Menu.Item key="/reportManagement"><NavLink activeClassName="nav-selected"
+                                                                                    to="/reportManagement">报告查询</NavLink></Menu.Item>
                                         : null
                                 }
                                 {
@@ -197,8 +199,9 @@ class App extends Component {
                                     activeClassName="nav-selected"
                                     to="/login">登录</NavLink></Menu.Item>
                                 }
+                                {/*target="_blank" */}
                                 {login.login ?
-                                    <Menu.Item key="/about"><NavLink target="_blank" activeClassName="nav-selected"
+                                    <Menu.Item key="/about"><NavLink activeClassName="nav-selected"
                                                                      to="/about">说明文档</NavLink></Menu.Item> : null}
                                 {/*{login.login ?
                                  <Menu.Item key="systemJournal"
@@ -210,6 +213,12 @@ class App extends Component {
                     </div>
 
                     <Route exact path="/" component={Home}/>
+                    <Route exact
+                           path="/about" render={(props) => {
+                        return (login.login && testPermission('test_script_management') ) ?
+                            <About {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
                     <Route exact
                            path="/hardwareTest" render={(props) => {
                         return (login.login && testPermission('hardware_testing') ) ?
@@ -327,7 +336,19 @@ class App extends Component {
                             <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
-
+                    <Route
+                        exact
+                        path="/reportManagement" render={(props) => {
+                        return (login.login && testPermission('report_print') ) ?
+                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
+                    <Route
+                        path="/reportManagement/:id" render={(props) => {
+                        return (login.login && testPermission('report_print') ) ?
+                            <ReportDetail  {...props}/> : login.login ? <Nopermission/> :
+                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                    }}/>
 
                 </div>
 

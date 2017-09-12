@@ -2,7 +2,8 @@
  * Created by Administrator on 2017/3/24.
  */
 import React, {Component} from 'react';
-import {Input,Select} from 'antd';
+import {Input,Select,DatePicker } from 'antd';
+const RangePicker = DatePicker.RangePicker;
 const Search = Input.Search;
 const Option = Select.Option;
 class TopicTable extends Component {
@@ -25,6 +26,9 @@ class TopicTable extends Component {
     onChangeProductsName=(e)=>{
         const {q}=this.props;
         this.props.onChangeSearch(1,q,e)
+    }
+    changeReportTime=(date, dateString)=>{
+        console.log( dateString);
     }
     render() {
         return (
@@ -50,6 +54,14 @@ class TopicTable extends Component {
                         )
                     }) }
                 </Select>
+                    </span>
+                    : null
+                }
+                {this.props.type === '/reportManagement' ?
+                    <span>
+                         <span className="search-text">测试时间 : </span>
+                        <RangePicker onChange={this.changeReportTime}
+                        />
                     </span>
                     : null
                 }

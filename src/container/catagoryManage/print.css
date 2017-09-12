@@ -1,0 +1,11 @@
+@media print {
+    .notprint {
+        display: none;
+    }
+    .content{
+        padding: 0 !important;
+    }
+    .print-header h3{
+        margin-left: -100px;
+    }
+}

@@ -5267,6 +5267,10 @@ pretty-format@^20.0.3:
     ansi-regex "^2.1.1"
     ansi-styles "^3.0.0"
 
+print.js@^1.0.18:
+  version "1.0.18"
+  resolved "http://registry.npm.taobao.org/print.js/download/print.js-1.0.18.tgz#1ea214bffad5da09305a13e6748b6451236ac4e9"
+
 private@^0.1.6:
   version "0.1.7"
   resolved "http://registry.npm.taobao.org/private/download/private-0.1.7.tgz#68ce5e8a1ef0a23bb570cc28537b5332aba63ef1"

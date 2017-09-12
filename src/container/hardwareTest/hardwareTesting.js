@@ -69,8 +69,6 @@ class HardwareTesting extends Component {
         let subPanel = document.querySelector('.testing-content');
         let subPanelOffsetTop = subPanel.offsetTop+24;//24为父容器padding-bottom
         let documentHeight= document.documentElement.clientHeight;
-        console.log('subPanelOffsetTop',subPanelOffsetTop);
-        console.log('documentHeight',documentHeight);
         subPanel.style.height=(documentHeight-subPanelOffsetTop)+'px'
     }
 

@@ -12,6 +12,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import AddOrEditName from './addOrEditNmae';
+import {
+    Link
+} from 'react-router-dom';
 class Catagory extends Component {
     constructor(props) {
         super(props);
@@ -59,6 +62,14 @@ class Catagory extends Component {
                 query: q,
                 company_id: selectTypeOrCompany
             }
+        }else{
+            that.setState({
+                data: [{id:123,name:123}],
+                page: page,
+                q: q,
+                loading: false
+            })
+            return
         }
         axios({
             url: `${configJson.prefix}${this.props.match.url}`,
@@ -193,7 +204,8 @@ class Catagory extends Component {
                 return '硬件版本';
             case '/test_stands':
                 return '测试架';
-
+            case '/reportManagement':
+                return '测试报告列表';
             default:
                 return ''
         }
@@ -210,6 +222,8 @@ class Catagory extends Component {
                 return '版本号';
             case '/test_stands':
                 return '测试架名称';
+            case '/reportManagement':
+                return '产品序列号';
             default:
                 return ''
         }
@@ -309,30 +323,90 @@ class Catagory extends Component {
                     dataIndex: 'company_name',
                     key: 'company_name'
                 }) : null;*/
+        } else if (this.props.match.url === '/reportManagement') {
+            columns.push({
+                title: '产品序列号',
+                dataIndex: 'name',
+                key: 'name'
+            }, {
+                title: '脚本名称',
+                dataIndex: 'ip',
+                key: 'ip'
+            }, {
+                title: '制造厂商',
+                dataIndex: 'index',
+                key: 'index'
+            },{
+                title: '产品代码',
+                dataIndex: 'name2',
+                key: 'name2'
+            }, {
+                title: '硬件版本',
+                dataIndex: 'ip3',
+                key: 'ip3'
+            }, {
+                title: '测试架',
+                dataIndex: 'index4',
+                key: 'index4'
+            },{
+                title: '测试时间',
+                dataIndex: 'name5',
+                key: 'name5'
+            }, {
+                title: '结果',
+                dataIndex: 'ip6',
+                key: 'ip6'
+            });
+            /*localStorage.getItem('userrole') === '系统管理员' ?
+             columns.push({
+             title: '厂商名称',
+             dataIndex: 'company_name',
+             key: 'company_name'
+             }) : null;*/
         }
-        columns.push({
-            title: '操作',
-            key: 'action',
-            width: 150,
-            render: (text, record, index) => {
-                return (
-                    <div key={index}>
-                        <Button onClick={()=> {
-                            this.setState({editId: record.id, editModal: true, editRecord: record})
-                        }}>
-                            编辑
-                        </Button>
-                        <span className="ant-divider"/>
-                        <Popconfirm placement="topRight" title={ `确定要删除吗?`}
-                                    onConfirm={this.delData.bind(this, record.id)}>
-                            <button className="ant-btn ant-btn-danger">删除
-                            </button>
-                        </Popconfirm>
-                    </div>
 
-                )
-            }
-        })
+        if (this.props.match.url === '/reportManagement'){
+            columns.push({
+                title: '操作',
+                key: 'action',
+                width: 80,
+                render: (text, record, index) => {
+                    return (
+                        <div key={index}>
+                            <Link
+                                to={{
+                                    pathname: `${this.props.match.url}/${record.id}`,
+                                }}
+                            ><Button type="primary">打开</Button></Link>
+                        </div>
+                    )
+                }
+            })
+        }else{
+            columns.push({
+                title: '操作',
+                key: 'action',
+                width: 150,
+                render: (text, record, index) => {
+                    return (
+                        <div key={index}>
+                            <Button onClick={()=> {
+                                this.setState({editId: record.id, editModal: true, editRecord: record})
+                            }}>
+                                编辑
+                            </Button>
+                            <span className="ant-divider"/>
+                            <Popconfirm placement="topRight" title={ `确定要删除吗?`}
+                                        onConfirm={this.delData.bind(this, record.id)}>
+                                <button className="ant-btn ant-btn-danger">删除
+                                </button>
+                            </Popconfirm>
+                        </div>
+                    )
+                }
+            })
+        }
+
 
         return (
             <div>
