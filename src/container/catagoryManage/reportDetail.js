@@ -105,56 +105,55 @@ class ReportDetail extends React.Component {
                                 <div className="print-category">
                                     <div className="print-item">
                                         <span
-                                              title='测试脚本测试脚本测试脚本'>测试脚本 : 测试脚本测试脚本测试脚本{this.state.script}
+                                              title='测试脚本测试脚本测试脚本'>产品序列号 : pc1000000001{this.state.script}
                                         </span>
                                     </div>
 
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>产品代码 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>产品名称 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>硬件版本 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>结果 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>测试类型 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>脚本名称 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>测试时间 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                              title={this.state.script}>测试架 : {this.state.script}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试脚本 : {this.state.script}
+                                            title={this.state.script}>制造厂商 : {this.state.script}
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                             <Table

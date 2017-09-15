@@ -57,7 +57,7 @@ class App extends Component {
     componentDidMount = ()=> {
         const that = this;
         document.body.onclick = function (e) {
-            that.launchFullscreen(document.documentElement);
+            // that.launchFullscreen(document.documentElement);
         }
     }
 
