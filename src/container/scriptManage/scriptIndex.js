@@ -236,8 +236,8 @@ class ScriptIndex extends Component {
         const lightText = 'whitesmoke';
         const myDiagramDiv = document.querySelector('#myDiagramDiv');
         let formulaArr = [
-            {title: "分组", isGroup: true, category: "OfGroups", isPrint: true},
-            {title: "循环分组", isGroup: true, category: "ForGroups", default_value: 100, times: 1, isPrint: true},
+            {title: "分组", isGroup: true, category: "OfGroups",desc:'分组描述',  isPrint: true},
+            {title: "循环分组", isGroup: true, category: "ForGroups",desc:'循环分组描述', default_value: 100, times: 1, isPrint: true},
             {title: "条件语句", category: "if", isPrint: true},
             // {title: "错误输出", category: "errOut", isPrint: false},
             {category: "start", title: "开始", loc: "0 0", belong: 'OfGroups', isPrint: true},
@@ -806,6 +806,7 @@ class ScriptIndex extends Component {
                 $(go.Panel, "Vertical",  // title above Placeholder
                     $(go.Panel, "Table",
                         {stretch: go.GraphObject.Horizontal, background: "#98FB98", minSize: new go.Size(150, 40)},
+
                         // {
                         //     contextMenu:     // define a context menu for each node
                         //         $(go.Adornment, "Vertical",  // that has one button
@@ -824,7 +825,7 @@ class ScriptIndex extends Component {
                             //     {alignment: go.Spot.Center, margin: 5}),
                             $(go.TextBlock,
                                 {
-                                    margin: new go.Margin(0, 0, 0, 15),
+                                    margin: new go.Margin(5, 0, 0, 15),
                                     alignment: go.Spot.Center,
                                     editable: true,
                                     font: titleFont,
@@ -832,7 +833,27 @@ class ScriptIndex extends Component {
                                 },
                                 new go.Binding("text", "title").makeTwoWay()),
                         ),
-                        that.renderPrintCheckbox(true)
+                        that.renderPrintCheckbox(true),
+                        $(go.Panel, "Horizontal",  // button next to TextBlock
+                            {
+                                row: 1,
+                                alignment: go.Spot.Left,
+                                margin: new go.Margin(5, 0, 5, 15),
+                            },
+                            // $("SubGraphExpanderButton",
+                            //     {alignment: go.Spot.Center, margin: 5}),
+                            $(go.TextBlock, "描述:",
+                                {column: 0,    font: titleFont, editable: false,},
+                            ),
+                            $(go.TextBlock,
+                                {
+                                    column: 1,
+                                    alignment: go.Spot.Center,
+                                    editable: true,
+                                    font: titleFont,
+                                },
+                                new go.Binding("text", "desc").makeTwoWay()),
+                        ),
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
                         {padding: 10},
@@ -885,50 +906,65 @@ class ScriptIndex extends Component {
                             //     {alignment: go.Spot.Center, margin: 5}),
                             $(go.TextBlock,
                                 {
-                                    margin: new go.Margin(0, 0, 0, 15),
+                                    margin: new go.Margin(5, 0, 0, 15),
                                     alignment: go.Spot.Center,
                                     editable: true,
                                     font: titleFont,
-                                    stroke: lightText,
                                     textValidation: that.okName
                                 },
                                 new go.Binding("text", "title").makeTwoWay()),
                             $(go.TextBlock, "默认值:",
                                 {
-                                    margin: new go.Margin(0, 0, 0, 5),
+                                    margin: new go.Margin(5, 0, 0, 10),
                                     alignment: go.Spot.Right,
                                     editable: false,
                                     font: "9pt Verdana, sans-serif",
-                                    stroke: lightText,
                                 }),
                             $(go.TextBlock,
                                 {
-                                    margin: new go.Margin(0, 5, 0, 0),
+                                    margin: new go.Margin(5, 5, 0, 0),
                                     alignment: go.Spot.Right,
                                     editable: true,
-                                    font: titleFont,
-                                    stroke: lightText,
+                                    font: "9pt Verdana, sans-serif",
                                 },
                                 new go.Binding("text", "default_value").makeTwoWay()),
                             $(go.TextBlock, "次数:",
                                 {
-                                    margin: new go.Margin(0, 0, 0, 5),
+                                    margin: new go.Margin(5, 0, 0, 10),
                                     alignment: go.Spot.Right,
                                     editable: false,
                                     font: "9pt Verdana, sans-serif",
-                                    stroke: lightText,
                                 }),
                             $(go.TextBlock,
                                 {
-                                    margin: new go.Margin(0, 5, 0, 0),
+                                    margin: new go.Margin(5, 5, 0, 0),
                                     alignment: go.Spot.Right,
                                     editable: true,
-                                    font: titleFont,
-                                    stroke: lightText,
+                                    font: "9pt Verdana, sans-serif",
                                 },
                                 new go.Binding("text", "times").makeTwoWay()),
                         ),
-                        that.renderPrintCheckbox(true)
+                        that.renderPrintCheckbox(true),
+                        $(go.Panel, "Horizontal",  // button next to TextBlock
+                            {
+                                row: 1,
+                                alignment: go.Spot.Left,
+                                margin: new go.Margin(5, 0, 5, 15),
+                            },
+                            // $("SubGraphExpanderButton",
+                            //     {alignment: go.Spot.Center, margin: 5}),
+                            $(go.TextBlock, "描述:",
+                                {column: 0,    font: titleFont, editable: false,},
+                            ),
+                            $(go.TextBlock,
+                                {
+                                    column: 1,
+                                    alignment: go.Spot.Center,
+                                    editable: true,
+                                    font: titleFont,
+                                },
+                                new go.Binding("text", "desc").makeTwoWay()),
+                        ),
                     ),  // end Horizontal Panel
                     $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
                         {padding: 10},
