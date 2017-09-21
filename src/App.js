@@ -106,7 +106,7 @@ class App extends Component {
             <Router>
                 <div>
 
-                    <div className="layout" style={{display: this.state.pathname === '/about' ? 'none' : 'block'}}>
+                    <div className="layout" >
                        {/* <div className="hide-div" id="hide-div"
                              onClick={()=>this.launchFullscreen(document.documentElement)}>这是隐藏的区域，用于控制全屏
                         </div>*/}
