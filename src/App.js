@@ -130,8 +130,8 @@ class App extends Component {
                                 }
                                 {
                                     (login.login && testPermission('report_print') ) ?
-                                        <Menu.Item key="/reportManagement"><NavLink activeClassName="nav-selected"
-                                                                                    to="/reportManagement">报告查询</NavLink></Menu.Item>
+                                        <Menu.Item key="/reports"><NavLink activeClassName="nav-selected"
+                                                                                    to="/reports">报告查询</NavLink></Menu.Item>
                                         : null
                                 }
                                 {
@@ -338,13 +338,13 @@ class App extends Component {
                     }}/>
                     <Route
                         exact
-                        path="/reportManagement" render={(props) => {
+                        path="/reports" render={(props) => {
                         return (login.login && testPermission('report_print') ) ?
                             <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
                     }}/>
                     <Route
-                        path="/reportManagement/:id" render={(props) => {
+                        path="/reports/:id" render={(props) => {
                         return (login.login && testPermission('report_print') ) ?
                             <ReportDetail  {...props}/> : login.login ? <Nopermission/> :
                             <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;

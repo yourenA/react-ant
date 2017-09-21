@@ -44,6 +44,7 @@
   "add /companies success":"添加制造商成功",
   "edit /companies success":"修改制造商成功",
   "del /companies success":"删除制造商成功",
+  "del /reports success":"删除测试报告成功",
   "add user success":"添加用户成功",
   "edit user success":"修改用户成功",
   "edit group success":"修改用户组成功",

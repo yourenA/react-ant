@@ -2,15 +2,22 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Breadcrumb, Button} from 'antd';
-import { Table, Badge, Menu, Dropdown, Icon } from 'antd';
+import {Breadcrumb, Button,Table,Badge} from 'antd';
+import configJson from 'configJson' ;
+import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import messageJson from './../../common/message.json';
+import axios from 'axios'
 import './print.css'
 import './print.less'
+import plus from './../../common/images/plus.png'
+import reduce from './../../common/images/reduce.png'
+const _ = require('lodash');
 class ReportDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            expands:[]
+            expands:[],
+            items:{data:[]}
         };
     }
 
@@ -19,6 +26,21 @@ class ReportDetail extends React.Component {
     }
     fetchReportDetail=(id)=>{
         console.log(id)
+        const that=this;
+        axios({
+            url: `${configJson.prefix}/reports/${id}`,
+            method: 'get',
+            headers: getHeader()
+        })
+            .then(function (response) {
+                console.log(response.data)
+                that.setState({
+                    ...response.data
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+            converErrorCodeToMsg(error)
+        })
     }
 
     printReport=()=>{
@@ -34,63 +56,63 @@ class ReportDetail extends React.Component {
             }else{
                 console.log('不打印')
             }
-
         })
         // window.print()
         // printJS('print-content', 'html')
     }
 
     render() {
-        const expandedRowRender = () => {
-            const columns = [
-                { title: 'Date', dataIndex: 'date', key: 'date' },
-                { title: 'Name', dataIndex: 'name', key: 'name' },
-                { title: 'Status', key: 'state', render: () => <span><Badge status="success" />Finished</span> },
-                { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-            ];
+        const that=this;
+        const renderPrintTable=this.state.items.data.map(function (item,index) {
 
-            const data = [];
-            for (let i = 0; i < 3; ++i) {
-                data.push({
-                    key: i,
-                    date: '2014-12-24 23:12:00',
-                    name: 'This is production name',
-                    upgradeNum: 'Upgraded: 56',
-                });
+            return(
+                <tr key={index} className={`tr-${item.level}`}>
+                    <td >{item.level<that.state.items.data[index+1]?<img src={plus} alt=""/>:null}</td>
+                    <td ><span>{`${_.fill(Array((item.level-1)*5), '—').join('')}`}</span>{item.test_name}</td>
+                    <td>{item.status_code}</td>
+                    <td>{item.status_code_explain}</td>
+                </tr>
+            )
+        })
+        const columns = [{
+            title: '序号',
+            dataIndex: 'id',
+            key: 'id',
+            width: '45px',
+            className: 'table-index',
+            fixed: 'left',
+            render: (text, record, index) => {
+                return (
+                    <span>
+                            {index + 1}
+                        </span>
+                )
             }
-            return (
-                <Table
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                />
-            );
-        };
-
-        const columns = [
-            { title: 'Version', dataIndex: 'version', key: 'version' },
-            { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-            { title: 'Creator', dataIndex: 'creator', key: 'creator' },
-            { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-        ];
-
-        const data = [];
-        for (let i = 0; i < 3; ++i) {
-            data.push({
-                key: i,
-                version: '10.3.4.5654',
-                upgradeNum: 500,
-                creator: 'Jack',
-                createdAt: '2014-12-24 23:12:00',
-            });
-        }
-
+        }, {
+            title: '名称',
+            dataIndex: 'test_name',
+            key: 'test_name',
+            render: (text, record, index) => {
+                return (
+                    <p style={{paddingLeft:record.level>=2?(record.level-2)*80+'px':0}}><span style={{color:'#c7c2c2'}}>{`${record.level!== 1 ?'└'+_.fill(Array(6), '─').join(''):''}`}</span>{text}</p>
+                )
+            }
+        }, {
+            title: '状态码',
+            dataIndex: 'status_code',
+            key: 'status_code',
+            width: 100,
+        }, {
+            title: '描述',
+            dataIndex: 'status_code_explain',
+            key: 'status_code_explain',
+        }];
         return (
             <div>
                 <div className="content">
                     <Breadcrumb className="breadcrumb notprint">
                         <Breadcrumb.Item>测试报告列表</Breadcrumb.Item>
-                        <Breadcrumb.Item>{this.props.match.params.id}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.state.product_serial_number}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content-container">
                         <div className="operate-box notprint" >
@@ -105,75 +127,65 @@ class ReportDetail extends React.Component {
                                 <div className="print-category">
                                     <div className="print-item">
                                         <span
-                                              title='测试脚本测试脚本测试脚本'>产品序列号 : pc1000000001{this.state.script}
+                                              title={this.state.product_serial_number}>产品序列号 : {this.state.product_serial_number}
                                         </span>
                                     </div>
 
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>产品代码 : {this.state.script}
+                                              title={this.state.product_code}>产品代码 : {this.state.product_code}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>产品名称 : {this.state.script}
+                                              title={this.state.product_name}>产品名称 : {this.state.product_name}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>硬件版本 : {this.state.script}
+                                              title={this.state.hardware_version}>硬件版本 : {this.state.hardware_version}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>结果 : {this.state.script}
+                                              title={this.state.status_code_explain}>结果 : {this.state.status_code_explain}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试类型 : {this.state.script}
+                                              title={this.state.test_type_name}>测试类型 : {this.state.test_type_name}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>脚本名称 : {this.state.script}
+                                              title={this.state.test_script_name}>脚本名称 : {this.state.test_script_name}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试时间 : {this.state.script}
+                                              title={this.state.created_at}>测试时间 : {this.state.created_at}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                              title={this.state.script}>测试架 : {this.state.script}
+                                              title={this.state.test_stand_name}>测试架 : {this.state.test_stand_name}
                                         </span>
                                     </div>
                                     <div className="print-item">
                                         <span
-                                            title={this.state.script}>制造厂商 : {this.state.script}
+                                            title={this.state.company_name}>制造厂商 : {this.state.company_name}
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <Table
-                                ref="printTable"
-                                className="components-table-demo-nested"
-                                columns={columns}
-                                bordered
-                                expandedRowRender={expandedRowRender}
-                                dataSource={data}
-                                expandedRowKeys={this.state.expands}
-                                onExpand={(expanded, record) => {
-                                    let expands = this.state.expands;
-                                    if (expanded) {
-                                        expands.push(record.key);
-                                    } else {
-                                        expands = expands.filter(v => v != record.key);
-                                    }
-                                    this.setState({expands});
-                                }}
-                            />
+                          {/*  <table className="print-table" style={{width:'100%'}}>
+                         <tbody>
+                         {renderPrintTable}
+                         </tbody>
+                         </table>*/}
+                            <Table bordered className="main-table print-ant-table"
+                                   rowKey="id" columns={columns}
+                                   dataSource={this.state.items.data} pagination={false}/>
                         </div>
                     </div>
 

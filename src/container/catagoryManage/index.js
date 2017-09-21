@@ -42,7 +42,7 @@ class Catagory extends Component {
         }
     }
 
-    fetchHwData = (page = 1, q = '', selectTypeOrCompany = '')=> {
+    fetchHwData = (page = 1, q = '', selectTypeOrCompany = '',startDate,endDate)=> {
         this.setState({loading: true});
         const that = this;
         this.setState({loading: true});
@@ -62,14 +62,13 @@ class Catagory extends Component {
                 query: q,
                 company_id: selectTypeOrCompany
             }
-        }else{
-            that.setState({
-                data: [{id:123,name:123}],
+        }else if(this.props.match.url ==='/reports'){
+            params = {
                 page: page,
-                q: q,
-                loading: false
-            })
-            return
+                serial_number: q,
+                start_date:startDate,
+                end_date:endDate
+            }
         }
         axios({
             url: `${configJson.prefix}${this.props.match.url}`,
@@ -172,12 +171,17 @@ class Catagory extends Component {
             converErrorCodeToMsg(error)
         })
     }
-    onChangeSearch = (page, q, selectType)=> {
+    onChangeSearch = (page, q, selectType,startDate,endDate)=> {
         if (this.props.match.url === '/hardware_versions') {
             this.setState({
                 page, q, selectType
             })
             this.fetchHwData(page, q, selectType);
+        }else if(this.props.match.url === '/reports'){
+            this.setState({
+                page, q,startDate,endDate
+            })
+            this.fetchHwData(page, q, null,startDate,endDate);
         } else {
             this.setState({
                 page, q
@@ -187,7 +191,9 @@ class Catagory extends Component {
     }
     onPageChange = (page) => {
         if (this.props.match.url === '/hardware_versions') {
-            this.fetchHwData(page, this.state.q, this.state.selectType);
+            this.onChangeSearch(page, this.state.q, this.state.selectType);
+        }else if(this.props.match.url === '/reports'){
+            this.onChangeSearch(page, this.state.q, null,this.state.startDate,this.state.endDate)
         } else {
             this.onChangeSearch(page, this.state.q);
         }
@@ -204,7 +210,7 @@ class Catagory extends Component {
                 return '硬件版本';
             case '/test_stands':
                 return '测试架';
-            case '/reportManagement':
+            case '/reports':
                 return '测试报告列表';
             default:
                 return ''
@@ -222,7 +228,7 @@ class Catagory extends Component {
                 return '版本号';
             case '/test_stands':
                 return '测试架名称';
-            case '/reportManagement':
+            case '/reports':
                 return '产品序列号';
             default:
                 return ''
@@ -323,39 +329,39 @@ class Catagory extends Component {
                     dataIndex: 'company_name',
                     key: 'company_name'
                 }) : null;*/
-        } else if (this.props.match.url === '/reportManagement') {
+        } else if (this.props.match.url === '/reports') {
             columns.push({
                 title: '产品序列号',
-                dataIndex: 'name',
-                key: 'name'
+                dataIndex: 'product_serial_number',
+                key: 'product_serial_number'
             }, {
                 title: '脚本名称',
-                dataIndex: 'ip',
-                key: 'ip'
+                dataIndex: 'test_script_name',
+                key: 'test_script_name'
             }, {
                 title: '制造厂商',
-                dataIndex: 'index',
-                key: 'index'
+                dataIndex: 'company_name',
+                key: 'company_name'
             },{
                 title: '产品代码',
-                dataIndex: 'name2',
-                key: 'name2'
+                dataIndex: 'product_code',
+                key: 'product_code'
             }, {
                 title: '硬件版本',
-                dataIndex: 'ip3',
-                key: 'ip3'
+                dataIndex: 'hardware_version',
+                key: 'hardware_version'
             }, {
                 title: '测试架',
-                dataIndex: 'index4',
-                key: 'index4'
+                dataIndex: 'test_stand_name',
+                key: 'test_stand_name'
             },{
                 title: '测试时间',
-                dataIndex: 'name5',
-                key: 'name5'
+                dataIndex: 'created_at',
+                key: 'created_at'
             }, {
                 title: '结果',
-                dataIndex: 'ip6',
-                key: 'ip6'
+                dataIndex: 'status_code_explain',
+                key: 'status_code_explain'
             });
             /*localStorage.getItem('userrole') === '系统管理员' ?
              columns.push({
@@ -365,11 +371,11 @@ class Catagory extends Component {
              }) : null;*/
         }
 
-        if (this.props.match.url === '/reportManagement'){
+        if (this.props.match.url === '/reports'){
             columns.push({
                 title: '操作',
                 key: 'action',
-                width: 80,
+                width: 150,
                 render: (text, record, index) => {
                     return (
                         <div key={index}>
@@ -378,6 +384,12 @@ class Catagory extends Component {
                                     pathname: `${this.props.match.url}/${record.id}`,
                                 }}
                             ><Button type="primary">打开</Button></Link>
+                            <span className="ant-divider"/>
+                            <Popconfirm placement="topRight" title={ `确定要删除吗?`}
+                                        onConfirm={this.delData.bind(this, record.id)}>
+                                <button className="ant-btn ant-btn-danger">删除
+                                </button>
+                            </Popconfirm>
                         </div>
                     )
                 }

@@ -19,6 +19,9 @@ class TopicTable extends Component {
         if (this.props.type === '/hardware_versions') {
             const {selectType}=this.props
             this.props.onChangeSearch(1, searchText, selectType)
+        } else if(this.props.match.url === '/reports'){
+            const {startDate,endDate}=this.props
+            this.props.onChangeSearch(1, searchText,null,startDate,endDate)
         } else {
             this.props.onChangeSearch(1, searchText)
         }
@@ -29,6 +32,8 @@ class TopicTable extends Component {
     }
     changeReportTime=(date, dateString)=>{
         console.log( dateString);
+        const {q}=this.props;
+        this.props.onChangeSearch(1, q,null,dateString[0],dateString[1])
     }
     render() {
         return (
@@ -57,7 +62,7 @@ class TopicTable extends Component {
                     </span>
                     : null
                 }
-                {this.props.type === '/reportManagement' ?
+                {this.props.type === '/reports' ?
                     <span>
                          <span className="search-text">测试时间 : </span>
                         <RangePicker onChange={this.changeReportTime}
