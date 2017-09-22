@@ -84,7 +84,8 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx'],
     alias: {
-      'configJson': process.env.NODE_ENV === 'production' ? paths.appSrc+"/common/config-prod.js": paths.appSrc+"/common/config-dev.js",
+      'configJson':  paths.appSrc+"/common/config.js",
+      // 'configJson': process.env.NODE_ENV === 'production' ? paths.appSrc+"/common/config-prod.js": paths.appSrc+"/common/config-dev.js",
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
