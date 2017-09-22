@@ -11,13 +11,14 @@ import './print.css'
 import './print.less'
 import plus from './../../common/images/plus.png'
 import reduce from './../../common/images/reduce.png'
+import uuidv4 from 'uuid/v4';
 const _ = require('lodash');
 class ReportDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             expands:[],
-            items:{data:[]}
+            items:[]
         };
     }
 
@@ -33,7 +34,6 @@ class ReportDetail extends React.Component {
             headers: getHeader()
         })
             .then(function (response) {
-                console.log(response.data)
                 that.setState({
                     ...response.data
                 })
@@ -62,51 +62,38 @@ class ReportDetail extends React.Component {
     }
 
     render() {
+        console.log(this.state.items)
         const that=this;
-        const renderPrintTable=this.state.items.data.map(function (item,index) {
-
-            return(
-                <tr key={index} className={`tr-${item.level}`}>
-                    <td >{item.level<that.state.items.data[index+1]?<img src={plus} alt=""/>:null}</td>
-                    <td ><span>{`${_.fill(Array((item.level-1)*5), '—').join('')}`}</span>{item.test_name}</td>
-                    <td>{item.status_code}</td>
-                    <td>{item.status_code_explain}</td>
-                </tr>
-            )
-        })
         const columns = [{
-            title: '序号',
-            dataIndex: 'id',
-            key: 'id',
-            width: '45px',
-            className: 'table-index',
-            fixed: 'left',
-            render: (text, record, index) => {
-                return (
-                    <span>
-                            {index + 1}
-                        </span>
-                )
-            }
-        }, {
             title: '名称',
             dataIndex: 'test_name',
             key: 'test_name',
-            render: (text, record, index) => {
-                return (
-                    <p style={{paddingLeft:record.level>=2?(record.level-2)*80+'px':0}}><span style={{color:'#c7c2c2'}}>{`${record.level!== 1 ?'└'+_.fill(Array(6), '─').join(''):''}`}</span>{text}</p>
-                )
-            }
         }, {
             title: '状态码',
             dataIndex: 'status_code',
             key: 'status_code',
-            width: 100,
+            width: '15%',
         }, {
             title: '描述',
             dataIndex: 'status_code_explain',
             key: 'status_code_explain',
+            width: '15%',
         }];
+
+        const expandedRowRender = (record) => {
+            console.log(record);
+            return (
+                <Table
+                    rowKey="index"
+                    columns={columns}
+                    dataSource={record.children}
+                    pagination={false}
+                    expandedRowRender={(record)=>expandedRowRender(record) }
+                />
+            );
+        };
+
+
         return (
             <div>
                 <div className="content">
@@ -183,9 +170,9 @@ class ReportDetail extends React.Component {
                          {renderPrintTable}
                          </tbody>
                          </table>*/}
-                            <Table bordered className="main-table print-ant-table"
-                                   rowKey="id" columns={columns}
-                                   dataSource={this.state.items.data} pagination={false}/>
+                            <Table bordered className="main-table  print-ant-table"
+                                   rowKey="index" columns={columns}
+                                   dataSource={this.state.items} pagination={false}/>
                         </div>
                     </div>
 
