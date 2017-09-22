@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu} from 'antd';
+import {Layout, Menu,Spin } from 'antd';
 import {
     BrowserRouter as Router,
     Route,
@@ -288,144 +288,149 @@ class App extends Component {
                         {/*<SystemJournalModal systemJournalModal={this.state.systemJournalModal}
                          ref="SystemJournalModal"/>*/}
                     </div>
+                    <div className="content-bg">
+                        <div className="spin">
+                            <Spin size="large" />
+                        </div>
+                        <Route exact path="/" component={Home}/>
+                        <Route exact
+                               path="/about" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <About {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login'}}/>;
+                        }}/>
+                        <Route exact
+                               path="/hardwareTest" render={(props) => {
+                            return (login.login && testPermission('hardware_testing') ) ?
+                                <HardwareTest {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route path="/hardwareTest/:uuid" render={(props) => {
+                            return (login.login && testPermission('hardware_testing') ) ?
+                                <HardwareTesting {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route exact path="/productionManagement" render={(props) => {
+                            return (login.login && testPermission('production_management') ) ?
+                                <ProductionManage {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route exact path="/productionManagement/:id" render={(props) => {
+                            return (login.login && testPermission('production_management') ) ?
+                                <AddOrEditBatch {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route path="/productionManagement/:id/serialNumbers" render={(props) => {
+                            return (login.login && testPermission('production_management') ) ?
+                                <SerialNumber {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
 
-                    <Route exact path="/" component={Home}/>
-                   <Route exact
-                           path="/about" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <About {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login'}}/>;
-                    }}/>
-                    <Route exact
-                           path="/hardwareTest" render={(props) => {
-                        return (login.login && testPermission('hardware_testing') ) ?
-                            <HardwareTest {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route path="/hardwareTest/:uuid" render={(props) => {
-                        return (login.login && testPermission('hardware_testing') ) ?
-                            <HardwareTesting {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route exact path="/productionManagement" render={(props) => {
-                        return (login.login && testPermission('production_management') ) ?
-                            <ProductionManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route exact path="/productionManagement/:id" render={(props) => {
-                        return (login.login && testPermission('production_management') ) ?
-                            <AddOrEditBatch {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route path="/productionManagement/:id/serialNumbers" render={(props) => {
-                        return (login.login && testPermission('production_management') ) ?
-                            <SerialNumber {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
 
+                        <Route path="/login" component={Login} ref="Login"/>
+                        {/*<Route path="/register" component={Register}/>*/}
+                        <Route
+                            path="/printSetting/:id" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <PrintSetting {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route exact
+                               path="/scriptManage" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <ScriptManage {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/scriptManage/:id" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <DrawScript {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
 
-                    <Route path="/login" component={Login} ref="Login"/>
-                    {/*<Route path="/register" component={Register}/>*/}
-                    <Route
-                        path="/printSetting/:id" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <PrintSetting {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route exact
-                           path="/scriptManage" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <ScriptManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/scriptManage/:id" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <DrawScript {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
+                        <Route
+                            path="/scriptDetail/:id" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <ScriptDetail {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
 
-                    <Route
-                        path="/scriptDetail/:id" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <ScriptDetail {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
+                        <Route exact
+                               path="/segmentManage" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <SegmentManage {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
 
-                    <Route exact
-                           path="/segmentManage" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <SegmentManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
+                        <Route
+                            path="/segmentManage/:id" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <DrawSegment {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/segmentDetail/:id" render={(props) => {
+                            return (login.login && testPermission('test_script_management') ) ?
+                                <DrawSegmentDetail {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/systemManage" render={(props) => {
+                            return login.login ?
+                                <SystemManage {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/userConfig" render={(props) => {
+                            return login.login ?
+                                <UserConfig {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        {/* <Route
+                         path="/companies" render={(props) => {
+                         return (login.login && testPermission('company_management') ) ?
+                         <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
+                         <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                         }}/>*/}
+                        <Route
+                            path="/products" render={(props) => {
+                            return (login.login && testPermission('product_management') ) ?
+                                <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/test_types" render={(props) => {
+                            return (login.login && testPermission('product_management') ) ?
+                                <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/hardware_versions" render={(props) => {
+                            return (login.login && testPermission('product_management') ) ?
+                                <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/test_stands" render={(props) => {
+                            return (login.login && testPermission('test_stand_management') ) ?
+                                <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            exact
+                            path="/reports" render={(props) => {
+                            return (login.login && testPermission('report_print') ) ?
+                                <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                        <Route
+                            path="/reports/:id" render={(props) => {
+                            return (login.login && testPermission('report_print') ) ?
+                                <ReportDetail  {...props}/> : login.login ? <Nopermission/> :
+                                <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                        }}/>
+                    </div>
 
-                    <Route
-                        path="/segmentManage/:id" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <DrawSegment {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/segmentDetail/:id" render={(props) => {
-                        return (login.login && testPermission('test_script_management') ) ?
-                            <DrawSegmentDetail {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/systemManage" render={(props) => {
-                        return login.login ?
-                            <SystemManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/userConfig" render={(props) => {
-                        return login.login ?
-                            <UserConfig {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    {/* <Route
-                     path="/companies" render={(props) => {
-                     return (login.login && testPermission('company_management') ) ?
-                     <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
-                     <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                     }}/>*/}
-                    <Route
-                        path="/products" render={(props) => {
-                        return (login.login && testPermission('product_management') ) ?
-                            <CatagoryManage {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/test_types" render={(props) => {
-                        return (login.login && testPermission('product_management') ) ?
-                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/hardware_versions" render={(props) => {
-                        return (login.login && testPermission('product_management') ) ?
-                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/test_stands" render={(props) => {
-                        return (login.login && testPermission('test_stand_management') ) ?
-                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        exact
-                        path="/reports" render={(props) => {
-                        return (login.login && testPermission('report_print') ) ?
-                            <CatagoryManage  {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
-                    <Route
-                        path="/reports/:id" render={(props) => {
-                        return (login.login && testPermission('report_print') ) ?
-                            <ReportDetail  {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
-                    }}/>
 
                 </div>
 
