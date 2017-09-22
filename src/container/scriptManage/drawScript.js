@@ -17,6 +17,7 @@ import FetchSegments from './fetchSegments'
 import ScriptInfo from './scriptInfo';
 import uuidv4 from 'uuid/v4';
 import ScriptErrorInfo from './scriptErrorInfo'
+import './../hardwareTest/hardwareTesting.less'
 const _ = require('lodash');
 const {Content,} = Layout;
 const confirm = Modal.confirm;

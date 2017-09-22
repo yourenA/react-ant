@@ -5,10 +5,10 @@ import React from 'react';
 import {Breadcrumb, Collapse, Icon, Anchor} from 'antd';
 import ReactMarkdown from './../component/markdown'
 import './about/about.less'
-const Panel = Collapse.Panel;
 const {Link} = Anchor;
 class About extends React.Component {
     render() {
+        console.log('这是about页面')
         return (
             <div>
                 <div className="content">

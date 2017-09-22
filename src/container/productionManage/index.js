@@ -14,6 +14,7 @@ import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
+import './../hardwareTest/hardwareTesting.less'
 const Option = Select.Option;
 class ProductionManage extends Component {
     constructor(props) {

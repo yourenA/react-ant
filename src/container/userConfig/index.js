@@ -11,6 +11,7 @@ import {Layout, Menu, Icon} from 'antd';
 import './index.less'
 import UserInfo from './userInfo/index'
 import ModifyPassword from './modifyPassword/index'
+import './../systemManage/index.less'
 const {Sider} = Layout;
 
 class UserConfig extends React.Component {

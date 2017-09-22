@@ -14,6 +14,7 @@ import {bindActionCreators} from 'redux';
 import ScriptInfo from './scriptInfo';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
+import './../hardwareTest/hardwareTesting.less'
 const confirm = Modal.confirm;
 const {Content,} = Layout;
 

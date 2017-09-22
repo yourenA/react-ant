@@ -15,6 +15,8 @@ import messageJson from './../../common/message.json';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
+import './../hardwareTest/hardwareTesting.less'
+
 class SegmentManage extends Component {
     constructor(props) {
         super(props);

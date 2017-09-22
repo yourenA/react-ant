@@ -12,6 +12,7 @@ import configJson from 'configJson' ;
 import messageJson from './../../common/message.json';
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import uuidv4 from 'uuid/v4';
+import './../hardwareTest/hardwareTesting.less'
 const _ = require('lodash');
 class AddOrEditBatch extends React.Component {
     constructor(props) {

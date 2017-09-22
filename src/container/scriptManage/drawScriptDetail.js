@@ -16,6 +16,7 @@ import FetchSegments from './fetchSegments'
 import ScriptIndex from './scriptIndex.js'
 import ScriptInfo from './scriptInfo';
 import ScriptErrorInfo from './scriptErrorInfo'
+import './../hardwareTest/hardwareTesting.less'
 const _ = require('lodash');
 const {Content,} = Layout;
 

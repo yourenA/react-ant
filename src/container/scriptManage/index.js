@@ -15,6 +15,7 @@ import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
+import './../hardwareTest/hardwareTesting.less'
 
 class ScriptManage extends Component {
     constructor(props) {

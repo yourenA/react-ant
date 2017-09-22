@@ -8,6 +8,7 @@ const {Content,} = Layout;
 class Home extends React.Component {
 
     render() {
+        console.log('这是home页面')
         return (
             <Content className="content">
                 <div className="content-container" style={{minHeight:'calc(100vh - 64px)'}}>
@@ -19,4 +20,4 @@ class Home extends React.Component {
 }
 
 
-export default withRouter(Home)
+export default Home

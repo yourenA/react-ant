@@ -7,33 +7,110 @@ import {
     Redirect,
 
 } from 'react-router-dom';
-import Nopermission from './container/nopermission';
-import Home from './container/home';
-import About from './container/about'
-import HardwareTest from './container/hardwareTest/index';
-import HardwareTesting from './container/hardwareTest/hardwareTesting';
-import ProductionManage from './container/productionManage/index';
-import AddOrEditBatch from './container/productionManage/addOrEditBatch';
-import SerialNumber from './container/productionManage/serialNumber';
-import ScriptManage from './container/scriptManage/index';
-import DrawScript from './container/scriptManage/drawScript';
-import SegmentManage from './container/scriptManage/segmentManage';
-import ScriptDetail from './container/scriptManage/drawScriptDetail';
-import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
-import DrawSegment from './container/scriptManage/drawSegment';
-import PrintSetting from './container/scriptManage/printSetting';
-import CatagoryManage from './container/catagoryManage/index';
-import ReportDetail from './container/catagoryManage/reportDetail';
-import SystemManage from './container/systemManage/index';
-import UserConfig from './container/userConfig/index';
-import Login from './container/login';
-// import Register from './container/register';
-// import SystemJournalModal from './component/systemJournalModal'
 import './App.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as loginAction from './actions/login';
 import {testPermission} from './common/common'
+
+import asyncComponent from './AsyncComponent'
+import Nopermission from './container/nopermission';
+import Login from './container/login';
+// import Home from './container/home';
+
+// import About from './container/about'
+// import HardwareTest from './container/hardwareTest/index';
+const Home = asyncComponent(() =>
+import(/* webpackChunkName: "home" */ "./container/home")
+)
+const About = asyncComponent(() =>
+import(/* webpackChunkName: "about" */ "./container/about")
+)
+
+const HardwareTest = asyncComponent(() =>
+import
+(/* webpackChunkName: "HardwareTest" */ "./container/hardwareTest/index")
+)
+// import HardwareTesting from './container/hardwareTest/hardwareTesting';
+const HardwareTesting = asyncComponent(() =>
+import
+(/* webpackChunkName: "HardwareTesting" */ "./container/hardwareTest/hardwareTesting")
+)
+// import ProductionManage from './container/productionManage/index';
+const ProductionManage = asyncComponent(() =>
+import
+(/* webpackChunkName: "ProductionManage" */ "./container/productionManage/index")
+)
+// import AddOrEditBatch from './container/productionManage/addOrEditBatch';
+const AddOrEditBatch = asyncComponent(() =>
+import
+(/* webpackChunkName: "AddOrEditBatch" */ "./container/productionManage/addOrEditBatch")
+)
+// import SerialNumber from './container/productionManage/serialNumber';
+const SerialNumber = asyncComponent(() =>
+import
+(/* webpackChunkName: "SerialNumber" */ "./container/productionManage/serialNumber")
+)
+// import ScriptManage from './container/scriptManage/index';
+const ScriptManage = asyncComponent(() =>
+import
+(/* webpackChunkName: "ScriptManage" */ "./container/scriptManage/index")
+)
+// import DrawScript from './container/scriptManage/drawScript';
+const DrawScript = asyncComponent(() =>
+import
+(/* webpackChunkName: "DrawScript" */ "./container/scriptManage/drawScript")
+)
+// import SegmentManage from './container/scriptManage/segmentManage';
+const SegmentManage = asyncComponent(() =>
+import
+(/* webpackChunkName: "SegmentManage" */ "./container/scriptManage/segmentManage")
+)
+// import ScriptDetail from './container/scriptManage/drawScriptDetail';
+const ScriptDetail = asyncComponent(() =>
+import
+(/* webpackChunkName: "ScriptDetail" */ "./container/scriptManage/drawScriptDetail")
+)
+// import DrawSegmentDetail from './container/scriptManage/drawSegmentDetail';
+const DrawSegmentDetail = asyncComponent(() =>
+import
+(/* webpackChunkName: "DrawSegmentDetail" */ "./container/scriptManage/drawSegmentDetail")
+)
+
+// import DrawSegment from './container/scriptManage/drawSegment';
+const DrawSegment = asyncComponent(() =>
+import
+(/* webpackChunkName: "DrawSegment" */ "./container/scriptManage/drawSegment")
+)
+// import PrintSetting from './container/scriptManage/printSetting';
+const PrintSetting = asyncComponent(() =>
+import
+(/* webpackChunkName: "PrintSetting" */ "./container/scriptManage/printSetting")
+)
+// import CatagoryManage from './container/catagoryManage/index';
+const CatagoryManage = asyncComponent(() =>
+import
+(/* webpackChunkName: "CatagoryManage" */ "./container/catagoryManage/index")
+)
+// import ReportDetail from './container/catagoryManage/reportDetail';
+const ReportDetail = asyncComponent(() =>
+import
+(/* webpackChunkName: "ReportDetail" */ "./container/catagoryManage/reportDetail")
+)
+// import SystemManage from './container/systemManage/index';
+const SystemManage = asyncComponent(() =>
+import
+(/* webpackChunkName: "SystemManage" */ "./container/systemManage/index")
+)
+// import UserConfig from './container/userConfig/index';
+const UserConfig = asyncComponent(() =>
+import
+(/* webpackChunkName: "UserConfig" */ "./container/userConfig/index")
+)
+
+// import Register from './container/register';
+// import SystemJournalModal from './component/systemJournalModal'
+
 const {Header} = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -213,11 +290,11 @@ class App extends Component {
                     </div>
 
                     <Route exact path="/" component={Home}/>
-                    <Route exact
+                   <Route exact
                            path="/about" render={(props) => {
                         return (login.login && testPermission('test_script_management') ) ?
                             <About {...props}/> : login.login ? <Nopermission/> :
-                            <Redirect to={{pathname: '/login', state: {from: props.location}}}/>;
+                            <Redirect to={{pathname: '/login'}}/>;
                     }}/>
                     <Route exact
                            path="/hardwareTest" render={(props) => {

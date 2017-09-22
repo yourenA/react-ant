@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import * as fetchTestConfAction from './../../actions/fetchTestConf';
 import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import './hardwareTesting.less'
 class HardwareTest extends Component {
     constructor(props) {
         super(props);
