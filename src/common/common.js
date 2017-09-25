@@ -593,3 +593,34 @@ exports.transformPrintJson = (transformJson) => {
     });
     return transformJson
 }
+
+/**
+ * 删除children个数为0的item
+ * */
+const getArray=(arr)=> {
+
+    for(let i=0,l=arr.length;i<l;i++) {
+        if(arr[i].children.length>0) {
+            getArray(arr[i].children);
+        }else{
+            delete arr[i].children;
+        }
+    }
+}
+exports.getArray=getArray;
+
+/**
+ * 获取所有group的index
+ * */
+const getArrayOfGroup=(arr)=> {
+    let arrs=[]
+    for(let i=0,l=arr.length;i<l;i++) {
+        if(arr[i].children.length>0) {
+            arrs=arrs.concat(arr[i].index);
+            arrs=arrs.concat(getArrayOfGroup(arr[i].children));
+        }else{
+        }
+    }
+    return arrs;
+}
+exports.getArrayOfGroup=getArrayOfGroup;

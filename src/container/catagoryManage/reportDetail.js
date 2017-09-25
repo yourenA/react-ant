@@ -4,21 +4,18 @@
 import React from 'react';
 import {Breadcrumb, Button,Table,Badge} from 'antd';
 import configJson from 'configJson' ;
-import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import {getHeader, converErrorCodeToMsg,getArray,getArrayOfGroup} from './../../common/common';
 import messageJson from './../../common/message.json';
 import axios from 'axios'
 import './print.css'
 import './print.less'
-import plus from './../../common/images/plus.png'
-import reduce from './../../common/images/reduce.png'
-import uuidv4 from 'uuid/v4';
-const _ = require('lodash');
 class ReportDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             expands:[],
-            items:[]
+            items:[],
+            allExpandsIndex:[]
         };
     }
 
@@ -34,7 +31,10 @@ class ReportDetail extends React.Component {
             headers: getHeader()
         })
             .then(function (response) {
+                const allExpandsIndex=getArrayOfGroup(response.data.items);
+                getArray(response.data.items);
                 that.setState({
+                    allExpandsIndex,
                     ...response.data
                 })
             }).catch(function (error) {
@@ -42,11 +42,28 @@ class ReportDetail extends React.Component {
             converErrorCodeToMsg(error)
         })
     }
+    expandRow=(expanded, record)=>{
+        if(expanded){
+            this.state.expands.push(record.index)
+            this.setState({
+                    expands:this.state.expands
+            })
+        }else{
+            const index = this.state.expands.indexOf(record.index);
+            if (index > -1) {
+                this.state.expands.splice(index, 1);
+            }
+            this.setState({
+                expands:this.state.expands
+            })
+        }
+
+    }
 
     printReport=()=>{
         let expands = this.state.expands;
         this.setState({
-            expands:[1,2,0,]
+            expands:this.state.allExpandsIndex
         },function () {
             if(document.execCommand("print")){
                 this.setState({
@@ -62,7 +79,7 @@ class ReportDetail extends React.Component {
     }
 
     render() {
-        console.log(this.state.items)
+        console.log(this.state.expands)
         const that=this;
         const columns = [{
             title: '名称',
@@ -172,6 +189,8 @@ class ReportDetail extends React.Component {
                          </table>*/}
                             <Table bordered className="main-table  print-ant-table"
                                    rowKey="index" columns={columns}
+                                   expandedRowKeys={this.state.expands}
+                                   onExpand={this.expandRow}
                                    dataSource={this.state.items} pagination={false}/>
                         </div>
                     </div>
